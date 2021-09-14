@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        //    "sourceMap": true,
+        "module": "esnext",
+            "target": "es5",
+        //    "jsx": "react",
+        "allowJs": true,
+        // 生成对应的 .d.ts 文件
+        "declaration": true,
+        "baseUrl": ".",
+        "paths": {
+            "@/*": [
+                "./src/*"
+            ]
+        }
+    },
+    "include": [
+        "src/**/*.ts"
+    ],
+    "exclude": [
+        "node_modules"
+    ]
+}
