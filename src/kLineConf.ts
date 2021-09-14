@@ -1,7 +1,7 @@
 /**
  * 主要是k线的配置相关
  */
-import {mergeData} from "@/utils/dataHandle";
+import { mergeData } from '@/utils/dataHandle'
 
 // item 的宽度 和 空隙
 export interface ItemWAndSpace {
@@ -25,11 +25,18 @@ const DefItemWAndSpaceList: ItemWAndSpace[] = [
 
 // 需要的数据格式
 export interface DataItem {
+    // 收盘价
     close: number
+    // 开盘
     open: number
+    // 最低
     min: number
+    // 最高
     max: number
-    date: number // 时间戳
+    // 时间戳
+    date: number
+    // 成交额
+    turnover: number
     [key: string]: any // 由于存储 指标计算出来的值
 }
 
