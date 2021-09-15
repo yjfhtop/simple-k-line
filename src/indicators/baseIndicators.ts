@@ -1,5 +1,6 @@
 import { DataItem } from '@/kLineConf'
 import { BaseChart } from '@/chart/baseChart'
+import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 
 /**
  *指标的基础类
@@ -7,7 +8,7 @@ import { BaseChart } from '@/chart/baseChart'
 
 export abstract class BaseIndicators {
     // 指标的名称
-    public abstract name: string
+    public abstract name: IndicatorsNames
 
     // 最大最小值的下标
     public maxIndex = -1
@@ -35,6 +36,10 @@ export abstract class BaseIndicators {
     }
     // 指标的绘制方法
     abstract draw(): void
+
+    get conf() {
+        return this.chart.conf.indicatorsConfMap[this.name]
+    }
 
     // 最大值
     get maxValue() {

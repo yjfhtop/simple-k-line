@@ -1,7 +1,16 @@
 /**
  * 主要是k线的配置相关
  */
-import { mergeData } from '@/utils/dataHandle'
+import { deepCopy, DefScaleCalcConfig, mergeData } from '@/utils/dataHandle'
+import { YConf } from '@/axis/YAxis'
+import { DefSectorConfig } from '@/utils/canvasDraw'
+import { ChartConfMap, ChartNames } from '@/chart/chartUtils'
+import { TimeSharingConf } from '@/indicators/timeSharing'
+import { BaseChartConf } from '@/chart/baseChart'
+import {
+    IndicatorsConfMap,
+    IndicatorsNames,
+} from '@/indicators/indicatorsUtils'
 
 // item 的宽度 和 空隙
 export interface ItemWAndSpace {
@@ -55,13 +64,66 @@ export interface KLineConf {
     itemWAndSpaceList?: ItemWAndSpace[]
     // 柱子宽度和间隔 使用哪一个宽度的下标
     useItemWAndSpaceIndex?: number
-    yPadding?: PaddingLR
+    yPadding?: Partial<PaddingLR>
+    yConf?: Partial<YConf>
+    // 需要显示的图表
+    chartShowArr?: ChartNames[]
+    // 图表的配置项
+    chartConfMap?: Partial<ChartConfMap>
+}
+
+// y轴默认配置
+const DefYConf: YConf = {
+    axisLine: {
+        color: '#fff',
+        lineW: 1,
+    },
+    axisMark: {
+        lineW: 1,
+        len: 4,
+    },
+    txt: {
+        size: 12,
+        family: 'Microsoft YaHei',
+        color: '#fff',
+        deviationY: 2,
+    },
+    gridLine: {
+        color: '#666',
+        lineW: 1,
+    },
+    scaleCalcConfig: DefScaleCalcConfig,
+}
+
+// 默认分时图的配置
+const DefTimeSharingConf: TimeSharingConf = {}
+
+// 所有指标配置项的集合
+const DefIndicatorsConfMap: IndicatorsConfMap = {
+    timeSharing: DefTimeSharingConf,
+}
+
+// 图表的基础配置
+const DefBaseChartConf: BaseChartConf = {
+    // 显示那些指标
+    indicatorShowArr: undefined,
+    // 指标的配置
+    indicatorsConfMap: DefIndicatorsConfMap,
+    yConf: DefYConf,
+}
+
+// 所有图表的配置
+const DefChartConfMap: ChartConfMap = {
+    mainChart: deepCopy(DefBaseChartConf),
 }
 
 export const DefKLineConf: KLineConf = {
     itemWAndSpaceList: DefItemWAndSpaceList,
     useItemWAndSpaceIndex: 5,
     yPadding: { left: 5, right: 5 },
+    yConf: DefYConf,
+    chartShowArr: ['mainChart'],
+    chartConfMap: DefChartConfMap,
 }
 
 export function initConf(conf: KLineConf) {

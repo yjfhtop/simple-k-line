@@ -17,21 +17,26 @@ export function getContainerEl(
 }
 
 /**
- * 在指定的 canvas 和 指定的 字体 返回字体的宽度
- * @param ctx  canvas 2d 上下文
- * @param font 字体样式
- * @param txt 文本
- * @param ceil 默认想上取整
+ * 获取文本的宽度
+ * @param ctx
+ * @param txt
+ * @param fontSize
+ * @param fontFamily
+ * @param ceil
  */
 export function getTxtW(
     ctx: CanvasRenderingContext2D,
     txt: string,
-    font?: string,
+    fontSize?: number,
+    fontFamily = '',
     ceil = true
 ) {
     let w: number
     ctx.save()
-    font && (ctx.font = font)
+    // font && (ctx.font = font)
+    if (fontSize || fontFamily) {
+        ctx.font = `${fontSize} ${fontFamily}`
+    }
     w = ctx.measureText(txt).width
     ctx.restore()
     w = ceil ? Math.ceil(w) : w

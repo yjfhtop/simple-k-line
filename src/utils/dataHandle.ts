@@ -105,6 +105,8 @@ export function mergeData<T>(oldData: T, newData: T, copy = true): T {
                 }
             })
             return oldData
+        } else if (newData === undefined) {
+            return oldData
         } else {
             return newData
         }
@@ -212,7 +214,7 @@ export interface ScaleCalcConfig {
     magicArr?: number[]
 }
 // 默认值
-const DefScaleCalcConfig: ScaleCalcConfig = {
+export const DefScaleCalcConfig: ScaleCalcConfig = {
     symmetrical: 'null',
     zeroMust: false,
     // 最大值必须大于100, 魔术数组用于生成刻度间隙

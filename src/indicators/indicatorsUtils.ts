@@ -1,4 +1,4 @@
-import { TimeSharing } from '@/indicators/timeSharing'
+import { TimeSharing, TimeSharingConf } from '@/indicators/timeSharing'
 import { BaseIndicators } from '@/indicators/baseIndicators'
 import { BaseChart } from '@/chart/baseChart'
 
@@ -9,10 +9,10 @@ export interface IndicatorsMap {
 
 // 指标的配置项
 export interface IndicatorsConfMap {
-    // 分时图不需要配置
+    timeSharing?: TimeSharingConf
 }
 
-export type IndicatorsKeys = keyof IndicatorsMap
+export type IndicatorsNames = keyof IndicatorsMap
 
 /**
  * 创建 指标
@@ -20,7 +20,7 @@ export type IndicatorsKeys = keyof IndicatorsMap
  * @param chart
  */
 export function createIndicators<T = BaseIndicators>(
-    name: IndicatorsKeys,
+    name: IndicatorsNames,
     chart: BaseChart
 ): T {
     switch (name) {
