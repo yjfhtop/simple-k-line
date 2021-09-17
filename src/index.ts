@@ -10,7 +10,8 @@ import {
     isLeapYear,
     timeArrGetTimeUnitAndNumber,
 } from '@/utils/timeHandle'
-import { ChartMap, ChartNames } from '@/chart/chartUtils'
+import { ChartMap, ChartNames, createChart } from '@/chart/chartUtils'
+import { arrGetAddAndDel } from '@/utils/index'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -30,12 +31,27 @@ export default class SimpleKLine {
     public tc: CanvasRenderingContext2D
     // 配置项
     public conf: KLineConf
+    // 旧的配置项
+    public oldConf: KLineConf
     // 需要的数据集合 最后的为最新的数据
     public dataArr: DataItem[]
     // y 轴最大文本长度
     public yTxtMaxW: number
     // 在图表内的绘制结束下标
     public eIndex: number
+    // 偏移下标的数目 在结束坐标的偏移
+    public eDeviationNumber = 2
+    // 偏移下标的数目 在开始坐标的偏移
+    public sDeviationNumber = 2
+
+    // 真正的绘制开始下标
+    get drawSIndex() {
+        return this.sIndex - this.sDeviationNumber
+    }
+    // 真正的绘制结束下标
+    get drawEIndex() {
+        return this.eIndex + this.eDeviationNumber
+    }
 
     // 图表的映射
     public chartMap: ChartMap = {}
@@ -67,19 +83,28 @@ export default class SimpleKLine {
     get sIndex() {
         return this.eIndex - this.itemNumber
     }
+    // 所有图表的高度
+    get allChatH() {
+        return this.elWH.h - this.conf.xConf.h
+    }
+    // 图表开始的y坐标， 第一个图表的y轴
+    get chartStartY() {
+        return 0
+    }
     constructor(
         el: HTMLElement | string,
         dataArr: DataItem[],
         option: KLineConf
     ) {
         this.test()
-        return
         // logTag()
         this.dataArr = deepCopy(dataArr)
         this.conf = initConf(option)
         this.initUseDom(el)
         this.initContainer()
         this.initCanvas()
+        this.determineChartMap()
+        this.determineYTxtMaxW()
     }
 
     // 初始化用户的dom
@@ -123,11 +148,82 @@ export default class SimpleKLine {
         this.el.appendChild(this.bEl)
         this.el.appendChild(this.tEl)
     }
-
-    // 计算所有需要的数据， 主要是计算各个指标的值，同时处理最大最小值
-    calc() {}
-    // 初始化图表的映射
-    initChartMap() {
+    // 确定化图表的映射
+    determineChartMap() {
+        if (
+            !this.oldConf ||
+            (this.oldConf &&
+                this.oldConf.chartShowArr.join('') ===
+                    this.conf.chartShowArr.join(''))
+        ) {
+            // 副图的高度
+            const viceChatH = this.allChatH * 0.2
+            // 主图的高度
+            const mainCharH =
+                (this.conf.chartShowArr.length - 1) * 0.2 * this.allChatH
+            this.conf.chartShowArr.forEach((name, index) => {
+                if (index === 0) {
+                    // 主图
+                    this.chartMap[name] = createChart(
+                        name,
+                        this,
+                        this.chartStartY,
+                        mainCharH
+                    )
+                    console.log(11)
+                } else {
+                    this.chartMap[name] = createChart(
+                        name,
+                        this,
+                        this.chartMap[this.conf.chartShowArr[index - 1]]
+                            .rightBottom.y,
+                        viceChatH
+                    )
+                }
+            })
+        }
+    }
+    // 获取 最大的文字宽度
+    getMaxTxtWInAllChart() {
+        let max = Number.MIN_VALUE
+        this.conf.chartShowArr.forEach((name) => {
+            const chart = this.chartMap[name]
+            const txtW = chart.maxTxtW
+            if (txtW > max) {
+                max = txtW
+            }
+        })
+        return max
+    }
+    // 计算所有需要的数据， 主要是计算各个指标的值, 然后计算图表的最大值
+    calc() {
+        for (let i = this.drawSIndex; i <= this.drawEIndex; i++) {
+            const item = this.dataArr[i]
+            if (item) {
+                // 是否在最大最小值的取值范围内
+                const isMaxValue = i >= this.drawSIndex && i <= this.drawEIndex
+                this.conf.chartShowArr.forEach((name) => {
+                    const chart = this.chartMap[name]
+                    chart.calcAll(item, i, isMaxValue)
+                })
+            }
+        }
+        this.conf.chartShowArr.forEach((name) => {
+            const chart = this.chartMap[name]
+            chart.calcMaxMin()
+        })
+    }
+    // 确定 YTxtMaxW
+    determineYTxtMaxW() {
+        const oldYTxtMaxW = this.yTxtMaxW
+        this.calc()
+        const txtW = this.getMaxTxtWInAllChart()
+        const diff = oldYTxtMaxW - txtW
+        if (txtW === oldYTxtMaxW || (diff > 0 && Math.abs(diff) <= 2)) {
+            this.yTxtMaxW = txtW
+        } else {
+            this.determineYTxtMaxW()
+        }
     }
     test() {
         console.log('------')

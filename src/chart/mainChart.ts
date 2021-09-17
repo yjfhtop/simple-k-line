@@ -9,11 +9,13 @@ import { ChartNames } from '@/chart/chartUtils'
 export interface MainChartConf extends BaseChartConf {}
 
 export class MainChart extends BaseChart {
-    public name: ChartNames = 'mainChart'
-    constructor(
-        public kLine: KLine,
-        position: { leftTop: Coordinate; rightBottom: Coordinate }
-    ) {
-        super(kLine, position)
-    }
+    public chartName: ChartNames = 'mainChart'
+    // constructor(
+    //     public kLine: KLine,
+    //     public topY: number,
+    //     public chartH: number
+    // ) {
+    //     super(kLine, topY, chartH)
+    //     console.log(this.chartName, '-------------')
+    // }
 }

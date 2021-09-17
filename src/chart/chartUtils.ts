@@ -15,18 +15,20 @@ export type ChartNames = keyof ChartMap
 
 /**
  * 创建图表
- * @param name
+ * @param name 图表名称
  * @param kLine
- * @param position
+ * @param topY
+ * @param chartH
  * @constructor
  */
-export function CreateChart<T = BaseChart>(
+export function createChart<T = BaseChart>(
     name: ChartNames,
     kLine: SimpleKLine,
-    position: { leftTop: Coordinate; rightBottom: Coordinate }
+    topY: number,
+    chartH: number
 ): T {
     switch (name) {
         case 'mainChart':
-            return new MainChart(kLine, position) as any as T
+            return new MainChart(kLine, topY, chartH) as any as T
     }
 }

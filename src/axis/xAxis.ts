@@ -6,7 +6,6 @@ import { Coordinate, drawLine, drawTxt } from '@/utils/canvasDraw'
 import {
     addTime,
     dateDiffForm,
-    dateDiffGetDate,
     formDate,
     timeArrGetTimeUnitAndNumber,
     TimeDate,
@@ -307,6 +306,9 @@ export class XAxis {
             : this.supplementDataArr[nowIndex]
     }
     indexGetX(index: number) {
-        return  this.drawStartX +  (index - this.drawStartIndex) * this.kLine.useItemAllW
+        return (
+            this.drawStartX +
+            (index - this.drawStartIndex) * this.kLine.useItemAllW
+        )
     }
 }

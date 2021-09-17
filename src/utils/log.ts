@@ -26,10 +26,9 @@ export function logError(apiName?: string, info?: string): void {
     console.error(
         `%c❌ ${LibName} error: \n%s%s`,
         'color:#ed1941;font-weight:bold',
-        apiName ? `Call api ${apiName}` : '',
+        apiName ? `Call api ${apiName} ` : '',
         info ? info : ''
     )
-    throw ''
 }
 
 export function logTag() {

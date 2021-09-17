@@ -26,7 +26,33 @@
 </div>
 </body>
 <script>
-    const kLine = new SimpleKLine('k_line',)
+    const second = 1000
+    const minute = second * 60
+    const hour = minute * 60
+    const day = hour * 24
+    let dataList = []
+    const startDate = new Date('2018-10-01').getTime()
+    const diffDate = day * 7
+
+    for (let i = 0; i < 100; i++) {
+        let maxVale = Math.floor(Math.random() * 60000) + 3000
+        const diffVale = Math.floor(Math.random() * 60000)
+        let minValue = Math.abs(maxVale - diffVale)
+        maxVale = Math.max(maxVale, minValue)
+        minValue = Math.min(maxVale, minValue)
+
+        const open = minValue + Math.floor(Math.random() * diffVale)
+        const close = minValue + Math.floor(Math.random() * diffVale)
+        dataList.push({
+            close: close,
+            open: open,
+            min: minValue,
+            max: maxVale,
+            date: startDate + i * diffDate,
+            turnover: 10000 + Math.floor(Math.random() * 100000)
+        })
+    }
+    const kLine = new SimpleKLine('#k_line')
 
 
     // class Yang {

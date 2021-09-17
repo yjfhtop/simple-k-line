@@ -12,6 +12,7 @@ import {
     IndicatorsNames,
 } from '@/indicators/indicatorsUtils'
 import { XConf } from '@/axis/xAxis'
+import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
 export interface ItemWAndSpace {
@@ -114,9 +115,12 @@ const DefBaseChartConf: BaseChartConf = {
     yConf: DefYConf,
 }
 
+const DefMainChartConf: MainChartConf = deepCopy(DefBaseChartConf)
+DefMainChartConf.indicatorShowArr = ['timeSharing']
+
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {
-    mainChart: deepCopy(DefBaseChartConf),
+    mainChart: DefMainChartConf,
 }
 
 // 默认 x轴的配置项

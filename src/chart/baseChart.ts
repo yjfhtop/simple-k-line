@@ -26,8 +26,8 @@ export interface BaseChartConf {
 export abstract class BaseChart {
     // 指标 实列的 的映射
     public indicatorsMap: IndicatorsMap = {}
-    public leftTop: Coordinate
-    public rightBottom: Coordinate
+    // public leftTop: Coordinate
+    // public rightBottom: Coordinate
 
     // 标记 集合
     public toolList: BaseTool[] = []
@@ -43,28 +43,39 @@ export abstract class BaseChart {
     public YAxis: YAxis
 
     // 图表的名称
-    abstract name: ChartNames
+    public abstract chartName: ChartNames
 
     constructor(
         public kLine: KLine,
-        position: { leftTop: Coordinate; rightBottom: Coordinate }
+        public topY: number,
+        public chartH: number
     ) {
-        this.leftTop = position.leftTop
-        this.rightBottom = position.rightBottom
         this.determineIndicatorsMap()
         this.YAxis = new YAxis(this)
     }
+    get leftTop(): Coordinate {
+        return {
+            x: 0,
+            y: this.topY,
+        }
+    }
+    get rightBottom(): Coordinate {
+        return {
+            x: this.kLine.elWH.w,
+            y: this.topY + this.chartH,
+        }
+    }
 
     get conf() {
-        return this.kLine.conf.chartConfMap[this.name]
+        return this.kLine.conf.chartConfMap[this.chartName]
     }
 
     get chartW() {
         return this.rightBottom.x - this.leftTop.x
     }
-    get chartH() {
-        return this.rightBottom.y - this.leftTop.y
-    }
+    // get chartH() {
+    //     return this.rightBottom.y - this.leftTop.y
+    // }
     // 这个地图 Y轴最大的宽度
     get maxTxtW() {
         return this.YAxis.maxTxtW
@@ -133,10 +144,13 @@ export abstract class BaseChart {
                 this.minIndexCacheKey = indicator.minIndexCacheKey
             }
         })
+        // 自己的最大最小值确定后， 开始计算轴标
+        this.YAxis.determineScale()
     }
 
     // 实例化 需要显示的指标 指标
     determineIndicatorsMap() {
+        console.log(this, 'this')
         this.conf.indicatorShowArr.forEach((key) => {
             if (!this.indicatorsMap[key]) {
                 this.indicatorsMap[key] = createIndicators(key, this)

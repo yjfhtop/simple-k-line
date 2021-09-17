@@ -1,8 +1,9 @@
 /**
  * canvas 绘制相关
  */
-import { deepCopy, isOdd, mergeData } from '@/utils/dataHandle'
+import { deepCopy, mergeData } from '@/utils/dataHandle'
 import { logError } from '@/utils/log'
+import { isOdd } from '@/utils/index'
 
 // 坐标
 export interface Coordinate {
