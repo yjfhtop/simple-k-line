@@ -12,17 +12,17 @@ import { drawLine, drawTxt } from '@/utils/canvasDraw'
 
 export interface YConf {
     // 轴线
-    axisLine: {
+    axisLine?: {
         color?: string
         lineW?: number
     }
     // 轴标
-    axisMark: {
+    axisMark?: {
         len?: number
         lineW?: number
         color?: string
     }
-    txt: {
+    txt?: {
         size?: number
         family?: string
         // Y偏移量， 文字默认是在轴标的尾部绘制 y轴 = 轴线.y + axisMark.len
@@ -30,12 +30,12 @@ export interface YConf {
         color?: string
     }
     // 网格线样式
-    gridLine: {
+    gridLine?: {
         color?: string
         lineW?: number
     }
     // 轴标配置
-    scaleCalcConfig: ScaleCalcConfig
+    scaleCalcConfig?: ScaleCalcConfig
 }
 
 /**

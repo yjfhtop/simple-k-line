@@ -6,7 +6,7 @@ import {
     IndicatorsNames,
     IndicatorsMap,
 } from '@/indicators/indicatorsUtils'
-import { YAxis, YConf } from '@/axis/YAxis'
+import { YAxis, YConf } from '@/axis/yAxis'
 import { BaseTool } from '@/tool/baseTool'
 import { createIndicators } from '@/indicators/indicatorsUtils'
 import { ChartNames } from '@/chart/chartUtils'
@@ -76,7 +76,7 @@ export abstract class BaseChart {
     // 绘制图表的范围，不包含 Y轴
     get drawChartRightBottom() {
         return {
-            x: this.rightBottom.x - this.kLine.yPaddingAllLen,
+            x: this.rightBottom.x - this.kLine.yW,
             y: this.rightBottom.y,
         }
     }

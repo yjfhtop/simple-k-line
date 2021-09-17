@@ -8,7 +8,7 @@ export interface ChartMap {
 }
 
 export interface ChartConfMap {
-    mainChart: MainChartConf
+    mainChart?: MainChartConf
 }
 
 export type ChartNames = keyof ChartMap

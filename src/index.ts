@@ -2,6 +2,15 @@ import { createHDCanvas, getContainerEl, getEleHW, WH } from '@/utils/element'
 import { logError, logTag } from '@/utils/log'
 import { DataItem, initConf, KLineConf } from '@/kLineConf'
 import { deepCopy } from '@/utils/dataHandle'
+import {
+    addTime,
+    formDate,
+    getMonthAllDayNumber,
+    isLastDay,
+    isLeapYear,
+    timeArrGetTimeUnitAndNumber,
+} from '@/utils/timeHandle'
+import { ChartMap, ChartNames } from '@/chart/chartUtils'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -28,6 +37,9 @@ export default class SimpleKLine {
     // 在图表内的绘制结束下标
     public eIndex: number
 
+    // 图表的映射
+    public chartMap: ChartMap = {}
+
     // y 轴左右 Padding 的和
     get yPaddingAllLen() {
         return (this.conf.yPadding.left || 0) + (this.conf.yPadding.right || 0)
@@ -40,6 +52,10 @@ export default class SimpleKLine {
     // 当前使用的 item 的 宽度
     get useItemAllW() {
         return this.useItem.w + this.useItem.space
+    }
+    // y轴的包含 Padding 宽度
+    get yW() {
+        return this.yTxtMaxW + this.yPaddingAllLen
     }
     // 能够展示的 item 个数
     get itemNumber() {
@@ -56,6 +72,8 @@ export default class SimpleKLine {
         dataArr: DataItem[],
         option: KLineConf
     ) {
+        this.test()
+        return
         // logTag()
         this.dataArr = deepCopy(dataArr)
         this.conf = initConf(option)
@@ -108,4 +126,21 @@ export default class SimpleKLine {
 
     // 计算所有需要的数据， 主要是计算各个指标的值，同时处理最大最小值
     calc() {}
+    // 初始化图表的映射
+    initChartMap() {
+    }
+    test() {
+        console.log('------')
+        const date = new Date('2020-1-31 00:00:00')
+        console.log(formDate(date))
+        console.log(formDate(addTime(date, 29, 'day')))
+        console.log(formDate(addTime(date, 58, 'day')))
+        console.log(
+            timeArrGetTimeUnitAndNumber([
+                date.getTime(),
+                addTime(date, 29, 'day'),
+                addTime(date, 58, 'day'),
+            ])
+        )
+    }
 }

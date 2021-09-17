@@ -2,7 +2,7 @@
  * 主要是k线的配置相关
  */
 import { deepCopy, DefScaleCalcConfig, mergeData } from '@/utils/dataHandle'
-import { YConf } from '@/axis/YAxis'
+import { YConf } from '@/axis/yAxis'
 import { DefSectorConfig } from '@/utils/canvasDraw'
 import { ChartConfMap, ChartNames } from '@/chart/chartUtils'
 import { TimeSharingConf } from '@/indicators/timeSharing'
@@ -11,6 +11,7 @@ import {
     IndicatorsConfMap,
     IndicatorsNames,
 } from '@/indicators/indicatorsUtils'
+import { XConf } from '@/axis/xAxis'
 
 // item 的宽度 和 空隙
 export interface ItemWAndSpace {
@@ -65,7 +66,8 @@ export interface KLineConf {
     // 柱子宽度和间隔 使用哪一个宽度的下标
     useItemWAndSpaceIndex?: number
     yPadding?: Partial<PaddingLR>
-    yConf?: Partial<YConf>
+    yConf?: YConf
+    xConf?: XConf
     // 需要显示的图表
     chartShowArr?: ChartNames[]
     // 图表的配置项
@@ -117,6 +119,29 @@ const DefChartConfMap: ChartConfMap = {
     mainChart: deepCopy(DefBaseChartConf),
 }
 
+// 默认 x轴的配置项
+const DefXConf: XConf = {
+    h: 24,
+    axisLine: {
+        color: '#fff',
+        lineW: 1,
+    },
+    axisMark: {
+        lineW: 1,
+        len: 4,
+    },
+    txt: {
+        size: 12,
+        family: 'Microsoft YaHei',
+        color: '#fff',
+        deviationY: 2,
+    },
+    gridLine: {
+        color: '#666',
+        lineW: 1,
+    },
+}
+
 export const DefKLineConf: KLineConf = {
     itemWAndSpaceList: DefItemWAndSpaceList,
     useItemWAndSpaceIndex: 5,
@@ -124,8 +149,20 @@ export const DefKLineConf: KLineConf = {
     yConf: DefYConf,
     chartShowArr: ['mainChart'],
     chartConfMap: DefChartConfMap,
+    xConf: DefXConf,
 }
 
 export function initConf(conf: KLineConf) {
-    return mergeData(DefKLineConf, conf || {})
+    const c = mergeData(DefKLineConf, conf || {})
+    // 保证主图是第一个 s
+    const mainChartIndex = c.chartShowArr.indexOf('mainChart')
+    if (mainChartIndex < 0) {
+        c.chartShowArr.unshift('mainChart')
+    }
+    if (mainChartIndex > 0) {
+        c.chartShowArr.splice(mainChartIndex, 1)
+        c.chartShowArr.unshift('mainChart')
+    }
+    // 保证主图是第一个 e
+    return c
 }

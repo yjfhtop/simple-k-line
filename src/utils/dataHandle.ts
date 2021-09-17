@@ -1,38 +1,9 @@
 import { Coordinate } from '@/utils/canvasDraw'
+import { getDataType } from '@/utils/index'
 
 /**
  * 数据处理
  */
-
-// 数据类型
-export type DataType =
-    | 'Object'
-    | 'Array'
-    | 'Function'
-    | 'Null'
-    | 'Number'
-    | 'String'
-    | 'Boolean'
-    | 'Undefined'
-
-/**
- * 是否奇数
- * @param v
- */
-export function isOdd(v: number): boolean {
-    v = Math.floor(v)
-    return v % 2 !== 0
-}
-
-/**
- * 获取数据类型
- * @param data
- */
-export function getDataType(data: any): DataType {
-    const typeStr: string = Object.prototype.toString.call(data)
-    const useTypeStr = typeStr.replace('[object ', '').replace(']', '')
-    return useTypeStr as DataType
-}
 
 /**
  * 深度克隆
