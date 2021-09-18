@@ -33,12 +33,11 @@ export abstract class BaseTool {
     }
     // 点的坐标集合
     get dotCoordinateArr(): Coordinate[] {
-        // return this.dotArr.map((item: ShapeDot) => {
-        //     return {
-        //         x: this.chart.kLine.xAxis.valueGetX(item.date),
-        //         y: this.chart.YAxis.valueGetY(item.value),
-        //     }
-        // })
-        return []
+        return this.dotArr.map((item: ShapeDot) => {
+            return {
+                x: this.chart.kLine.xAxis.valueGetX(item.date),
+                y: this.chart.YAxis.valueGetY(item.value),
+            }
+        })
     }
 }

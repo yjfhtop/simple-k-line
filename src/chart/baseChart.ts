@@ -250,4 +250,17 @@ export class BaseChart {
     formData(v: number) {
         return Math.floor(v) + ''
     }
+
+    // 获取绘制有效的 Y
+    getDrawEffectiveY(y: number) {
+        const drawChartLeftTop = this.drawChartLeftTop
+        const drawChartRightBottom = this.drawChartRightBottom
+        if (y < drawChartLeftTop.y) {
+            return drawChartLeftTop.y
+        }
+        if (y > drawChartRightBottom.y) {
+            return drawChartRightBottom.y
+        }
+        return y
+    }
 }

@@ -15,6 +15,7 @@ import { arrGetAddAndDel } from '@/utils/index'
 import { XAxis } from '@/axis/xAxis'
 import { EventHandle } from '@/eventHandle/index'
 import { Cross } from '@/cross/index'
+import { createTool, ToolTypes } from '@/tool/toolUtils'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -270,6 +271,10 @@ export default class SimpleKLine {
             const chart = this.chartMap[name]
             chart.drawTop()
         })
+        // 因为没有完成的工具没有添加到图表里面，所以需要手动绘制
+        if (this.eventHandle.activeTool && !this.eventHandle.activeTool.over) {
+            this.eventHandle.activeTool.draw()
+        }
         if (this.showCross) {
             this.cross.draw()
         }
@@ -279,6 +284,10 @@ export default class SimpleKLine {
     }
     clearTc() {
         this.tc.clearRect(0, 0, this.elWH.w, this.elWH.h)
+    }
+    addTool(name: ToolTypes) {
+        const tool = createTool(name, this.chartMap[this.conf.chartShowArr[0]])
+        this.eventHandle.activeTool = tool
     }
     test() {
         const a: any = { a: 1 }

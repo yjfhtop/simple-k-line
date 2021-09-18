@@ -22,6 +22,7 @@
 
 </head>
 <body>
+<button id='addTool'>add Tool</button>
 <div id="k_line">
 
 </div>
@@ -56,19 +57,9 @@
     const kLine = new SimpleKLine('#k_line', dataList)
     console.log(kLine)
 
-
-    // class Yang {
-    //     constructor() {
-    //         this.age = 10
-    //     }
-    //     get myAge() {
-    //         console.log(1111);
-    //         return this.age
-    //     }
-    // }
-    // const a = new Yang()
-    // a.myAge
-    // a.myAge
-    // a.myAge
+    const addTool = document.getElementById('addTool')
+    addTool.addEventListener('click', () => {
+        kLine.addTool('triangle')
+    })
 </script>
 </html>

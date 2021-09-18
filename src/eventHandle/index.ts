@@ -3,8 +3,8 @@ import { Coordinate } from '@/utils/canvasDraw'
 import SimpleKLine from '@/index'
 
 export class EventHandle {
-    // 绘制中的 标记
-    public shape: BaseTool
+    // 激活的 标记
+    public activeTool: BaseTool
     // 鼠标左键是否在按下状态中
     public leftPressIng: boolean
     // 上一个鼠标 移动时的坐标
@@ -49,11 +49,36 @@ export class EventHandle {
 
     initEnv() {
         this.kLine.el.addEventListener('mousemove', (e) => {
+            this.kLine.showCross = true
             this.nowCoordinate = {
                 x: this.getEffectiveX(e.offsetX),
                 y: this.getEffectiveY(e.offsetY),
             }
-            this.kLine.showCross = true
+            const nowChart = this.nowChart
+            // 是否有激活的工具
+            if (this.activeTool) {
+                this.kLine.showCross = false
+                // 还没有确定点的 工具是可切换所在的图表的 s
+                if (this.activeTool.nowDotIndex === 0) {
+                    this.activeTool.chart = nowChart
+                }
+                // 还没有确定点的 工具是可切换所在的图表的 e
+
+                // 获取date 和 value s
+                const date = this.kLine.xAxis.xGetValue(this.nowCoordinate.x)
+                const value = this.activeTool.chart.YGetValue(
+                    // 这里需要处理一下y轴
+                    this.activeTool.chart.getDrawEffectiveY(
+                        this.nowCoordinate.y
+                    )
+                )
+                // 获取date 和 value e
+                if (this.activeTool.over) {
+                    // pass
+                } else {
+                    this.activeTool.setDot({ date, value })
+                }
+            }
             this.kLine.drawTop()
             this.oldCoordinate = { ...this.nowCoordinate }
         })
@@ -67,12 +92,12 @@ export class EventHandle {
         })
 
         this.kLine.el.addEventListener('click', (e) => {
-            if (this.shape) {
-                this.shape.nowDotIndex++
-                if (this.shape.over) {
-                    this.shape.chart.toolList.push(this.shape)
-                    this.shape.active = false
-                    this.shape = null
+            if (this.activeTool) {
+                this.activeTool.nowDotIndex++
+                if (this.activeTool.over) {
+                    this.activeTool.chart.toolList.push(this.activeTool)
+                    this.activeTool.active = false
+                    this.activeTool = null
                     this.kLine.showCross = true
                 }
             }
