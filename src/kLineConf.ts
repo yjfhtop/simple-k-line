@@ -4,7 +4,7 @@
 import { deepCopy, DefScaleCalcConfig, mergeData } from '@/utils/dataHandle'
 import { YConf } from '@/axis/yAxis'
 import { DefSectorConfig } from '@/utils/canvasDraw'
-import { ChartConfMap, ChartNames } from '@/chart/chartUtils'
+import { ChartConfMap } from '@/chart/chartUtils'
 import { TimeSharingConf } from '@/indicators/timeSharing'
 import { BaseChartConf } from '@/chart/baseChart'
 import {
@@ -12,7 +12,7 @@ import {
     IndicatorsNames,
 } from '@/indicators/indicatorsUtils'
 import { XConf } from '@/axis/xAxis'
-import { MainChartConf } from '@/chart/mainChart'
+// import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
 export interface ItemWAndSpace {
@@ -70,7 +70,7 @@ export interface KLineConf {
     yConf?: YConf
     xConf?: XConf
     // 需要显示的图表
-    chartShowArr?: ChartNames[]
+    chartShowArr?: string[]
     // 图表的配置项
     chartConfMap?: Partial<ChartConfMap>
 }
@@ -115,7 +115,7 @@ const DefBaseChartConf: BaseChartConf = {
     yConf: DefYConf,
 }
 
-const DefMainChartConf: MainChartConf = deepCopy(DefBaseChartConf)
+const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
 DefMainChartConf.indicatorShowArr = ['timeSharing']
 
 // 所有图表的配置

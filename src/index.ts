@@ -10,7 +10,7 @@ import {
     isLeapYear,
     timeArrGetTimeUnitAndNumber,
 } from '@/utils/timeHandle'
-import { ChartMap, ChartNames, createChart } from '@/chart/chartUtils'
+import { ChartMap, createChart } from '@/chart/chartUtils'
 import { arrGetAddAndDel } from '@/utils/index'
 
 export default class SimpleKLine {
@@ -36,7 +36,7 @@ export default class SimpleKLine {
     // 需要的数据集合 最后的为最新的数据
     public dataArr: DataItem[]
     // y 轴最大文本长度
-    public yTxtMaxW: number
+    public yTxtMaxW: number = 70
     // 在图表内的绘制结束下标
     public eIndex: number
     // 偏移下标的数目 在结束坐标的偏移
@@ -75,9 +75,8 @@ export default class SimpleKLine {
     }
     // 能够展示的 item 个数
     get itemNumber() {
-        return Math.floor(
-            (this.elWH.w - this.yPaddingAllLen) / this.useItemAllW
-        )
+        const data = Math.floor((this.elWH.w - this.yW) / this.useItemAllW)
+        return data
     }
     // 在图表内的绘制的开始下标
     get sIndex() {
@@ -99,6 +98,11 @@ export default class SimpleKLine {
         this.test()
         // logTag()
         this.dataArr = deepCopy(dataArr)
+        if (!this.dataArr) {
+            logError('new SimpleKLine', 'dataArr is required')
+            return
+        }
+        this.eIndex = dataArr.length - 1
         this.conf = initConf(option)
         this.initUseDom(el)
         this.initContainer()
@@ -222,21 +226,15 @@ export default class SimpleKLine {
         if (txtW === oldYTxtMaxW || (diff > 0 && Math.abs(diff) <= 2)) {
             this.yTxtMaxW = txtW
         } else {
+            this.yTxtMaxW = txtW
             this.determineYTxtMaxW()
         }
     }
     test() {
-        console.log('------')
-        const date = new Date('2020-1-31 00:00:00')
-        console.log(formDate(date))
-        console.log(formDate(addTime(date, 29, 'day')))
-        console.log(formDate(addTime(date, 58, 'day')))
-        console.log(
-            timeArrGetTimeUnitAndNumber([
-                date.getTime(),
-                addTime(date, 29, 'day'),
-                addTime(date, 58, 'day'),
-            ])
-        )
+        const a: any = { a: 1 }
+        const b: any = { b: 10 }
+        b.a = a
+        a.b = b
+        console.log(deepCopy(a))
     }
 }

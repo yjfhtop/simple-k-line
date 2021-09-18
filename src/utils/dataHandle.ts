@@ -35,7 +35,9 @@ export function deepCopy<T>(data: T): T {
                     }
                 } else {
                     newData = {}
+                    // 处理循环引用 s
                     reMap.set(data, newData)
+                    // 处理循环引用 e
                     Object.keys(useData).forEach((key) => {
                         newData[key] = copy(useData[key])
                     })

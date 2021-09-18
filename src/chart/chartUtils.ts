@@ -1,17 +1,17 @@
-import { MainChart, MainChartConf } from '@/chart/mainChart'
+// import { MainChart, MainChartConf } from '@/chart/mainChart'
 import { BaseChart, BaseChartConf } from '@/chart/baseChart'
 import SimpleKLine from '@/index'
 import { Coordinate } from '@/utils/canvasDraw'
 
 export interface ChartMap {
-    mainChart?: MainChart
+    [key: string]: BaseChart
 }
 
 export interface ChartConfMap {
-    mainChart?: MainChartConf
+    [key: string]: BaseChartConf
 }
 
-export type ChartNames = keyof ChartMap
+// export type ChartNames = keyof ChartMap
 
 /**
  * 创建图表
@@ -21,14 +21,11 @@ export type ChartNames = keyof ChartMap
  * @param chartH
  * @constructor
  */
-export function createChart<T = BaseChart>(
-    name: ChartNames,
+export function createChart(
+    name: string,
     kLine: SimpleKLine,
     topY: number,
     chartH: number
-): T {
-    switch (name) {
-        case 'mainChart':
-            return new MainChart(kLine, topY, chartH) as any as T
-    }
+) {
+    return new BaseChart(name, kLine, topY, chartH)
 }

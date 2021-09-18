@@ -9,7 +9,7 @@ import {
 import { YAxis, YConf } from '@/axis/yAxis'
 import { BaseTool } from '@/tool/baseTool'
 import { createIndicators } from '@/indicators/indicatorsUtils'
-import { ChartNames } from '@/chart/chartUtils'
+// import { ChartNames } from '@/chart/chartUtils'
 
 /**
  * 图表类
@@ -23,7 +23,7 @@ export interface BaseChartConf {
     yConf?: YConf
 }
 
-export abstract class BaseChart {
+export class BaseChart {
     // 指标 实列的 的映射
     public indicatorsMap: IndicatorsMap = {}
     // public leftTop: Coordinate
@@ -43,9 +43,10 @@ export abstract class BaseChart {
     public YAxis: YAxis
 
     // 图表的名称
-    public abstract chartName: ChartNames
+    // public chartName: ChartNames
 
     constructor(
+        public chartName: string,
         public kLine: KLine,
         public topY: number,
         public chartH: number
@@ -150,7 +151,6 @@ export abstract class BaseChart {
 
     // 实例化 需要显示的指标 指标
     determineIndicatorsMap() {
-        console.log(this, 'this')
         this.conf.indicatorShowArr.forEach((key) => {
             if (!this.indicatorsMap[key]) {
                 this.indicatorsMap[key] = createIndicators(key, this)
