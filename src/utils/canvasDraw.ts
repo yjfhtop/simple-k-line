@@ -568,3 +568,76 @@ export function drawTxt(ctx: CanvasRenderingContext2D, txtConf: TxtConf) {
         ctx.strokeText(c.txt, c.coordinate.x, c.coordinate.y, c.maxWidth)
     }
 }
+
+// smooth 平滑的   sharp：锐利
+export type BrokenLineType = 'smooth' | 'sharp'
+export interface BrokenLineConfig {
+    lineType?: BrokenLineType
+    drawStyle?: DrawStyle
+}
+
+export const DefBrokenLineConfig: BrokenLineConfig = {
+    lineType: 'smooth',
+    drawStyle: deepCopy(DefDrawStyle),
+}
+
+// todo 三次方得优化
+// 三次方贝赛尔曲线 控制点计算, 好像有问
+// 参考 https://wenku.baidu.com/view/c790f8d46bec0975f565e211.html
+// 折线绘制
+export function drawBrokenLine(
+    ctx: CanvasRenderingContext2D,
+    dotArr: Coordinate[],
+    brokenLineConfig?: BrokenLineConfig
+) {
+    brokenLineConfig = mergeData(DefBrokenLineConfig, brokenLineConfig)
+    ctx.save()
+    ctx.beginPath()
+    if (brokenLineConfig && brokenLineConfig.drawStyle) {
+        setDrawStyle(ctx, 'stroke', brokenLineConfig.drawStyle)
+    }
+
+    if (brokenLineConfig && brokenLineConfig.lineType === 'smooth') {
+        dotArr.forEach((item, index) => {
+            let scale = 0.08
+            let last1X = (dotArr[index - 1] && dotArr[index - 1].x) || 0,
+                last1Y = (dotArr[index - 1] && dotArr[index - 1].y) || 0,
+                //前一个点坐标
+                last2X = (dotArr[index - 2] && dotArr[index - 2].x) || 0,
+                last2Y = (dotArr[index - 2] && dotArr[index - 2].y) || 0,
+                //前两个点坐标
+                nowX = item.x,
+                nowY = item.y,
+                //当期点坐标
+                nextX = (dotArr[index + 1] && dotArr[index + 1].x) || 0,
+                nextY = (dotArr[index + 1] && dotArr[index + 1].y) || 0,
+                //下一个点坐标
+                cAx = last1X + (nowX - last2X) * scale,
+                cAy = last1Y + (nowY - last2Y) * scale,
+                cBx = nowX - (nextX - last1X) * scale,
+                cBy = nowY - (nextY - last1Y) * scale
+            if (index === 0) {
+                ctx.lineTo(nowX, nowY)
+                return
+            } else if (index === 1) {
+                cAx = last1X + (nowX - 0) * scale
+                cAy = last1Y + (nowY - 0) * scale
+            } else if (index === dotArr.length - 1) {
+                cBx = nowX - (nowX - last1X) * scale
+                cBy = nowY - (nowY - last1Y) * scale
+            }
+            ctx.bezierCurveTo(cAx, cAy, cBx, cBy, nowX, nowY)
+            //绘制出上一个点到当前点的贝塞尔曲线
+        })
+    } else {
+        dotArr.forEach((item, index) => {
+            if (index === 0) {
+                ctx.moveTo(item.x, item.y)
+            } else {
+                ctx.lineTo(item.x, item.y)
+            }
+        })
+    }
+    ctx.stroke()
+    ctx.restore()
+}

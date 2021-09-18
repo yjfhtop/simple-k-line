@@ -165,24 +165,40 @@ export class BaseChart {
     YGetValue(y: number) {
         return this.YAxis.YGetValue(y)
     }
-
+    // 绘制工具
+    drawTool() {
+        this.toolList.forEach((item) => {
+            item.draw()
+        })
+    }
     drawAll() {
         this.drawBottom()
         this.drawTop()
     }
     drawBottom() {
+        const bc = this.kLine.bc
+        bc.save()
+        bc.rect(
+            this.drawChartLeftTop.x,
+            this.drawChartLeftTop.y,
+            this.chartW,
+            this.chartH
+        )
+        bc.clip()
         this.YAxis.draw()
         this.drawGridLine()
         Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
             const item = this.indicatorsMap[key]
             item.drawBottom()
         })
+        bc.restore()
     }
     drawTop() {
         Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
             const item = this.indicatorsMap[key]
             item.drawTop()
         })
+        this.drawTool()
     }
     // 绘制 图表的网格线
     drawGridLine() {
@@ -212,12 +228,6 @@ export class BaseChart {
             coordinate.y >= this.leftTop.y &&
             coordinate.y <= this.rightBottom.y
         )
-    }
-
-    drawFloat() {
-        this.toolList.forEach((item) => {
-            item.draw()
-        })
     }
 
     formData(v: number) {

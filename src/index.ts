@@ -240,6 +240,7 @@ export default class SimpleKLine {
     }
     // 绘制底部的canvas
     drawBottom() {
+        this.clearBc()
         this.xAxis.draw()
         this.conf.chartShowArr.forEach((name) => {
             const chart = this.chartMap[name]
@@ -248,10 +249,17 @@ export default class SimpleKLine {
     }
     // 绘制顶部的 canvas
     drawTop() {
+        this.clearTc()
         this.conf.chartShowArr.forEach((name) => {
             const chart = this.chartMap[name]
             chart.drawTop()
         })
+    }
+    clearBc() {
+        this.bc.clearRect(0, 0, this.elWH.w, this.elWH.h)
+    }
+    clearTc() {
+        this.tc.clearRect(0, 0, this.elWH.w, this.elWH.h)
     }
     test() {
         const a: any = { a: 1 }

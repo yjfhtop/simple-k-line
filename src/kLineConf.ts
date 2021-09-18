@@ -5,7 +5,7 @@ import { deepCopy, DefScaleCalcConfig, mergeData } from '@/utils/dataHandle'
 import { YConf } from '@/axis/yAxis'
 import { DefSectorConfig } from '@/utils/canvasDraw'
 import { ChartConfMap } from '@/chart/chartUtils'
-import { TimeSharingConf } from '@/indicators/timeSharing'
+import { CloseIndicatorsConf } from '@/indicators/closeIndicators'
 import { BaseChartConf } from '@/chart/baseChart'
 import {
     IndicatorsConfMap,
@@ -93,22 +93,28 @@ const DefYConf: YConf = {
         deviationX: 4,
     },
     gridLine: {
-        color: '#ccc',
+        color: '#666',
         lineW: 1,
     },
     scaleCalcConfig: DefScaleCalcConfig,
 }
 
-// 默认分时图的配置
-const DefTimeSharingConf: TimeSharingConf = {
-    closeLine: {
+// 默认 close 配置
+const DefTimeSharingConf: CloseIndicatorsConf = {
+    lineW: 1,
+    color: 'rgb(32, 145, 234)',
+    nowLine: {
         lineW: 1,
         color: 'rgb(32, 145, 234)',
+        lineDash: [2, 2],
     },
-    maLine: {
-        maDay: 60,
-        lineW: 1,
-        color: 'rgb(209, 195, 25)',
+    nowHighlight: {
+        bgc: 'rgb(32, 145, 234)',
+        font: {
+            size: 12,
+            color: '#fff',
+        },
+        h: 24,
     },
 }
 
@@ -153,7 +159,7 @@ const DefXConf: XConf = {
         deviationY: 2,
     },
     gridLine: {
-        color: '#ccc',
+        color: '#666',
         lineW: 1,
     },
 }
@@ -161,7 +167,7 @@ const DefXConf: XConf = {
 export const DefKLineConf: KLineConf = {
     itemWAndSpaceList: DefItemWAndSpaceList,
     useItemWAndSpaceIndex: 5,
-    yPadding: { left: 5, right: 5 },
+    yPadding: { left: 10, right: 10 },
     yConf: DefYConf,
     chartShowArr: ['mainChart'],
     chartConfMap: DefChartConfMap,

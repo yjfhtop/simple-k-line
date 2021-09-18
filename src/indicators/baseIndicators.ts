@@ -9,6 +9,7 @@ import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 export abstract class BaseIndicators {
     // 指标的名称
     public abstract name: IndicatorsNames
+    public abstract cacheKeyArr: string[]
 
     // 最大最小值的下标
     public maxIndex = -1
