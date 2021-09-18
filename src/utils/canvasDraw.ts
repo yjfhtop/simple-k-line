@@ -246,7 +246,6 @@ export function drawRect(
         )
         ctx.closePath()
     } else {
-        console.log(rectConfig, 'rectConfig')
         ctx.rect(
             rectConfig.leftTop.x,
             rectConfig.leftTop.y,

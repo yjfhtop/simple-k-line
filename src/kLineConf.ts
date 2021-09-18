@@ -12,6 +12,7 @@ import {
     IndicatorsNames,
 } from '@/indicators/indicatorsUtils'
 import { XConf } from '@/axis/xAxis'
+import { CrossConf } from '@/cross/index'
 // import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
@@ -84,6 +85,24 @@ export interface KLineConf {
     chartShowArr?: string[]
     // 图表的配置项
     chartConfMap?: Partial<ChartConfMap>
+    crossConf?: CrossConf
+}
+
+const DefCrossConf: CrossConf = {
+    line: {
+        lineW: 1,
+        color: '#ccc',
+        lineDash: [3, 1],
+    },
+    nowHighlight: {
+        bgc: '#ccc',
+        font: {
+            size: 12,
+            color: '#000',
+        },
+        yH: 24,
+        xW: 120,
+    },
 }
 
 // y轴默认配置
@@ -190,6 +209,7 @@ export const DefKLineConf: KLineConf = {
     chartShowArr: ['mainChart'],
     chartConfMap: DefChartConfMap,
     xConf: DefXConf,
+    crossConf: DefCrossConf,
 }
 
 export function initConf(conf: KLineConf) {

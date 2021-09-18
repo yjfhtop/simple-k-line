@@ -13,6 +13,8 @@ import {
 import { ChartMap, createChart } from '@/chart/chartUtils'
 import { arrGetAddAndDel } from '@/utils/index'
 import { XAxis } from '@/axis/xAxis'
+import { EventHandle } from '@/eventHandle/index'
+import { Cross } from '@/cross/index'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -45,6 +47,10 @@ export default class SimpleKLine {
     // 偏移下标的数目 在开始坐标的偏移
     public sDeviationNumber = 2
     public xAxis: XAxis
+    public eventHandle: EventHandle
+    // 是否显示十字交叉线
+    public showCross: boolean = false
+    public cross: Cross
 
     // 真正的绘制开始下标
     get drawSIndex() {
@@ -92,6 +98,14 @@ export default class SimpleKLine {
     get chartStartY() {
         return 0
     }
+    // 图表最大的 y 坐标的值，不含轴
+    get chartMaxY() {
+        return this.elWH.h - this.conf.xConf.h
+    }
+    // 图表最大的 x 坐标的值，不含轴
+    get chartMaxX() {
+        return this.elWH.w - this.yW
+    }
     constructor(
         el: HTMLElement | string,
         dataArr: DataItem[],
@@ -112,6 +126,8 @@ export default class SimpleKLine {
         this.determineChartMap()
         this.determineYTxtMaxW()
         this.xAxis = new XAxis(this)
+        this.eventHandle = new EventHandle(this)
+        this.cross = new Cross(this)
         this.drawAll()
     }
 
@@ -254,6 +270,9 @@ export default class SimpleKLine {
             const chart = this.chartMap[name]
             chart.drawTop()
         })
+        if (this.showCross) {
+            this.cross.draw()
+        }
     }
     clearBc() {
         this.bc.clearRect(0, 0, this.elWH.w, this.elWH.h)
