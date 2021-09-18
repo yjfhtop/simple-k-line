@@ -6,7 +6,18 @@ import { BaseIndicators } from '@/indicators/baseIndicators'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 
 // 分时图的配置项
-export interface TimeSharingConf {}
+export interface TimeSharingConf {
+    closeLine?: {
+        lineW?: number
+        color?: string
+    }
+    maLine?: {
+        lineW?: number
+        color?: string
+        maDay: number
+    }
+    // showLineName: ['']
+}
 
 export class TimeSharing extends BaseIndicators {
     public name: IndicatorsNames = 'timeSharing'

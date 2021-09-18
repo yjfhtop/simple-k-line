@@ -100,7 +100,17 @@ const DefYConf: YConf = {
 }
 
 // 默认分时图的配置
-const DefTimeSharingConf: TimeSharingConf = {}
+const DefTimeSharingConf: TimeSharingConf = {
+    closeLine: {
+        lineW: 1,
+        color: 'rgb(32, 145, 234)',
+    },
+    maLine: {
+        maDay: 60,
+        lineW: 1,
+        color: 'rgb(209, 195, 25)',
+    },
+}
 
 // 所有指标配置项的集合
 const DefIndicatorsConfMap: IndicatorsConfMap = {
