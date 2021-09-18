@@ -61,8 +61,19 @@ export interface PaddingTB {
     bottom: number
 }
 
+// 涨跌颜色
+export interface RiseFallColor {
+    riseColor?: string
+    fallColor?: string
+}
+export const DefRiseFallColor: RiseFallColor = {
+    riseColor: 'rgb(235, 73, 89)',
+    fallColor: 'rgb(186, 186, 186)',
+}
+
 // k线的配置类型
 export interface KLineConf {
+    riseFallColor?: RiseFallColor
     itemWAndSpaceList?: ItemWAndSpace[]
     // 柱子宽度和间隔 使用哪一个宽度的下标
     useItemWAndSpaceIndex?: number
@@ -130,6 +141,12 @@ const DefBaseChartConf: BaseChartConf = {
     // 指标的配置
     indicatorsConfMap: DefIndicatorsConfMap,
     yConf: DefYConf,
+    infoTxt: {
+        deviationX: 2,
+        deviationY: 2,
+        size: 12,
+        color: '#ccc',
+    },
 }
 
 const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
@@ -165,6 +182,7 @@ const DefXConf: XConf = {
 }
 
 export const DefKLineConf: KLineConf = {
+    riseFallColor: DefRiseFallColor,
     itemWAndSpaceList: DefItemWAndSpaceList,
     useItemWAndSpaceIndex: 5,
     yPadding: { left: 10, right: 10 },

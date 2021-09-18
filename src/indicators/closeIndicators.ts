@@ -16,12 +16,14 @@ import {
 export interface CloseIndicatorsConf {
     lineW?: number
     color?: string
+    // 当前价格的线段样式
     nowLine?: {
         lineW?: number
         color?: string
         // 本项存在就是虚线
         lineDash?: number[]
     }
+    // 高亮块 和 其内的文字样式
     nowHighlight?: {
         bgc?: string
         font?: {
@@ -129,5 +131,8 @@ export class CloseIndicators extends BaseIndicators {
             fontSize: this.conf.nowHighlight.font.size,
             fontFamily: this.conf.nowHighlight.font.family,
         })
+
+        // 图表上的文字绘制 s
+        // 图表上的文字绘制 e
     }
 }

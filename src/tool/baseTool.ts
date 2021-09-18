@@ -19,7 +19,6 @@ export abstract class BaseTool {
     public active: boolean = false
     constructor(public chart: BaseChart) {}
 
-    // 分不同的点绘制
     abstract draw(): void
 
     addDot(dot: ShapeDot) {

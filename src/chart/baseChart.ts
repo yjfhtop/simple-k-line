@@ -9,6 +9,7 @@ import {
 import { YAxis, YConf } from '@/axis/yAxis'
 import { BaseTool } from '@/tool/baseTool'
 import { createIndicators } from '@/indicators/indicatorsUtils'
+import { deepCopy } from '@/utils/dataHandle'
 // import { ChartNames } from '@/chart/chartUtils'
 
 /**
@@ -21,6 +22,14 @@ export interface BaseChartConf {
     // 指标的配置
     indicatorsConfMap?: IndicatorsConfMap
     yConf?: YConf
+    // 用于绘制图表上信息
+    infoTxt?: {
+        deviationX?: number
+        deviationY?: number
+        size?: number
+        family?: string
+        color?: string
+    }
 }
 
 export class BaseChart {
@@ -42,10 +51,11 @@ export class BaseChart {
 
     public YAxis: YAxis
 
-    // 图表的名称
-    // public chartName: ChartNames
+    // 用于绘制图表上信息的的起始坐标
+    public infoTxtCoordinate: Coordinate
 
     constructor(
+        // 图表的名称
         public chartName: string,
         public kLine: KLine,
         public topY: number,
@@ -115,7 +125,13 @@ export class BaseChart {
             Number.MAX_VALUE
         )
     }
-
+    // 初始化信息文字的绘制坐标
+    initInfoTxtCoordinate() {
+        this.infoTxtCoordinate = {
+            x: this.drawChartLeftTop.x - this.conf.infoTxt.deviationX,
+            y: this.drawChartLeftTop.y - this.conf.infoTxt.deviationY,
+        }
+    }
     // 计算所有指标
     calcAll(item: DataItem, index: number, isMaxValue: boolean) {
         Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
@@ -194,6 +210,7 @@ export class BaseChart {
         bc.restore()
     }
     drawTop() {
+        this.initInfoTxtCoordinate()
         Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
             const item = this.indicatorsMap[key]
             item.drawTop()
