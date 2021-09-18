@@ -166,33 +166,43 @@ export class BaseChart {
         return this.YAxis.YGetValue(y)
     }
 
-    draw() {
+    drawAll() {
+        this.drawBottom()
+        this.drawTop()
+    }
+    drawBottom() {
         this.YAxis.draw()
         this.drawGridLine()
         Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
             const item = this.indicatorsMap[key]
-            item.draw()
+            item.drawBottom()
+        })
+    }
+    drawTop() {
+        Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
+            const item = this.indicatorsMap[key]
+            item.drawTop()
         })
     }
     // 绘制 图表的网格线
     drawGridLine() {
-        // this.kLine.xAxis.axisMarkArr.forEach((item) => {
-        //     drawLine(
-        //         this.kLine.mainCtx,
-        //         {
-        //             x: item.x,
-        //             y: this.leftTop.y,
-        //         },
-        //         {
-        //             x: item.x,
-        //             y: this.rightBottom.y,
-        //         },
-        //         {
-        //             w: this.kLine.theme.gridStyle.w,
-        //             style: this.kLine.theme.gridStyle.color,
-        //         }
-        //     )
-        // })
+        this.kLine.xAxis.axisMarkArr.forEach((item) => {
+            drawLine(
+                this.kLine.bc,
+                {
+                    x: item.x,
+                    y: this.leftTop.y,
+                },
+                {
+                    x: item.x,
+                    y: this.rightBottom.y,
+                },
+                {
+                    w: this.kLine.conf.xConf.gridLine.lineW,
+                    style: this.kLine.conf.xConf.gridLine.color,
+                }
+            )
+        })
     }
     // 坐标是否在图表中
     inChart(coordinate: Coordinate) {

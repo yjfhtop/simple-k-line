@@ -35,7 +35,13 @@ export abstract class BaseIndicators {
         item[cacheKey] = value
     }
     // 指标的绘制方法
-    abstract draw(): void
+    abstract drawBottom(): void
+    abstract drawTop(): void
+
+    drawAll() {
+        this.drawBottom()
+        this.drawTop()
+    }
 
     get conf() {
         return this.chart.conf.indicatorsConfMap[this.name]

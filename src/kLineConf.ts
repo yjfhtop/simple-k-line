@@ -84,15 +84,16 @@ const DefYConf: YConf = {
     axisMark: {
         lineW: 1,
         len: 4,
+        color: '#fff',
     },
     txt: {
         size: 12,
         family: 'Microsoft YaHei',
         color: '#fff',
-        deviationY: 2,
+        deviationX: 4,
     },
     gridLine: {
-        color: '#666',
+        color: '#ccc',
         lineW: 1,
     },
     scaleCalcConfig: DefScaleCalcConfig,
@@ -133,6 +134,7 @@ const DefXConf: XConf = {
     axisMark: {
         lineW: 1,
         len: 4,
+        color: '#fff',
     },
     txt: {
         size: 12,
@@ -141,7 +143,7 @@ const DefXConf: XConf = {
         deviationY: 2,
     },
     gridLine: {
-        color: '#666',
+        color: '#ccc',
         lineW: 1,
     },
 }

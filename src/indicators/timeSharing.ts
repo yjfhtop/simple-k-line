@@ -21,5 +21,6 @@ export class TimeSharing extends BaseIndicators {
         }
         this.itemTryMaxMin(cacheKey, item, useValue, index, isMaxValue)
     }
-    draw() {}
+    drawBottom() {}
+    drawTop() {}
 }

@@ -25,8 +25,8 @@ export interface YConf {
     txt?: {
         size?: number
         family?: string
-        // Y偏移量， 文字默认是在轴标的尾部绘制 y轴 = 轴线.y + axisMark.len
-        deviationY?: number
+        // X偏移量， 文字默认是在轴标的尾部绘制 x轴 = 轴线.x + axisMark.len
+        deviationX?: number
         color?: string
     }
     // 网格线样式
@@ -157,7 +157,7 @@ export class YAxis {
             drawLine(
                 this.chart.kLine.bc,
                 {
-                    x: this.chart.drawChartRightBottom.x,
+                    x: this.chart.drawChartLeftTop.x,
                     y,
                 },
                 {
@@ -176,8 +176,8 @@ export class YAxis {
                     x:
                         this.chart.drawChartRightBottom.x +
                         this.conf.axisMark.len +
-                        this.conf.txt.deviationY,
-                    y: y,
+                        this.conf.txt.deviationX,
+                    y: y - this.conf.txt.size / 2,
                 },
                 txt: this.scaleShowValueArr[i],
                 drawType: 'full',
@@ -186,7 +186,7 @@ export class YAxis {
                 },
                 fontSize: this.conf.txt.size,
                 fontFamily: this.conf.txt.family,
-                textBaseline: 'middle',
+                textBaseline: 'hanging',
                 textAlign: 'left',
             })
         }

@@ -12,6 +12,7 @@ import {
 } from '@/utils/timeHandle'
 import { ChartMap, createChart } from '@/chart/chartUtils'
 import { arrGetAddAndDel } from '@/utils/index'
+import { XAxis } from '@/axis/xAxis'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -43,6 +44,7 @@ export default class SimpleKLine {
     public eDeviationNumber = 2
     // 偏移下标的数目 在开始坐标的偏移
     public sDeviationNumber = 2
+    public xAxis: XAxis
 
     // 真正的绘制开始下标
     get drawSIndex() {
@@ -109,6 +111,8 @@ export default class SimpleKLine {
         this.initCanvas()
         this.determineChartMap()
         this.determineYTxtMaxW()
+        this.xAxis = new XAxis(this)
+        this.drawAll()
     }
 
     // 初始化用户的dom
@@ -164,7 +168,7 @@ export default class SimpleKLine {
             const viceChatH = this.allChatH * 0.2
             // 主图的高度
             const mainCharH =
-                (this.conf.chartShowArr.length - 1) * 0.2 * this.allChatH
+                (1 - (this.conf.chartShowArr.length - 1) * 0.2) * this.allChatH
             this.conf.chartShowArr.forEach((name, index) => {
                 if (index === 0) {
                     // 主图
@@ -229,6 +233,25 @@ export default class SimpleKLine {
             this.yTxtMaxW = txtW
             this.determineYTxtMaxW()
         }
+    }
+    drawAll() {
+        this.drawBottom()
+        this.drawTop()
+    }
+    // 绘制底部的canvas
+    drawBottom() {
+        this.xAxis.draw()
+        this.conf.chartShowArr.forEach((name) => {
+            const chart = this.chartMap[name]
+            chart.drawBottom()
+        })
+    }
+    // 绘制顶部的 canvas
+    drawTop() {
+        this.conf.chartShowArr.forEach((name) => {
+            const chart = this.chartMap[name]
+            chart.drawTop()
+        })
     }
     test() {
         const a: any = { a: 1 }
