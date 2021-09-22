@@ -13,6 +13,7 @@ import {
 } from '@/indicators/indicatorsUtils'
 import { XConf } from '@/axis/xAxis'
 import { CrossConf } from '@/cross/index'
+import { BaseToolConf } from '@/tool/baseTool'
 // import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
@@ -74,6 +75,7 @@ export const DefRiseFallColor: RiseFallColor = {
 
 // k线的配置类型
 export interface KLineConf {
+    bgc?: string
     riseFallColor?: RiseFallColor
     itemWAndSpaceList?: ItemWAndSpace[]
     // 柱子宽度和间隔 使用哪一个宽度的下标
@@ -86,6 +88,23 @@ export interface KLineConf {
     // 图表的配置项
     chartConfMap?: Partial<ChartConfMap>
     crossConf?: CrossConf
+    // 工具的基础配置
+    toolConf?: BaseToolConf
+}
+
+const DefToolConf: BaseToolConf = {
+    dot: {
+        bigR: 5,
+        smallR: 3,
+        color: '#fff',
+        activeColor: '#1661ab',
+    },
+    line: {
+        lineW: 1,
+        color: '#fff',
+        inLineW: 3,
+        activeLineDash: [2, 2],
+    },
 }
 
 const DefCrossConf: CrossConf = {
@@ -201,6 +220,7 @@ const DefXConf: XConf = {
 }
 
 export const DefKLineConf: KLineConf = {
+    bgc: '#000',
     riseFallColor: DefRiseFallColor,
     itemWAndSpaceList: DefItemWAndSpaceList,
     useItemWAndSpaceIndex: 5,
@@ -210,6 +230,7 @@ export const DefKLineConf: KLineConf = {
     chartConfMap: DefChartConfMap,
     xConf: DefXConf,
     crossConf: DefCrossConf,
+    toolConf: DefToolConf,
 }
 
 export function initConf(conf: KLineConf) {

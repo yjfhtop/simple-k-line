@@ -265,6 +265,8 @@ export interface CircularConfig {
     drawType?: DrawType
     // 包含边框 和 填充样式
     drawStyle?: DrawStyle
+    // 内部圆的填充样式, r 为 数组时起作用
+    innerStyle?: DrawStyle
 }
 export const DefCircularConfig: CircularConfig = {
     center: null,
@@ -314,6 +316,23 @@ export function drawCircular(
     }
     drawTypeDraw(ctx, circularConfig.drawType)
     ctx.restore()
+
+    // 内部填充
+    if (circularConfig.innerStyle && typeof circularConfig.r !== 'number') {
+        ctx.save()
+        ctx.beginPath()
+        const r = Math.min(...circularConfig.r)
+        setDrawStyle(ctx, 'full', circularConfig.innerStyle)
+        ctx.arc(
+            circularConfig.center.x,
+            circularConfig.center.y,
+            r,
+            0,
+            Math.PI * 2
+        )
+        drawTypeDraw(ctx, 'full')
+        ctx.restore()
+    }
 }
 
 export interface SectorConfig {
@@ -590,6 +609,7 @@ export function drawBrokenLine(
     brokenLineConfig?: BrokenLineConfig
 ) {
     brokenLineConfig = mergeData(DefBrokenLineConfig, brokenLineConfig)
+    if (dotArr.length < 2) return
     ctx.save()
     ctx.beginPath()
     if (brokenLineConfig && brokenLineConfig.drawStyle) {
