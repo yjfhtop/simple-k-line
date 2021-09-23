@@ -78,7 +78,7 @@ export interface KLineConf {
     bgc?: string
     riseFallColor?: RiseFallColor
     itemWAndSpaceList?: ItemWAndSpace[]
-    // 柱子宽度和间隔 使用哪一个宽度的下标
+    // 柱子宽度和间隔 使用哪一个宽度的下标, 仅在实例化时有效
     useItemWAndSpaceIndex?: number
     yPadding?: Partial<PaddingLR>
     yConf?: YConf

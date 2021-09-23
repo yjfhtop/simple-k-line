@@ -179,8 +179,6 @@ export class EventHandle {
             }
         })
 
-        this.kLine.el.addEventListener('click', (e) => {})
-
         document.addEventListener('mouseup', (e) => {
             this.downCoordinate = null
             // 表示是对工具进行移动 和 拖动时的处理
@@ -188,6 +186,26 @@ export class EventHandle {
                 this.activeTool.activeDotNumber = -1
                 this.activeTool = null
             }
+        })
+
+        // 用于缩放
+        this.kLine.el.addEventListener('wheel', (e) => {
+            const deltaY = e.deltaY
+            console.log(deltaY)
+            if (deltaY > 0) {
+                if (this.kLine.useItemWAndSpaceIndex > 0) {
+                    this.kLine.useItemWAndSpaceIndex--
+                }
+            } else {
+                if (
+                    this.kLine.useItemWAndSpaceIndex <
+                    this.kLine.conf.itemWAndSpaceList.length - 1
+                ) {
+                    this.kLine.useItemWAndSpaceIndex++
+                }
+            }
+            this.kLine.drawAll()
+            e.preventDefault()
         })
     }
 }

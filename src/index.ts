@@ -54,6 +54,17 @@ export default class SimpleKLine {
     public showCross: boolean = false
     public cross: Cross
 
+    private _useItemWAndSpaceIndex: number
+    get useItemWAndSpaceIndex() {
+        return this._useItemWAndSpaceIndex
+    }
+    set useItemWAndSpaceIndex(v) {
+        this._useItemWAndSpaceIndex = v
+        this.determineYTxtMaxW()
+        this.xAxis.getSupplementDataArr()
+        this.xAxis.determineScale()
+    }
+
     get eIndex() {
         return this._eIndex
     }
@@ -83,7 +94,7 @@ export default class SimpleKLine {
 
     // 当前使用的 item
     get useItem() {
-        return this.conf.itemWAndSpaceList[this.conf.useItemWAndSpaceIndex]
+        return this.conf.itemWAndSpaceList[this.useItemWAndSpaceIndex]
     }
     // 当前使用的 item 的 宽度
     get useItemAllW() {
@@ -130,8 +141,10 @@ export default class SimpleKLine {
             logError('new SimpleKLine', 'dataArr is required')
             return
         }
+
         this.eIndex = dataArr.length - 1
         this.conf = initConf(option)
+        this._useItemWAndSpaceIndex = this.conf.useItemWAndSpaceIndex
         this.initUseDom(el)
         this.initContainer()
         this.initCanvas()
