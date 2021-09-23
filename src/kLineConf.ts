@@ -76,6 +76,7 @@ export const DefRiseFallColor: RiseFallColor = {
 // k线的配置类型
 export interface KLineConf {
     bgc?: string
+    minItem?: number
     riseFallColor?: RiseFallColor
     itemWAndSpaceList?: ItemWAndSpace[]
     // 柱子宽度和间隔 使用哪一个宽度的下标, 仅在实例化时有效
@@ -221,6 +222,7 @@ const DefXConf: XConf = {
 
 export const DefKLineConf: KLineConf = {
     bgc: '#000',
+    minItem: 5,
     riseFallColor: DefRiseFallColor,
     itemWAndSpaceList: DefItemWAndSpaceList,
     useItemWAndSpaceIndex: 5,

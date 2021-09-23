@@ -71,6 +71,7 @@ export class CloseIndicators extends BaseIndicators {
             }
         }
         drawBrokenLine(this.chart.kLine.bc, dotArr, {
+            lineType: 'sharp',
             drawStyle: {
                 w: this.conf.lineW,
                 style: this.conf.color,

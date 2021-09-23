@@ -65,14 +65,31 @@ export default class SimpleKLine {
         this.xAxis.determineScale()
     }
 
+    get eIndexMax() {
+        console.log('eIndexMax')
+        if (this.dataArr.length < this.conf.minItem) {
+            return this.itemNumber
+        } else {
+            return this.dataArr.length - this.conf.minItem + this.itemNumber
+        }
+    }
+    get eIndexMin() {
+        return Math.min(this.dataArr.length - 1, this.conf.minItem - 1)
+    }
     get eIndex() {
         return this._eIndex
     }
     set eIndex(v) {
+        // const max = this.eIndexMax
+        // const min = this.eIndexMin
+        // // this._eIndex = v
+        // if (v > max) {
+        //     v = max
+        // } else if (v < min) {
+        //     v = min
+        // }
         this._eIndex = v
-        if (this.xAxis) {
-            this.xAxis.getSupplementDataArr()
-        }
+        this.standardizationEIndex()
     }
 
     // 真正的绘制开始下标
@@ -142,8 +159,8 @@ export default class SimpleKLine {
             return
         }
 
-        this.eIndex = dataArr.length - 1
         this.conf = initConf(option)
+        this._eIndex = dataArr.length - 1
         this._useItemWAndSpaceIndex = this.conf.useItemWAndSpaceIndex
         this.initUseDom(el)
         this.initContainer()
@@ -154,6 +171,17 @@ export default class SimpleKLine {
         this.eventHandle = new EventHandle(this)
         this.cross = new Cross(this)
         this.drawAll()
+    }
+
+    // 规范化 EIndex
+    standardizationEIndex() {
+        const max = this.eIndexMax
+        const min = this.eIndexMin
+        if (this._eIndex > max) {
+            this._eIndex = this.eIndexMax
+        } else if (this._eIndex < min) {
+            this._eIndex = min
+        }
     }
 
     // 初始化用户的dom

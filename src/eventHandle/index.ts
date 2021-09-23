@@ -103,6 +103,8 @@ export class EventHandle {
                 const diffIndex = nowIndex - oldIndex
                 if (diffIndex !== 0) {
                     this.kLine.eIndex -= diffIndex
+                    this.kLine.determineYTxtMaxW()
+                    this.kLine.xAxis.getSupplementDataArr()
                     this.kLine.drawAll()
                 }
             }
@@ -204,6 +206,8 @@ export class EventHandle {
                     this.kLine.useItemWAndSpaceIndex++
                 }
             }
+            this.kLine.standardizationEIndex()
+            this.kLine.determineYTxtMaxW()
             this.kLine.drawAll()
             e.preventDefault()
         })
