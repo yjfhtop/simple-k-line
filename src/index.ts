@@ -68,9 +68,9 @@ export default class SimpleKLine {
     get eIndexMax() {
         return (
             this.dataArr.length -
-            1 -
             Math.min(this.conf.minItem, this.dataArr.length) +
-            this.itemNumber
+            this.itemNumber -
+            1
         )
     }
     get eIndexMin() {
