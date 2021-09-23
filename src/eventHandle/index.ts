@@ -3,13 +3,13 @@ import { Coordinate } from '@/utils/canvasDraw'
 import SimpleKLine from '@/index'
 
 export class EventHandle {
+    // 鼠标在工具上的工具，当 鼠标按下时， hoverTool 将会变为 activeTool
+    public hoverTool: BaseTool
     // 激活的 标记
     public activeTool: BaseTool
-    // 鼠标左键是否在按下状态中
-    public leftPressIng: boolean
     // 上一个鼠标 移动时的坐标
     public oldCoordinate: Coordinate
-    // 鼠标按下的坐标
+    // 鼠标按下的坐标, 松开为null
     public downCoordinate: Coordinate
     // 当前鼠标的坐标
     public nowCoordinate: Coordinate
@@ -55,6 +55,63 @@ export class EventHandle {
                 y: this.getEffectiveY(e.offsetY),
             }
             const nowChart = this.nowChart
+            // 鼠标按下 并且有 激活的工具，意味着是对工具进行移动，或者点的移动
+            if (this.downCoordinate && this.activeTool) {
+                const oldYValue = this.activeTool.chart.YAxis.YGetValue(
+                    this.oldCoordinate.y
+                )
+                const yValue = this.activeTool.chart.YAxis.YGetValue(
+                    this.activeTool.chart.getDrawEffectiveY(
+                        this.nowCoordinate.y
+                    )
+                )
+                const yDiff = yValue - oldYValue
+
+                const oldXValue = this.kLine.xAxis.xGetValue(
+                    this.oldCoordinate.x
+                )
+                const xValue = this.kLine.xAxis.xGetValue(this.nowCoordinate.x)
+                const xDiff = xValue - oldXValue
+
+                const activeDotNumber = this.activeTool.activeDotNumber
+                // 点的移动
+                if (activeDotNumber > -1) {
+                    const activeDotNumberObj =
+                        this.activeTool.dotArr[activeDotNumber]
+                    this.activeTool.setDot(
+                        {
+                            date: xValue,
+                            value: yValue,
+                        },
+                        this.activeTool.activeDotNumber
+                    )
+                } else {
+                    // 平移
+                    this.activeTool.move(yDiff, xDiff)
+                }
+            }
+
+            // 没有选中的工具， 鼠标也不是按下的状态， 处理 hoverTool
+            if (!this.activeTool && !this.downCoordinate) {
+                // 判断有没有鼠标在工具上 s
+                let hasHoverTool = false
+                this.kLine.eachShowChart((chart) => {
+                    chart.toolList.forEach((item) => {
+                        const inLine = item.inLine(this.nowCoordinate)
+                        if (inLine) {
+                            item.active = true
+                            hasHoverTool = true
+                            this.hoverTool = item
+                        } else {
+                            item.active = false
+                        }
+                    })
+                })
+                !hasHoverTool && (this.hoverTool = null)
+                hasHoverTool && (this.kLine.showCross = false)
+                // 判断有没有鼠标在工具上 e
+            }
+
             // 是否有激活的工具
             if (this.activeTool) {
                 this.kLine.showCross = false
@@ -74,7 +131,7 @@ export class EventHandle {
                 )
                 // 获取date 和 value e
                 if (this.activeTool.over) {
-                    // pass
+                    // 判断index, ---------------------
                 } else {
                     this.activeTool.setDot({ date, value })
                 }
@@ -85,13 +142,9 @@ export class EventHandle {
 
         this.kLine.el.addEventListener('mousedown', (e) => {
             this.downCoordinate = {
-                x: e.offsetX,
-                y: e.offsetY,
+                x: this.getEffectiveX(e.offsetX),
+                y: this.getEffectiveY(e.offsetY),
             }
-            this.leftPressIng = true
-        })
-
-        this.kLine.el.addEventListener('click', (e) => {
             if (this.activeTool) {
                 this.activeTool.nowDotIndex++
                 if (this.activeTool.over) {
@@ -100,11 +153,27 @@ export class EventHandle {
                     this.activeTool = null
                     this.kLine.showCross = true
                 }
+            } else if (this.hoverTool) {
+                this.activeTool = this.hoverTool
+                // 按下的是点
+                const index = this.activeTool.getInDotIndex(this.downCoordinate)
+                this.activeTool.activeDotNumber = index
+                if (index > -1) {
+                    this.kLine.drawTop()
+                }
+                // 如果不是点的话，就是线
             }
         })
 
+        this.kLine.el.addEventListener('click', (e) => {})
+
         document.addEventListener('mouseup', (e) => {
-            this.leftPressIng = false
+            this.downCoordinate = null
+            // 表示是对工具进行移动 和 拖动时的处理
+            if (this.activeTool && this.activeTool.over) {
+                this.activeTool.activeDotNumber = -1
+                this.activeTool = null
+            }
         })
     }
 }

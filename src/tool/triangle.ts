@@ -9,8 +9,6 @@ import { dotAndDitRGetLineDot } from '@/utils/coordinate'
 
 export class Triangle extends BaseTool {
     public dotNumber = 3
-    // 当前选中的点的下标
-    public activeDotNumber: number = -1
     draw() {
         const ctx = this.chart.kLine.tc
         const dotCoordinateArr = this.dotCoordinateArr
@@ -57,11 +55,11 @@ export class Triangle extends BaseTool {
     }
 
     inLine(dot: Coordinate): boolean {
+        let inLine = false
         const ctx = this.chart.kLine.tc
         ctx.save()
-        ctx.beginPath()
         ctx.lineWidth = this.conf.line.inLineW
-
+        ctx.beginPath()
         this.dotCoordinateArr.forEach((item, index) => {
             if (index === 0) {
                 ctx.moveTo(item.x, item.y)
@@ -70,7 +68,8 @@ export class Triangle extends BaseTool {
             }
         })
         ctx.closePath()
+        inLine = ctx.isPointInStroke(dot.x, dot.y)
         ctx.restore()
-        return ctx.isPointInStroke(dot.x, dot.y)
+        return inLine
     }
 }

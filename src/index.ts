@@ -16,6 +16,7 @@ import { XAxis } from '@/axis/xAxis'
 import { EventHandle } from '@/eventHandle/index'
 import { Cross } from '@/cross/index'
 import { createTool, ToolTypes } from '@/tool/toolUtils'
+import { BaseChart } from '@/chart/baseChart'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -288,6 +289,15 @@ export default class SimpleKLine {
     addTool(name: ToolTypes) {
         const tool = createTool(name, this.chartMap[this.conf.chartShowArr[0]])
         this.eventHandle.activeTool = tool
+    }
+    // 便利显示的图表
+    eachShowChart(cbk: (c: BaseChart) => void) {
+        this.conf.chartShowArr.forEach((name) => {
+            const chart = this.chartMap[name]
+            if (chart) {
+                cbk(chart)
+            }
+        })
     }
     test() {
         const a: any = { a: 1 }

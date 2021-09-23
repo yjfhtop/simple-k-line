@@ -102,7 +102,7 @@ const DefToolConf: BaseToolConf = {
     line: {
         lineW: 1,
         color: '#fff',
-        inLineW: 3,
+        inLineW: 8,
         activeLineDash: [2, 2],
     },
 }
