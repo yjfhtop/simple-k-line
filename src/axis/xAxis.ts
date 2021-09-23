@@ -166,6 +166,8 @@ export class XAxis {
     }
 
     draw() {
+        // console.log(this.rightBottom.x, 'this.rightBottom.x')
+        console.log(this.leftTop.y, 'this.leftTop.y')
         drawLine(
             this.kLine.bc,
             this.leftTop,
@@ -232,11 +234,9 @@ export class XAxis {
 
     // 时间获取 x 轴, 带吸附
     valueGetX(value: number) {
-        const drawStartIndexTime = this.getIndexTime(this.drawStartIndex)
         const sTime = this.getIndexTime(this.kLine.sIndex)
         const eTime = this.getIndexTime(this.kLine.eIndex)
-        const timeDiff = value - sTime
-        if (value >= sTime || value <= eTime) {
+        if (value >= sTime && value <= eTime) {
             for (let i = this.kLine.sIndex; i <= this.kLine.eIndex; i++) {
                 const nowTime = this.getIndexTime(i)
                 const nextTime = this.getIndexTime(i + 1)
@@ -259,17 +259,16 @@ export class XAxis {
                 }
             }
         } else {
-            const diffIndexNumber = Math.round(
-                Math.abs(timeDiff) / this.scaleDiff
-            )
-            if (timeDiff >= 0) {
-                return (
-                    this.drawStartX + diffIndexNumber * this.kLine.useItemAllW
-                )
+            if (value < eTime) {
+                const diff = eTime - value
+                const eX = this.indexGetX(this.kLine.eIndex)
+                const diffNumber = Math.round(diff / this.scaleDiff)
+                return eX - diffNumber * this.kLine.useItemAllW
             } else {
-                return (
-                    this.drawStartX - diffIndexNumber * this.kLine.useItemAllW
-                )
+                const diff = value - sTime
+                const eX = this.indexGetX(this.kLine.sIndex)
+                const diffNumber = Math.round(diff / this.scaleDiff)
+                return eX + diffNumber * this.kLine.useItemAllW
             }
         }
     }

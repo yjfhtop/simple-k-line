@@ -57,7 +57,6 @@ export class Cross {
         )
         const date = this.kLine.xAxis.xGetValue(x)
         // 数值的绘制 s
-        const fontSize = 14
         drawRect(this.kLine.tc, {
             leftTop: {
                 x: right.x,

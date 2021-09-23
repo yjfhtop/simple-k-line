@@ -57,6 +57,7 @@ export class EventHandle {
             const nowChart = this.nowChart
             // 鼠标按下 并且有 激活的工具，意味着是对工具进行移动，或者点的移动
             if (this.downCoordinate && this.activeTool) {
+                this.kLine.showCross = false
                 const oldYValue = this.activeTool.chart.YAxis.YGetValue(
                     this.oldCoordinate.y
                 )
@@ -90,30 +91,23 @@ export class EventHandle {
                     this.activeTool.move(yDiff, xDiff)
                 }
             }
-
-            // 没有选中的工具， 鼠标也不是按下的状态， 处理 hoverTool
-            if (!this.activeTool && !this.downCoordinate) {
-                // 判断有没有鼠标在工具上 s
-                let hasHoverTool = false
-                this.kLine.eachShowChart((chart) => {
-                    chart.toolList.forEach((item) => {
-                        const inLine = item.inLine(this.nowCoordinate)
-                        if (inLine) {
-                            item.active = true
-                            hasHoverTool = true
-                            this.hoverTool = item
-                        } else {
-                            item.active = false
-                        }
-                    })
-                })
-                !hasHoverTool && (this.hoverTool = null)
-                hasHoverTool && (this.kLine.showCross = false)
-                // 判断有没有鼠标在工具上 e
+            // 没有激活的工具下按下， 然后拖动， 相当于图表的左右拖动
+            else if (!this.activeTool && this.downCoordinate) {
+                this.kLine.showCross = false
+                const oldIndex = this.kLine.xAxis.xGetIndex(
+                    this.oldCoordinate.x
+                )
+                const nowIndex = this.kLine.xAxis.xGetIndex(
+                    this.nowCoordinate.x
+                )
+                const diffIndex = nowIndex - oldIndex
+                if (diffIndex !== 0) {
+                    this.kLine.eIndex -= diffIndex
+                    this.kLine.drawAll()
+                }
             }
-
             // 是否有激活的工具
-            if (this.activeTool) {
+            else if (this.activeTool) {
                 this.kLine.showCross = false
                 // 还没有确定点的 工具是可切换所在的图表的 s
                 if (this.activeTool.nowDotIndex === 0) {
@@ -135,6 +129,26 @@ export class EventHandle {
                 } else {
                     this.activeTool.setDot({ date, value })
                 }
+            }
+            // 没有选中的工具， 鼠标也不是按下的状态， 处理 hoverTool
+            else if (!this.activeTool && !this.downCoordinate) {
+                // 判断有没有鼠标在工具上 s
+                let hasHoverTool = false
+                this.kLine.eachShowChart((chart) => {
+                    chart.toolList.forEach((item) => {
+                        const inLine = item.inLine(this.nowCoordinate)
+                        if (inLine) {
+                            item.active = true
+                            hasHoverTool = true
+                            this.hoverTool = item
+                        } else {
+                            item.active = false
+                        }
+                    })
+                })
+                !hasHoverTool && (this.hoverTool = null)
+                hasHoverTool && (this.kLine.showCross = false)
+                // 判断有没有鼠标在工具上 e
             }
             this.kLine.drawTop()
             this.oldCoordinate = { ...this.nowCoordinate }

@@ -81,6 +81,8 @@ export function drawLine(
     ctx.save()
     ctx.beginPath()
     ctx.imageSmoothingEnabled = true
+    startCoordinate = deepCopy(startCoordinate)
+    endCoordinate = deepCopy(endCoordinate)
 
     setDrawStyle(ctx, 'stroke', drawStyle)
 

@@ -191,31 +191,38 @@ export class BaseChart {
         this.drawBottom()
         this.drawTop()
     }
-    drawBottom() {
-        const bc = this.kLine.bc
+    // 裁剪可绘制的部分
+    cutting(type: 'bottom' | 'top', cb: () => void) {
+        const bc = type === 'bottom' ? this.kLine.bc : this.kLine.tc
         bc.save()
-        bc.rect(
-            this.drawChartLeftTop.x,
-            this.drawChartLeftTop.y,
-            this.chartW,
-            this.chartH
-        )
+        const drawChartLeftTop = this.drawChartLeftTop
+        const drawChartRightBottom = this.drawChartRightBottom
+        const w = drawChartRightBottom.x - drawChartLeftTop.x
+        const h = drawChartRightBottom.y - drawChartLeftTop.y
+        bc.rect(drawChartLeftTop.x, drawChartLeftTop.y, w, h)
         bc.clip()
-        this.YAxis.draw()
-        this.drawGridLine()
-        Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
-            const item = this.indicatorsMap[key]
-            item.drawBottom()
-        })
+        cb && cb()
         bc.restore()
     }
-    drawTop() {
-        this.initInfoTxtCoordinate()
-        Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
-            const item = this.indicatorsMap[key]
-            item.drawTop()
+    drawBottom() {
+        this.cutting('bottom', () => {
+            this.drawGridLine()
+            Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
+                const item = this.indicatorsMap[key]
+                item.drawBottom()
+            })
         })
-        this.drawTool()
+        this.YAxis.draw()
+    }
+    drawTop() {
+        this.cutting('top', () => {
+            this.initInfoTxtCoordinate()
+            Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
+                const item = this.indicatorsMap[key]
+                item.drawTop()
+            })
+            this.drawTool()
+        })
     }
     // 绘制 图表的网格线
     drawGridLine() {
