@@ -208,6 +208,7 @@ export class EventHandle {
             }
             this.kLine.standardizationEIndex()
             this.kLine.determineYTxtMaxW()
+            console.log(this.kLine)
             this.kLine.drawAll()
             e.preventDefault()
         })

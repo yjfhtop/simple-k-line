@@ -66,12 +66,12 @@ export default class SimpleKLine {
     }
 
     get eIndexMax() {
-        console.log('eIndexMax')
-        if (this.dataArr.length < this.conf.minItem) {
-            return this.itemNumber
-        } else {
-            return this.dataArr.length - this.conf.minItem + this.itemNumber
-        }
+        return (
+            this.dataArr.length -
+            1 -
+            Math.min(this.conf.minItem, this.dataArr.length) +
+            this.itemNumber
+        )
     }
     get eIndexMin() {
         return Math.min(this.dataArr.length - 1, this.conf.minItem - 1)
