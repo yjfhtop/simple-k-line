@@ -43,7 +43,7 @@ export default class SimpleKLine {
     // y 轴最大文本长度
     public yTxtMaxW: number = 70
     // 在图表内的绘制结束下标
-    public eIndex: number
+    private _eIndex: number
     // 偏移下标的数目 在结束坐标的偏移
     public eDeviationNumber = 2
     // 偏移下标的数目 在开始坐标的偏移
@@ -53,6 +53,16 @@ export default class SimpleKLine {
     // 是否显示十字交叉线
     public showCross: boolean = false
     public cross: Cross
+
+    get eIndex() {
+        return this._eIndex
+    }
+    set eIndex(v) {
+        this._eIndex = v
+        if (this.xAxis) {
+            this.xAxis.getSupplementDataArr()
+        }
+    }
 
     // 真正的绘制开始下标
     get drawSIndex() {

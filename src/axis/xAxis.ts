@@ -141,21 +141,22 @@ export class XAxis {
             if (this.kLine.sIndex < 0) {
                 for (let i = -1; i >= this.kLine.sIndex; i--) {
                     arr[i] = addTime(
-                        this.kLine.dataArr[this.kLine.sIndex].date,
+                        this.kLine.dataArr[0].date,
                         this.unitAndNumber.number * i,
                         this.unitAndNumber.unit
                     )
                 }
-            } else {
+            }
+            if (this.kLine.eIndex > this.kLine.dataArr.length - 1) {
                 for (
                     let i = this.kLine.dataArr.length;
                     i <= this.kLine.eIndex;
                     i++
                 ) {
                     arr[i] = addTime(
-                        this.kLine.dataArr[this.kLine.sIndex].date,
+                        this.kLine.dataArr[this.kLine.dataArr.length - 1].date,
                         this.unitAndNumber.number *
-                            (i - this.kLine.dataArr.length),
+                            (i - this.kLine.dataArr.length + 1),
                         this.unitAndNumber.unit
                     )
                 }
@@ -166,8 +167,6 @@ export class XAxis {
     }
 
     draw() {
-        // console.log(this.rightBottom.x, 'this.rightBottom.x')
-        console.log(this.leftTop.y, 'this.leftTop.y')
         drawLine(
             this.kLine.bc,
             this.leftTop,
