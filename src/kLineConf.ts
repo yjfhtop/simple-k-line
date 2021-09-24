@@ -18,6 +18,8 @@ import { XConf } from '@/axis/xAxis'
 import { CrossConf } from '@/cross/index'
 import { BaseToolConf } from '@/tool/baseTool'
 import { MAIndicatorsConf } from '@/indicators/maIndicators'
+import SimpleKLine from '@/index'
+import { determineLang, LangType } from '@/lang/utils'
 // import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
@@ -77,9 +79,35 @@ export const DefRiseFallColor: RiseFallColor = {
     fallColor: 'rgb(186, 186, 186)',
 }
 
-// k线的配置类型
+// 图表上的文字信息， 比如 时间， 涨幅...
+export interface InfoTxtConf {
+    // 绘制开始x偏移
+    deviationX?: number
+    // 绘制开始Y偏移
+    deviationY?: number
+    size?: number
+    family?: string
+    color?: string
+    // 同一行 不同文字段的间隔
+    xSpace?: number
+    // 不同行的间隔
+    ySpace?: number
+}
+
+export const DefInfoTxtConf: InfoTxtConf = {
+    deviationX: 2,
+    deviationY: 2,
+    size: 12,
+    color: '#ccc',
+    xSpace: 4,
+    ySpace: 4,
+}
+
+// k线的配置类型-------------------------------------------------------------
 export interface KLineConf {
+    lang?: LangType
     bgc?: string
+    infoTxtConf?: InfoTxtConf
     minItem?: number
     riseFallColor?: RiseFallColor
     itemWAndSpaceList?: ItemWAndSpace[]
@@ -147,7 +175,7 @@ const DefYConf: YConf = {
         deviationX: 4,
     },
     gridLine: {
-        color: '#666',
+        color: '#2c2c2c',
         lineW: 1,
     },
     scaleCalcConfig: DefScaleCalcConfig,
@@ -162,14 +190,14 @@ const DefCloseIndicatorsConf: CloseIndicatorsConf = {
         color: 'rgb(32, 145, 234)',
         lineDash: [2, 2],
     },
-    nowHighlight: {
-        bgc: 'rgb(32, 145, 234)',
-        font: {
-            size: 12,
-            color: '#fff',
-        },
-        h: 24,
-    },
+    // nowHighlight: {
+    //     bgc: 'rgb(32, 145, 234)',
+    //     font: {
+    //         size: 12,
+    //         color: '#fff',
+    //     },
+    //     h: 24,
+    // },
 }
 
 const DefMAIndicatorsConf: MAIndicatorsConf = [
@@ -206,12 +234,7 @@ const DefBaseChartConf: BaseChartConf = {
     // 指标的配置
     indicatorsConfMap: DefIndicatorsConfMap,
     yConf: DefYConf,
-    infoTxt: {
-        deviationX: 2,
-        deviationY: 2,
-        size: 12,
-        color: '#ccc',
-    },
+    infoTxtConf: DefInfoTxtConf,
 }
 
 const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
@@ -241,14 +264,16 @@ const DefXConf: XConf = {
         deviationY: 2,
     },
     gridLine: {
-        color: '#666',
+        color: '#2c2c2c',
         lineW: 1,
     },
 }
 
 export const DefKLineConf: KLineConf = {
+    lang: 'zh-CN',
     bgc: '#000',
     minItem: 5,
+    infoTxtConf: DefInfoTxtConf,
     riseFallColor: DefRiseFallColor,
     itemWAndSpaceList: DefItemWAndSpaceList,
     useItemWAndSpaceIndex: 5,
@@ -261,7 +286,7 @@ export const DefKLineConf: KLineConf = {
     toolConf: DefToolConf,
 }
 
-export function initConf(conf: KLineConf) {
+export function initConf(conf: KLineConf, kLine: SimpleKLine) {
     const c = mergeData(DefKLineConf, conf || {})
     // 保证主图是第一个 s
     const mainChartIndex = c.chartShowArr.indexOf('mainChart')
@@ -273,5 +298,15 @@ export function initConf(conf: KLineConf) {
         c.chartShowArr.unshift('mainChart')
     }
     // 保证主图是第一个 e
+
+    // infoTxtConf 映射到 图表的配置 s
+    Object.keys(c.chartConfMap).forEach((key) => {
+        const charConf = c.chartConfMap[key]
+        charConf.infoTxtConf = mergeData(c.infoTxtConf, charConf.infoTxtConf)
+    })
+    // infoTxtConf 映射到 图表的配置 e
+
+    kLine.conf = c
+    kLine.lang = determineLang(c.lang)
     return c
 }

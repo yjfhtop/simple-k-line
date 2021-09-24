@@ -17,6 +17,7 @@ import { EventHandle } from '@/eventHandle/index'
 import { Cross } from '@/cross/index'
 import { createTool, ToolTypes } from '@/tool/toolUtils'
 import { BaseChart } from '@/chart/baseChart'
+import { Lang } from '@/lang/utils'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -53,6 +54,8 @@ export default class SimpleKLine {
     // 是否显示十字交叉线
     public showCross: boolean = false
     public cross: Cross
+    // 使用的语言对象
+    public lang: Lang
 
     private _useItemWAndSpaceIndex: number
     get useItemWAndSpaceIndex() {
@@ -159,7 +162,7 @@ export default class SimpleKLine {
             return
         }
 
-        this.conf = initConf(option)
+        initConf(option, this)
         this._eIndex = dataArr.length - 1
         this._useItemWAndSpaceIndex = this.conf.useItemWAndSpaceIndex
         this.initUseDom(el)

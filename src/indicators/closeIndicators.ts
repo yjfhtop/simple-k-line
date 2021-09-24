@@ -1,7 +1,7 @@
 /**
- * close 指标
+ * close 指标, 分时？？ 大概
  */
-import { DataItem } from '@/kLineConf'
+import { DataItem, DefInfoTxtConf } from '@/kLineConf'
 import { BaseIndicators } from '@/indicators/baseIndicators'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 import {
@@ -11,6 +11,8 @@ import {
     drawRect,
     drawTxt,
 } from '@/utils/canvasDraw'
+import { formDate } from '@/utils/timeHandle'
+import { getTxtW } from '@/utils/element'
 
 // close的配置项
 export interface CloseIndicatorsConf {
@@ -23,16 +25,16 @@ export interface CloseIndicatorsConf {
         // 本项存在就是虚线
         lineDash?: number[]
     }
-    // 高亮块 和 其内的文字样式
-    nowHighlight?: {
-        bgc?: string
-        font?: {
-            size?: number
-            family?: string
-            color?: string
-        }
-        h?: number
-    }
+    // // 高亮块 和 其内的文字样式
+    // nowHighlight?: {
+    //     bgc?: string
+    //     font?: {
+    //         size?: number
+    //         family?: string
+    //         color?: string
+    //     }
+    //     h?: number
+    // }
 }
 const cacheKey = '_close'
 export class CloseIndicators extends BaseIndicators {
@@ -94,6 +96,7 @@ export class CloseIndicators extends BaseIndicators {
         )
         const y = this.chart.YAxis.valueGetY(value)
 
+        // 当前收盘价
         drawLine(
             this.chart.kLine.tc,
             {
@@ -110,36 +113,39 @@ export class CloseIndicators extends BaseIndicators {
                 lineDash: this.conf.nowLine.lineDash,
             }
         )
+        // 图表上的信息文字绘制
+    }
+    // 图表上的信息文字绘制
+    drawTopInfoTxt(index: number) {
+        // 时间 开 高 低 收 （涨幅 振幅 %）
+        const ctx = this.chart.kLine.tc
+        const preItem = this.chart.kLine.dataArr[index - 1]
+        const nowItem = this.chart.kLine.dataArr[index]
+        const date = formDate(nowItem.date)
+        // 涨幅
+        let change: string
+        // 振幅
+        let ampl: string
+        if (preItem) {
+            change =
+                (
+                    ((nowItem.close - preItem.close) / preItem.close) *
+                    100
+                ).toFixed(2) + '%'
+            ampl = (
+                ((nowItem.max - nowItem.min) / preItem.close) *
+                100
+            ).toFixed(2)
+        } else {
+            change = '0%'
+            ampl = '0%'
+        }
 
-        drawRect(this.chart.kLine.tc, {
-            leftTop: {
-                x: this.chart.drawChartRightBottom.x,
-                y: y - this.conf.nowHighlight.h / 2,
-            },
-            w: this.chart.kLine.yW,
-            h: this.conf.nowHighlight.h,
-            drawType: 'full',
-            drawStyle: {
-                style: this.conf.nowHighlight.bgc,
-            },
-        })
-
-        drawTxt(this.chart.kLine.tc, {
-            txt: this.chart.formData(value),
-            coordinate: {
-                x: this.chart.drawChartRightBottom.x + this.chart.kLine.yW / 2,
-                y: y,
-            },
-            textAlign: 'center',
-            textBaseline: 'middle',
-            drawStyle: {
-                style: this.conf.nowHighlight.font.color,
-            },
-            fontSize: this.conf.nowHighlight.font.size,
-            fontFamily: this.conf.nowHighlight.font.family,
-        })
-
-        // 图表上的文字绘制 s
-        // 图表上的文字绘制 e
+        const drawDataTxt = `${this.chart.kLine.lang.date}: ${date}`
+        // const drawDataTxtWidth = getTxtW(ctx, )
+        // drawTxt(ctx, {
+        //     coordinate: this.chart.infoTxtCoordinate,
+        //     txt: ``,
+        // })
     }
 }

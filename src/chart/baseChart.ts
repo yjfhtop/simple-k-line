@@ -1,6 +1,6 @@
 import { Coordinate, drawLine } from '@/utils/canvasDraw'
 import KLine from '@/index'
-import { DataItem } from '@/kLineConf'
+import { DataItem, InfoTxtConf } from '@/kLineConf'
 import {
     IndicatorsConfMap,
     IndicatorsNames,
@@ -22,14 +22,8 @@ export interface BaseChartConf {
     // 指标的配置
     indicatorsConfMap?: IndicatorsConfMap
     yConf?: YConf
-    // 用于绘制图表上信息
-    infoTxt?: {
-        deviationX?: number
-        deviationY?: number
-        size?: number
-        family?: string
-        color?: string
-    }
+    // 用于绘制图表上 文字 信息
+    infoTxtConf?: InfoTxtConf
 }
 
 export class BaseChart {
@@ -128,8 +122,8 @@ export class BaseChart {
     // 初始化信息文字的绘制坐标
     initInfoTxtCoordinate() {
         this.infoTxtCoordinate = {
-            x: this.drawChartLeftTop.x - this.conf.infoTxt.deviationX,
-            y: this.drawChartLeftTop.y - this.conf.infoTxt.deviationY,
+            x: this.drawChartLeftTop.x - this.conf.infoTxtConf.deviationX,
+            y: this.drawChartLeftTop.y - this.conf.infoTxtConf.deviationY,
         }
     }
     // 计算所有指标
