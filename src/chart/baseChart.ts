@@ -193,16 +193,17 @@ export class BaseChart {
     }
     // 裁剪可绘制的部分
     cutting(type: 'bottom' | 'top', cb: () => void) {
-        const bc = type === 'bottom' ? this.kLine.bc : this.kLine.tc
-        bc.save()
+        const ctx = type === 'bottom' ? this.kLine.bc : this.kLine.tc
+        ctx.save()
+        ctx.beginPath()
         const drawChartLeftTop = this.drawChartLeftTop
         const drawChartRightBottom = this.drawChartRightBottom
         const w = drawChartRightBottom.x - drawChartLeftTop.x
         const h = drawChartRightBottom.y - drawChartLeftTop.y
-        bc.rect(drawChartLeftTop.x, drawChartLeftTop.y, w, h)
-        bc.clip()
+        ctx.rect(drawChartLeftTop.x, drawChartLeftTop.y, w, h)
+        ctx.clip()
         cb && cb()
-        bc.restore()
+        ctx.restore()
     }
     drawBottom() {
         this.cutting('bottom', () => {

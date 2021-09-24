@@ -202,7 +202,6 @@ export function drawRect(
     ctx.save()
     ctx.beginPath()
     setDrawStyle(ctx, rectConfig.drawType, rectConfig.drawStyle)
-    ctx.beginPath()
 
     if (
         rectConfig.borderRadius.topLeft ||
@@ -587,6 +586,7 @@ export function drawTxt(ctx: CanvasRenderingContext2D, txtConf: TxtConf) {
     } else {
         ctx.strokeText(c.txt, c.coordinate.x, c.coordinate.y, c.maxWidth)
     }
+    ctx.restore()
 }
 
 // smooth 平滑的   sharp：锐利
