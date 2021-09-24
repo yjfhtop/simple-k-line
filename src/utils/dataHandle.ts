@@ -156,7 +156,7 @@ export function calcScaleNumber(
         }
         maxScaleInsideItemNumber--
         useScaleInsideItemNumber = Math.floor(
-            maxScaleInsideItemNumber * 0.4 + minScaleInsideItemNumber * 0.6
+            maxScaleInsideItemNumber * 0.3 + minScaleInsideItemNumber * 0.7
         )
 
         useNumber = Math.floor(w / (itemW * useScaleInsideItemNumber))

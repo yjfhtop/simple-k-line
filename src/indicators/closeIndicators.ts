@@ -1,5 +1,5 @@
 /**
- * 分时图
+ * close 指标
  */
 import { DataItem } from '@/kLineConf'
 import { BaseIndicators } from '@/indicators/baseIndicators'
@@ -36,8 +36,14 @@ export interface CloseIndicatorsConf {
 }
 const cacheKey = '_close'
 export class CloseIndicators extends BaseIndicators {
-    public name: IndicatorsNames = 'timeSharing'
+    public name: IndicatorsNames = 'closeIndicators'
     public cacheKeyArr: string[] = []
+
+    get conf() {
+        return this.chart.conf.indicatorsConfMap[
+            this.name
+        ] as CloseIndicatorsConf
+    }
 
     calc(item: DataItem, index: number, isMaxValue: boolean) {
         if (!item) return

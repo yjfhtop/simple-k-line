@@ -288,7 +288,6 @@ export function timeArrGetTimeUnitAndNumber(
                     break
                 }
             }
-            console.log(122)
             if (diffNumber !== null) {
                 // const determine = timeArr.slice(0, 4).every((item, index) => {
                 //     const next = timeArr[index + 1]

@@ -58,12 +58,12 @@
 
     const fiveMinuteArr = fiveMinute.map(item => {
         return {
-            close: item.close,
-            open: item.open,
-            min: item.low,
-            max: item.high,
+            close: parseFloat(item.close),
+            open: parseFloat(item.open),
+            min: parseFloat(item.low),
+            max: parseFloat(item.high),
             date: new Date(item.day).getTime(),
-            turnover: item.volume
+            turnover: parseFloat(item.volume)
         }
     })
 
@@ -73,5 +73,6 @@
     addTool.addEventListener('click', () => {
         kLine.addTool('triangle')
     })
+    console.log(kLine)
 </script>
 </html>

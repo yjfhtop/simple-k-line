@@ -5,7 +5,10 @@ import { deepCopy, DefScaleCalcConfig, mergeData } from '@/utils/dataHandle'
 import { YConf } from '@/axis/yAxis'
 import { DefSectorConfig } from '@/utils/canvasDraw'
 import { ChartConfMap } from '@/chart/chartUtils'
-import { CloseIndicatorsConf } from '@/indicators/closeIndicators'
+import {
+    CloseIndicators,
+    CloseIndicatorsConf,
+} from '@/indicators/closeIndicators'
 import { BaseChartConf } from '@/chart/baseChart'
 import {
     IndicatorsConfMap,
@@ -14,6 +17,7 @@ import {
 import { XConf } from '@/axis/xAxis'
 import { CrossConf } from '@/cross/index'
 import { BaseToolConf } from '@/tool/baseTool'
+import { MAIndicatorsConf } from '@/indicators/maIndicators'
 // import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
@@ -150,7 +154,7 @@ const DefYConf: YConf = {
 }
 
 // 默认 close 配置
-const DefTimeSharingConf: CloseIndicatorsConf = {
+const DefCloseIndicatorsConf: CloseIndicatorsConf = {
     lineW: 1,
     color: 'rgb(32, 145, 234)',
     nowLine: {
@@ -168,9 +172,31 @@ const DefTimeSharingConf: CloseIndicatorsConf = {
     },
 }
 
+const DefMAIndicatorsConf: MAIndicatorsConf = [
+    {
+        lineW: 1,
+        color: '#F8E71C',
+        show: true,
+        number: 7,
+    },
+    {
+        lineW: 1,
+        color: '#50E3C2',
+        show: false,
+        number: 30,
+    },
+    {
+        lineW: 1,
+        color: '#F600FF',
+        show: false,
+        number: 60,
+    },
+]
+
 // 所有指标配置项的集合
 const DefIndicatorsConfMap: IndicatorsConfMap = {
-    timeSharing: DefTimeSharingConf,
+    closeIndicators: DefCloseIndicatorsConf,
+    maIndicators: DefMAIndicatorsConf,
 }
 
 // 图表的基础配置
@@ -189,7 +215,7 @@ const DefBaseChartConf: BaseChartConf = {
 }
 
 const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
-DefMainChartConf.indicatorShowArr = ['timeSharing']
+DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
 
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {

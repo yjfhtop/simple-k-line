@@ -193,7 +193,6 @@ export class EventHandle {
         // 用于缩放
         this.kLine.el.addEventListener('wheel', (e) => {
             const deltaY = e.deltaY
-            console.log(deltaY)
             if (deltaY > 0) {
                 if (this.kLine.useItemWAndSpaceIndex > 0) {
                     this.kLine.useItemWAndSpaceIndex--
@@ -208,7 +207,6 @@ export class EventHandle {
             }
             this.kLine.standardizationEIndex()
             this.kLine.determineYTxtMaxW()
-            console.log(this.kLine)
             this.kLine.drawAll()
             e.preventDefault()
         })

@@ -4,15 +4,18 @@ import {
 } from '@/indicators/closeIndicators'
 import { BaseIndicators } from '@/indicators/baseIndicators'
 import { BaseChart } from '@/chart/baseChart'
+import { MAIndicators, MAIndicatorsConf } from '@/indicators/maIndicators'
 
 // 指标的映射
 export interface IndicatorsMap {
-    timeSharing?: CloseIndicators
+    closeIndicators?: CloseIndicators
+    maIndicators?: MAIndicators
 }
 
 // 指标的配置项
 export interface IndicatorsConfMap {
-    timeSharing?: CloseIndicatorsConf
+    closeIndicators?: CloseIndicatorsConf
+    maIndicators?: MAIndicatorsConf
 }
 
 export type IndicatorsNames = keyof IndicatorsMap
@@ -27,7 +30,9 @@ export function createIndicators<T = BaseIndicators>(
     chart: BaseChart
 ): T {
     switch (name) {
-        case 'timeSharing':
+        case 'closeIndicators':
             return new CloseIndicators(chart) as any as T
+        case 'maIndicators':
+            return new MAIndicators(chart) as any as T
     }
 }

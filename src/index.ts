@@ -247,7 +247,6 @@ export default class SimpleKLine {
                         this.chartStartY,
                         mainCharH
                     )
-                    console.log(11)
                 } else {
                     this.chartMap[name] = createChart(
                         name,
@@ -363,6 +362,5 @@ export default class SimpleKLine {
         const b: any = { b: 10 }
         b.a = a
         a.b = b
-        console.log(deepCopy(a))
     }
 }
