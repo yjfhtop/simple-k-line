@@ -47,6 +47,13 @@ export abstract class BaseIndicators {
     get conf() {
         return this.chart.conf.indicatorsConfMap[this.name]
     }
+    // 在每次计算时调用
+    clearMaxMin() {
+        this.maxIndex = -1
+        this.minIndex = -1
+        this.maxIndexCacheKey = ''
+        this.minIndexCacheKey = ''
+    }
 
     // 最大值
     get maxValue() {

@@ -212,5 +212,10 @@ export class EventHandle {
             this.kLine.drawAll()
             e.preventDefault()
         })
+
+        this.kLine.el.addEventListener('mouseleave', () => {
+            this.kLine.showCross = false
+            this.kLine.drawTop()
+        })
     }
 }

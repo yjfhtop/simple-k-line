@@ -274,6 +274,14 @@ export default class SimpleKLine {
     }
     // 计算所有需要的数据， 主要是计算各个指标的值, 然后计算图表的最大值
     calc() {
+        this.conf.chartShowArr.forEach((name) => {
+            const chart = this.chartMap[name]
+            if (chart) {
+                chart.clearMaxMin()
+            } else {
+                logError('calc', 'chart non-existent')
+            }
+        })
         for (let i = this.drawSIndex; i <= this.drawEIndex; i++) {
             const item = this.dataArr[i]
             if (item) {

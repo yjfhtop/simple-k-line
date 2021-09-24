@@ -142,6 +142,16 @@ export class BaseChart {
         })
     }
 
+    // 在每次计算时调用
+    clearMaxMin() {
+        this.conf.indicatorShowArr.forEach((name) => {
+            const indicator = this.indicatorsMap[name]
+            if (indicator) {
+                indicator.clearMaxMin()
+            }
+        })
+    }
+
     // 计算自己的最大最小值
     calcMaxMin() {
         let max = Number.MIN_VALUE
