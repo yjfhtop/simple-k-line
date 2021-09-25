@@ -52,7 +52,7 @@ export abstract class BaseTool {
         this.dotArr.push(dot)
     }
     setDot(dot: ToolDot, index?: number) {
-        this.dotArr[index || this.nowDotIndex] = dot
+        this.dotArr[index === undefined ? this.nowDotIndex : index] = dot
     }
     get conf() {
         return this.chart.kLine.conf.toolConf

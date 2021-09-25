@@ -235,13 +235,11 @@ export class XAxis {
     valueGetX(value: number) {
         const sTime = this.getIndexTime(this.kLine.sIndex)
         const eTime = this.getIndexTime(this.kLine.eIndex)
+        // 准备在dataArr 查找，二分法
         if (value >= sTime && value <= eTime) {
             for (let i = this.kLine.sIndex; i <= this.kLine.eIndex; i++) {
                 const nowTime = this.getIndexTime(i)
                 const nextTime = this.getIndexTime(i + 1)
-                if (value === nowTime) {
-                    return this.indexGetX(i)
-                }
                 if (nextTime) {
                     if (value === nowTime) {
                         return this.indexGetX(i + 1)
@@ -255,19 +253,21 @@ export class XAxis {
                             return this.indexGetX(i)
                         }
                     }
+                } else {
+                    return this.indexGetX(i)
                 }
             }
         } else {
-            if (value < eTime) {
+            if (value > eTime) {
                 const diff = eTime - value
                 const eX = this.indexGetX(this.kLine.eIndex)
                 const diffNumber = Math.round(diff / this.scaleDiff)
-                return eX - diffNumber * this.kLine.useItemAllW
+                return eX + diffNumber * this.kLine.useItemAllW
             } else {
-                const diff = value - sTime
+                const diff = sTime - value
                 const eX = this.indexGetX(this.kLine.sIndex)
                 const diffNumber = Math.round(diff / this.scaleDiff)
-                return eX + diffNumber * this.kLine.useItemAllW
+                return eX - diffNumber * this.kLine.useItemAllW
             }
         }
     }

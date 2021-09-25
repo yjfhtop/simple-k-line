@@ -210,14 +210,14 @@ export class BaseChart {
         ctx.restore()
     }
     drawBottom() {
+        this.drawGridLine()
+        this.YAxis.draw()
         this.cutting('bottom', () => {
-            this.drawGridLine()
             Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
                 const item = this.indicatorsMap[key]
                 item.drawBottom()
             })
         })
-        this.YAxis.draw()
     }
     drawTop() {
         this.cutting('top', () => {
