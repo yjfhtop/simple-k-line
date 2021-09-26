@@ -139,6 +139,8 @@ export class EventHandle {
                     chart.toolList.forEach((item) => {
                         const inLine = item.inLine(this.nowCoordinate)
                         if (inLine) {
+                            // 保证只有一个
+                            this.hoverTool && (this.hoverTool.active = false)
                             item.active = true
                             hasHoverTool = true
                             this.hoverTool = item
