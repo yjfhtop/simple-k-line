@@ -11,6 +11,7 @@ import {
     TimeDate,
     UnitAndNumber,
 } from '@/utils/timeHandle'
+import { dichotomy } from '@/utils/index'
 
 // x轴的配置
 export interface XConf {
@@ -233,43 +234,30 @@ export class XAxis {
 
     // 时间获取 x 轴, 带吸附
     valueGetX(value: number) {
-        const sTime = this.getIndexTime(this.kLine.sIndex)
-        const eTime = this.getIndexTime(this.kLine.eIndex)
-        // 准备在dataArr 查找，二分法
-        if (value >= sTime && value <= eTime) {
-            for (let i = this.kLine.sIndex; i <= this.kLine.eIndex; i++) {
-                const nowTime = this.getIndexTime(i)
-                const nextTime = this.getIndexTime(i + 1)
-                if (nextTime) {
-                    if (value === nowTime) {
-                        return this.indexGetX(i + 1)
-                    }
-                    if (value < nowTime && value < nextTime) {
-                        const diffNow = Math.abs(value - nowTime)
-                        const diffNext = Math.abs(nextTime - value)
-                        if (diffNext < diffNow) {
-                            return this.indexGetX(i + 1)
-                        } else {
-                            return this.indexGetX(i)
-                        }
-                    }
-                } else {
-                    return this.indexGetX(i)
-                }
-            }
+        let index = 0
+        const sTime = this.kLine.dataArr[0].date
+        const eTime = this.kLine.dataArr[this.kLine.dataArr.length - 1].date
+        if (value < sTime || value > eTime) {
+            const typeStr = value < this.kLine.dataArr[0].date ? 'min' : 'max'
+            // 数据外，模糊计算
+            const timeDiff = typeStr === 'min' ? sTime - value : value - eTime
+            let diffNumber = Math.round(timeDiff / this.scaleDiff)
+            index =
+                typeStr === 'min'
+                    ? -diffNumber
+                    : this.kLine.dataArr.length - 1 + diffNumber
         } else {
-            if (value > eTime) {
-                const diff = eTime - value
-                const eX = this.indexGetX(this.kLine.eIndex)
-                const diffNumber = Math.round(diff / this.scaleDiff)
-                return eX + diffNumber * this.kLine.useItemAllW
-            } else {
-                const diff = sTime - value
-                const eX = this.indexGetX(this.kLine.sIndex)
-                const diffNumber = Math.round(diff / this.scaleDiff)
-                return eX - diffNumber * this.kLine.useItemAllW
-            }
+            // 数据内
+            index = dichotomy<DataItem>(
+                this.kLine.dataArr,
+                value,
+                (item: DataItem) => {
+                    return item.date
+                },
+                true
+            )
         }
+        return this.indexGetX(index)
     }
     // x 轴获取 x 轴，带吸附
     xGetX(x: number) {
@@ -282,26 +270,28 @@ export class XAxis {
     // x轴获取下标 带吸附
     xGetIndex(x: number) {
         const diff = x - this.drawStartX
-        let diffNumber = Math.floor(Math.abs(diff / this.kLine.useItemAllW))
-        const remainder = Math.abs(diff % this.kLine.useItemAllW)
-
-        if (remainder !== 0) {
-            if (remainder > this.kLine.useItemAllW / 2) {
-                diffNumber++
-            }
-        }
-
-        if (diff > 0) {
-            return this.drawStartIndex + diffNumber
-        } else {
-            return this.drawStartIndex - diffNumber
-        }
+        let diffNumber = Math.round(diff / this.kLine.useItemAllW)
+        return this.drawStartIndex + diffNumber
     }
     xGetValue(x: number) {
         const nowIndex = this.xGetIndex(x)
-        return this.kLine.dataArr[nowIndex]
-            ? this.kLine.dataArr[nowIndex].date
-            : this.supplementDataArr[nowIndex]
+        const useData = this.kLine.dataArr[nowIndex]
+        if (useData) {
+            return useData.date
+        } else {
+            const diffNumber =
+                nowIndex < 0
+                    ? nowIndex
+                    : nowIndex - (this.kLine.dataArr.length - 1)
+
+            return addTime(
+                nowIndex < 0
+                    ? this.kLine.dataArr[0].date
+                    : this.kLine.dataArr[this.kLine.dataArr.length - 1].date,
+                diffNumber * this.unitAndNumber.number,
+                this.unitAndNumber.unit
+            )
+        }
     }
     indexGetX(index: number) {
         return (

@@ -1,6 +1,7 @@
 import { BaseTool } from '@/tool/baseTool'
 import { Coordinate } from '@/utils/canvasDraw'
 import SimpleKLine from '@/index'
+import { deepCopy } from '@/utils/dataHandle'
 
 export class EventHandle {
     // 鼠标在工具上的工具，当 鼠标按下时， hoverTool 将会变为 activeTool
@@ -58,21 +59,14 @@ export class EventHandle {
             // 鼠标按下 并且有 激活的工具，意味着是对工具进行移动，或者点的移动
             if (this.downCoordinate && this.activeTool) {
                 this.kLine.showCross = false
-                const oldYValue = this.activeTool.chart.YAxis.YGetValue(
-                    this.oldCoordinate.y
-                )
                 const yValue = this.activeTool.chart.YAxis.YGetValue(
                     this.activeTool.chart.getDrawEffectiveY(
                         this.nowCoordinate.y
                     )
                 )
-                const yDiff = yValue - oldYValue
-
-                const oldXValue = this.kLine.xAxis.xGetValue(
-                    this.oldCoordinate.x
-                )
                 const xValue = this.kLine.xAxis.xGetValue(this.nowCoordinate.x)
-                const xDiff = xValue - oldXValue
+                const yDiff = this.nowCoordinate.y - this.downCoordinate.y
+                const xDiff = this.nowCoordinate.x - this.downCoordinate.x
 
                 const activeDotNumber = this.activeTool.activeDotNumber
                 // 点的移动
@@ -174,6 +168,8 @@ export class EventHandle {
                 // 按下的是点
                 const index = this.activeTool.getInDotIndex(this.downCoordinate)
                 this.activeTool.activeDotNumber = index
+                // 保存旧的， 方便平移
+                this.activeTool.oldDotArr = deepCopy(this.activeTool.dotArr)
                 if (index > -1) {
                     this.kLine.drawTop()
                 }

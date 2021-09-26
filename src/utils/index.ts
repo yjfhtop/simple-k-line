@@ -92,29 +92,9 @@ export function dichotomy<T>(
     }
     getValue = getValue || defGetValue
 
-    // 数组长度处理 s
     if (list.length === 0) {
         return -1
-    } else if (list.length === 1) {
-        const v = getValue(list[0])
-        if (v === value || approximate) {
-            return 0
-        } else {
-            return -1
-        }
     }
-    // 数组长度处理 e
-
-    // 最大最小值处理 s
-    const sValue = getValue(list[s])
-    const eValue = getValue(list[e])
-    if (value > eValue) {
-        return approximate ? e : -1
-    } else if (value < sValue) {
-        return approximate ? s : -1
-    }
-    // 最大最小值处理 e
-
     function useDichotomy(
         list: T[],
         value: number,
@@ -135,11 +115,16 @@ export function dichotomy<T>(
         if (cValue === value) {
             return center
         }
-        if (center === s) {
+
+        if (s === e) {
+            return approximate ? s : -1
+        }
+
+        if (e - s === 1) {
+            // 取近似下标
             if (approximate) {
-                // 取近似下标
-                const sDiff = cValue - sValue
-                const eDiff = eValue - cValue
+                const sDiff = value - sValue
+                const eDiff = eValue - value
                 if (sDiff <= eDiff) {
                     return s
                 } else {

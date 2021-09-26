@@ -361,7 +361,7 @@ export default class SimpleKLine {
         })
     }
     test() {
-        const list = [1, 5, 7, 10]
-        console.log(dichotomy(list, 10, undefined, true), 'dichotomy')
+        const list = [1, 2, 100, 200]
+        console.log(dichotomy(list, 100, undefined, true), 'dichotomy')
     }
 }

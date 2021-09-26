@@ -36,7 +36,7 @@ export abstract class BaseTool {
     public nowDotIndex = 0
     // 点的集合, 不应该是坐标集合， 应该是时间戳 和 value 的集合
     public dotArr: ToolDot[] = []
-    // public oldDotArr: ToolDot[] = []
+    public oldDotArr: ToolDot[] = []
     // 是否选中状态
     public active: boolean = true
     // 当前选中的点的下标
@@ -87,11 +87,34 @@ export abstract class BaseTool {
         return targetIndex
     }
 
-    move(valueDiff: number, dateDiff: number) {
-        this.dotArr.forEach((item) => {
-            item.date += dateDiff
-            item.value += valueDiff
+    move(yDiff: number, xDiff: number) {
+        console.log('----')
+        const dotCoordinateArr: Coordinate[] = this.oldDotArr.map((item) => {
+            return {
+                x: this.chart.kLine.xAxis.valueGetX(item.date),
+                y: this.chart.YAxis.valueGetY(item.value),
+            }
         })
+        if (xDiff > 6) {
+            console.log(111)
+        }
+        const newDotCoordinateArr = dotCoordinateArr.map((item, index) => {
+            return {
+                x: item.x + xDiff,
+                y: item.y + yDiff,
+            }
+        })
+        this.dotArr = newDotCoordinateArr.map((item, index) => {
+            if (index === 1 && xDiff > 6) {
+                console.log(1)
+            }
+            return {
+                value: this.chart.YAxis.YGetValue(item.y),
+                date: this.chart.kLine.xAxis.xGetValue(item.x),
+            }
+        })
+
+        console.log(this.dotArr[1].date - this.oldDotArr[1].date, '-jian')
     }
 
     // // 判断是否在线上
