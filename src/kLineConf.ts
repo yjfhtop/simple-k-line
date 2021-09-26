@@ -105,6 +105,8 @@ export const DefInfoTxtConf: InfoTxtConf = {
 
 // k线的配置类型-------------------------------------------------------------
 export interface KLineConf {
+    // 显示的小数位
+    showDecimalPlaces?: number
     lang?: LangType
     bgc?: string
     infoTxtConf?: InfoTxtConf
@@ -270,6 +272,7 @@ const DefXConf: XConf = {
 }
 
 export const DefKLineConf: KLineConf = {
+    showDecimalPlaces: 2,
     lang: 'zh-CN',
     bgc: '#000',
     minItem: 5,

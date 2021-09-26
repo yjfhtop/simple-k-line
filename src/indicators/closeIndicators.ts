@@ -26,10 +26,6 @@ export interface CloseIndicatorsConf {
         lineDash?: number[]
     }
 }
-export interface FontTxtAndColor {
-    txt: string
-    color?: string
-}
 
 const cacheKey = '_close'
 export class CloseIndicators extends BaseIndicators {
@@ -117,6 +113,7 @@ export class CloseIndicators extends BaseIndicators {
         const ctx = this.chart.kLine.tc
         const nowItem = this.chart.kLine.dataArr[index]
         const preItem = this.chart.kLine.dataArr[index - 1] || nowItem
+        const showDecimalPlaces = this.chart.kLine.conf.showDecimalPlaces
         if (!nowItem) return
         const date = formDate(nowItem.date)
         // 涨幅
@@ -126,8 +123,10 @@ export class CloseIndicators extends BaseIndicators {
         change = (
             ((nowItem.close - preItem.close) / preItem.close) *
             100
-        ).toFixed(2)
-        ampl = (((nowItem.max - nowItem.min) / preItem.close) * 100).toFixed(2)
+        ).toFixed(showDecimalPlaces)
+        ampl = (((nowItem.max - nowItem.min) / preItem.close) * 100).toFixed(
+            showDecimalPlaces
+        )
         const infoTxtConf = this.chart.conf.infoTxtConf
 
         const drawDataTxt = `${this.chart.kLine.lang.date}: ${date}`
@@ -137,7 +136,7 @@ export class CloseIndicators extends BaseIndicators {
         const color: string = this.chart.kLine.getItemColor(nowItem)
         // 时间 开 高 低 收 （涨幅 振幅 %）
         const afterStr = ': '
-        const txtArr: FontTxtAndColor[][] = [
+        const txtArr: { txt: string; color?: string }[][] = [
             [
                 {
                     txt: drawDataTxt,
@@ -148,7 +147,7 @@ export class CloseIndicators extends BaseIndicators {
                     txt: lang.open + afterStr,
                 },
                 {
-                    txt: String(nowItem.open),
+                    txt: nowItem.open.toFixed(showDecimalPlaces),
                     color,
                 },
             ],
@@ -157,7 +156,7 @@ export class CloseIndicators extends BaseIndicators {
                     txt: lang.height + afterStr,
                 },
                 {
-                    txt: String(nowItem.max),
+                    txt: nowItem.max.toFixed(showDecimalPlaces),
                     color,
                 },
             ],
@@ -166,7 +165,7 @@ export class CloseIndicators extends BaseIndicators {
                     txt: lang.low + afterStr,
                 },
                 {
-                    txt: String(nowItem.min),
+                    txt: nowItem.min.toFixed(showDecimalPlaces),
                     color,
                 },
             ],
@@ -175,7 +174,7 @@ export class CloseIndicators extends BaseIndicators {
                     txt: lang.close + afterStr,
                 },
                 {
-                    txt: String(nowItem.close),
+                    txt: nowItem.close.toFixed(showDecimalPlaces),
                     color,
                 },
             ],
@@ -215,7 +214,7 @@ export class CloseIndicators extends BaseIndicators {
                     },
                     fontFamily: infoTxtConf.family,
                     fontSize: infoTxtConf.size,
-                    textBaseline: 'hanging',
+                    textBaseline: 'top',
                     textAlign: 'left',
                 })
                 this.chart.infoTxtCoordinate.x += txtLen
@@ -223,5 +222,7 @@ export class CloseIndicators extends BaseIndicators {
 
             this.chart.infoTxtCoordinate.x += infoTxtConf.xSpace
         })
+        this.chart.infoTxtCoordinate.y += infoTxtConf.size + infoTxtConf.ySpace
+        this.chart.initInfoTxtCoordinateX()
     }
 }

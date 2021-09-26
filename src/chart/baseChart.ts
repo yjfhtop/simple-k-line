@@ -126,6 +126,10 @@ export class BaseChart {
             y: this.drawChartLeftTop.y + this.conf.infoTxtConf.deviationY,
         }
     }
+    initInfoTxtCoordinateX() {
+        this.infoTxtCoordinate.x =
+            this.drawChartLeftTop.x + this.conf.infoTxtConf.deviationX
+    }
     // 计算所有指标
     calcAll(item: DataItem, index: number, isMaxValue: boolean) {
         Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {

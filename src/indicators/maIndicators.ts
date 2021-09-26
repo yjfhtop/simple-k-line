@@ -12,6 +12,8 @@ import {
     drawTxt,
 } from '@/utils/canvasDraw'
 import { CloseIndicatorsConf } from '@/indicators/closeIndicators'
+import { getTxtW } from '@/utils/element'
+import { deepCopy } from '@/utils/dataHandle'
 // close的配置项
 export interface MAIndicatorsConfItem {
     lineW: number
@@ -129,5 +131,71 @@ export class MAIndicators extends BaseIndicators {
             })
         })
     }
-    drawTop() {}
+    drawTop() {
+        this.drawTopInfoTxt(this.chart.kLine.eventHandle.nowIndex)
+    }
+
+    drawTopInfoTxt(index: number) {
+        const ctx = this.chart.kLine.tc
+        const nowItem = this.chart.kLine.dataArr[index]
+        const infoTxtConf = this.chart.conf.infoTxtConf
+        const showArr: {
+            key: string
+            conf: MAIndicatorsConfItem
+        }[] = []
+        this.conf.forEach((conf) => {
+            if (!conf.show) return
+            const key = cacheKey + conf.number
+            showArr.push({
+                key,
+                conf,
+            })
+        })
+
+        if (showArr.length === 0) return
+
+        const txtArr: { txt: string; color?: string }[] = [
+            {
+                txt: `MA(${showArr.map((item) => item.key).join(',')})`,
+            },
+        ]
+
+        showArr.forEach((item) => {
+            const key = item.key
+            const value = nowItem[key]
+            if (value === undefined) return
+
+            const txt = `MA(${item.conf.number}): ${value.toFixed(2)}`
+            const color = item.conf.color
+
+            txtArr.push({
+                txt,
+                color,
+            })
+        })
+
+        txtArr.forEach((item) => {
+            const txtLen = getTxtW(
+                ctx,
+                item.txt,
+                infoTxtConf.size,
+                infoTxtConf.family
+            )
+            drawTxt(ctx, {
+                coordinate: this.chart.infoTxtCoordinate,
+                txt: item.txt,
+                drawStyle: {
+                    style: item.color || infoTxtConf.color,
+                },
+                fontFamily: infoTxtConf.family,
+                fontSize: infoTxtConf.size,
+                textBaseline: 'top',
+                textAlign: 'left',
+            })
+            this.chart.infoTxtCoordinate.x += txtLen + infoTxtConf.xSpace
+        })
+
+        this.chart.infoTxtCoordinate.y += infoTxtConf.size + infoTxtConf.ySpace
+        this.chart.initInfoTxtCoordinateX()
+    }
 }

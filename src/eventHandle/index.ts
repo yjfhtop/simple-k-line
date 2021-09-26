@@ -18,6 +18,7 @@ export class EventHandle {
     public nowIndex: number
     constructor(public kLine: SimpleKLine) {
         this.initEnv()
+        this.nowIndex = this.kLine.dataArr.length - 1
     }
 
     get nowChart() {
