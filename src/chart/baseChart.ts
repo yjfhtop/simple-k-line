@@ -122,8 +122,8 @@ export class BaseChart {
     // 初始化信息文字的绘制坐标
     initInfoTxtCoordinate() {
         this.infoTxtCoordinate = {
-            x: this.drawChartLeftTop.x - this.conf.infoTxtConf.deviationX,
-            y: this.drawChartLeftTop.y - this.conf.infoTxtConf.deviationY,
+            x: this.drawChartLeftTop.x + this.conf.infoTxtConf.deviationX,
+            y: this.drawChartLeftTop.y + this.conf.infoTxtConf.deviationY,
         }
     }
     // 计算所有指标

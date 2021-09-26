@@ -14,6 +14,8 @@ export class EventHandle {
     public downCoordinate: Coordinate
     // 当前鼠标的坐标
     public nowCoordinate: Coordinate
+    // 当前的下标, 主要为提示文字使用
+    public nowIndex: number
     constructor(public kLine: SimpleKLine) {
         this.initEnv()
     }
@@ -28,6 +30,8 @@ export class EventHandle {
             }
         }
     }
+
+    // get nowIndex =
 
     getEffectiveX(x: number) {
         if (x > this.kLine.chartMaxX) {
@@ -131,7 +135,7 @@ export class EventHandle {
                     this.activeTool.setDot({ date, value })
                 }
             }
-            // 没有选中的工具， 鼠标也不是按下的状态， 处理 hoverTool
+            // 没有选中的工具， 鼠标也不是按下的状态， 处理 hoverTool 和 nowIndex
             else if (!this.activeTool && !this.downCoordinate) {
                 // 判断有没有鼠标在工具上 s
                 let hasHoverTool = false
@@ -152,6 +156,10 @@ export class EventHandle {
                 !hasHoverTool && (this.hoverTool = null)
                 hasHoverTool && (this.kLine.showCross = false)
                 // 判断有没有鼠标在工具上 e
+
+                // nowIndex s
+                this.nowIndex = this.kLine.xAxis.xGetIndex(this.nowCoordinate.x)
+                // nowIndex e
             }
             this.kLine.drawTop()
             this.oldCoordinate = { ...this.nowCoordinate }
@@ -219,6 +227,7 @@ export class EventHandle {
         this.kLine.el.addEventListener('mouseleave', () => {
             this.kLine.showCross = false
             this.kLine.drawTop()
+            this.nowIndex = this.kLine.dataArr.length - 1
         })
     }
 }

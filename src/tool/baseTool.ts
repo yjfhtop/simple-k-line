@@ -88,16 +88,12 @@ export abstract class BaseTool {
     }
 
     move(yDiff: number, xDiff: number) {
-        console.log('----')
         const dotCoordinateArr: Coordinate[] = this.oldDotArr.map((item) => {
             return {
                 x: this.chart.kLine.xAxis.valueGetX(item.date),
                 y: this.chart.YAxis.valueGetY(item.value),
             }
         })
-        if (xDiff > 6) {
-            console.log(111)
-        }
         const newDotCoordinateArr = dotCoordinateArr.map((item, index) => {
             return {
                 x: item.x + xDiff,
@@ -105,9 +101,6 @@ export abstract class BaseTool {
             }
         })
         this.dotArr = newDotCoordinateArr.map((item, index) => {
-            if (index === 1 && xDiff > 6) {
-                console.log(1)
-            }
             return {
                 value: this.chart.YAxis.YGetValue(item.y),
                 date: this.chart.kLine.xAxis.xGetValue(item.x),
