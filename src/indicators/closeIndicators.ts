@@ -26,6 +26,11 @@ export interface CloseIndicatorsConf {
         lineDash?: number[]
     }
 }
+export interface FontTxtAndColor {
+    txt: string
+    color?: string
+}
+
 const cacheKey = '_close'
 export class CloseIndicators extends BaseIndicators {
     public name: IndicatorsNames = 'closeIndicators'
@@ -110,46 +115,113 @@ export class CloseIndicators extends BaseIndicators {
     drawTopInfoTxt(index: number) {
         // 时间 开 高 低 收 （涨幅 振幅 %）
         const ctx = this.chart.kLine.tc
-        const preItem = this.chart.kLine.dataArr[index - 1]
         const nowItem = this.chart.kLine.dataArr[index]
+        const preItem = this.chart.kLine.dataArr[index - 1] || nowItem
         if (!nowItem) return
         const date = formDate(nowItem.date)
         // 涨幅
         let change: string
         // 振幅
         let ampl: string
-        if (preItem) {
-            change = (
-                ((nowItem.close - preItem.close) / preItem.close) *
-                100
-            ).toFixed(2)
-            ampl = (
-                ((nowItem.max - nowItem.min) / preItem.close) *
-                100
-            ).toFixed(2)
-        } else {
-            change = '0'
-            ampl = '0'
-        }
+        change = (
+            ((nowItem.close - preItem.close) / preItem.close) *
+            100
+        ).toFixed(2)
+        ampl = (((nowItem.max - nowItem.min) / preItem.close) * 100).toFixed(2)
         const infoTxtConf = this.chart.conf.infoTxtConf
 
         const drawDataTxt = `${this.chart.kLine.lang.date}: ${date}`
-        const drawDataTxtWidth = getTxtW(
-            ctx,
-            drawDataTxt,
-            infoTxtConf.size,
-            infoTxtConf.family
-        )
-        drawTxt(ctx, {
-            coordinate: this.chart.infoTxtCoordinate,
-            txt: drawDataTxt,
-            drawStyle: {
-                style: infoTxtConf.color,
-            },
-            fontFamily: infoTxtConf.family,
-            fontSize: infoTxtConf.size,
-            textBaseline: 'hanging',
-            textAlign: 'left',
+
+        const riseFallColor = this.chart.kLine.conf.riseFallColor
+        const lang = this.chart.kLine.lang
+        const color: string = this.chart.kLine.getItemColor(nowItem)
+        // 时间 开 高 低 收 （涨幅 振幅 %）
+        const afterStr = ': '
+        const txtArr: FontTxtAndColor[][] = [
+            [
+                {
+                    txt: drawDataTxt,
+                },
+            ],
+            [
+                {
+                    txt: lang.open + afterStr,
+                },
+                {
+                    txt: String(nowItem.open),
+                    color,
+                },
+            ],
+            [
+                {
+                    txt: lang.height + afterStr,
+                },
+                {
+                    txt: String(nowItem.max),
+                    color,
+                },
+            ],
+            [
+                {
+                    txt: lang.low + afterStr,
+                },
+                {
+                    txt: String(nowItem.min),
+                    color,
+                },
+            ],
+            [
+                {
+                    txt: lang.close + afterStr,
+                },
+                {
+                    txt: String(nowItem.close),
+                    color,
+                },
+            ],
+            [
+                {
+                    txt: lang.change + afterStr,
+                },
+                {
+                    txt: change + '%',
+                    color,
+                },
+            ],
+            [
+                {
+                    txt: lang.ampl + afterStr,
+                },
+                {
+                    txt: ampl + '%',
+                    color,
+                },
+            ],
+        ]
+
+        txtArr.forEach((item) => {
+            item.forEach((cItem) => {
+                const txtLen = getTxtW(
+                    ctx,
+                    cItem.txt,
+                    infoTxtConf.size,
+                    infoTxtConf.family
+                )
+                drawTxt(ctx, {
+                    coordinate: this.chart.infoTxtCoordinate,
+                    txt: cItem.txt,
+                    drawStyle: {
+                        style: cItem.color || infoTxtConf.color,
+                    },
+                    fontFamily: infoTxtConf.family,
+                    fontSize: infoTxtConf.size,
+                    textBaseline: 'hanging',
+                    textAlign: 'left',
+                })
+                this.chart.infoTxtCoordinate.x += txtLen
+            })
+
+            this.chart.infoTxtCoordinate.x += infoTxtConf.xSpace
         })
     }
 }

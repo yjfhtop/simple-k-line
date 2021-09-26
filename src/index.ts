@@ -360,6 +360,18 @@ export default class SimpleKLine {
             }
         })
     }
+    // 根据item 获取当前的柱子改显示什么颜色
+    getItemColor(item: DataItem) {
+        if (!item) {
+            return null
+        } else {
+            if (item.close >= item.open) {
+                return this.conf.riseFallColor.riseColor
+            } else {
+                return this.conf.riseFallColor.fallColor
+            }
+        }
+    }
     test() {
         const list = [1, 2, 100, 200]
     }

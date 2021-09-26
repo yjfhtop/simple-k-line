@@ -75,8 +75,8 @@ export interface RiseFallColor {
     fallColor?: string
 }
 export const DefRiseFallColor: RiseFallColor = {
-    riseColor: 'rgb(235, 73, 89)',
-    fallColor: 'rgb(186, 186, 186)',
+    riseColor: 'rgba(235, 73, 89, 1)',
+    fallColor: 'rgba(80, 186, 133, 1)',
 }
 
 // 图表上的文字信息， 比如 时间， 涨幅...
@@ -95,8 +95,8 @@ export interface InfoTxtConf {
 }
 
 export const DefInfoTxtConf: InfoTxtConf = {
-    deviationX: 2,
-    deviationY: 2,
+    deviationX: 5,
+    deviationY: 5,
     size: 12,
     color: '#ccc',
     xSpace: 4,

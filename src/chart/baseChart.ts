@@ -119,7 +119,7 @@ export class BaseChart {
             Number.MAX_VALUE
         )
     }
-    // 初始化信息文字的绘制坐标
+    // 初始化信息文字的绘制坐标， 每次绘制之前调用
     initInfoTxtCoordinate() {
         this.infoTxtCoordinate = {
             x: this.drawChartLeftTop.x + this.conf.infoTxtConf.deviationX,
@@ -220,8 +220,8 @@ export class BaseChart {
         })
     }
     drawTop() {
+        this.initInfoTxtCoordinate()
         this.cutting('top', () => {
-            this.initInfoTxtCoordinate()
             Object.keys(this.indicatorsMap).forEach((key: IndicatorsNames) => {
                 const item = this.indicatorsMap[key]
                 item.drawTop()
