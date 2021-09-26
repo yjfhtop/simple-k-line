@@ -11,7 +11,7 @@ import {
     TimeDate,
     UnitAndNumber,
 } from '@/utils/timeHandle'
-import { binarySearch } from '@/utils/index'
+import { binarySearch, getApproximate } from '@/utils/index'
 
 // x轴的配置
 export interface XConf {
@@ -241,7 +241,12 @@ export class XAxis {
             const typeStr = value < this.kLine.dataArr[0].date ? 'min' : 'max'
             // 数据外，模糊计算
             const timeDiff = typeStr === 'min' ? sTime - value : value - eTime
-            let diffNumber = Math.round(timeDiff / this.scaleDiff)
+            let diffNumber = timeDiff / this.scaleDiff
+            diffNumber = getApproximate(
+                Math.floor(diffNumber),
+                Math.ceil(diffNumber),
+                diffNumber
+            )
             index =
                 typeStr === 'min'
                     ? -diffNumber
@@ -270,7 +275,12 @@ export class XAxis {
     // x轴获取下标 带吸附
     xGetIndex(x: number) {
         const diff = x - this.drawStartX
-        let diffNumber = Math.round(diff / this.kLine.useItemAllW)
+        let diffNumber = diff / this.kLine.useItemAllW
+        diffNumber = getApproximate(
+            Math.floor(diffNumber),
+            Math.ceil(diffNumber),
+            diffNumber
+        )
         return this.drawStartIndex + diffNumber
     }
     xGetValue(x: number) {

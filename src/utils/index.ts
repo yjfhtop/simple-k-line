@@ -73,6 +73,31 @@ export function arrGetAddAndDel(oldArr: string[], newArr: string[]) {
 }
 
 /**
+ * 获取近似值 str, 返回： s 代表s靠近
+ * @param sData
+ * @param eDate
+ * @param target
+ */
+export function getApproximateStr(
+    sData: number,
+    eDate: number,
+    target: number
+) {
+    const sDiff = Math.abs(sData - target)
+    const eDiff = Math.abs(eDate - target)
+    if (sDiff <= eDiff) {
+        return 's'
+    } else {
+        return 'e'
+    }
+}
+
+export function getApproximate(sData: number, eDate: number, target: number) {
+    const str = getApproximateStr(sData, eDate, target)
+    return str === 's' ? sData : eDate
+}
+
+/**
  * 二分发找值， 早不到返回 -1
  * @param list
  * @param value 要找的目标值
@@ -123,13 +148,8 @@ export function binarySearch<T>(
         if (e - s === 1) {
             // 取近似下标
             if (approximate) {
-                const sDiff = value - sValue
-                const eDiff = eValue - value
-                if (sDiff <= eDiff) {
-                    return s
-                } else {
-                    return e
-                }
+                const diffType = getApproximateStr(sValue, eValue, value)
+                return diffType === 's' ? s : e
             } else {
                 return -1
             }
