@@ -11,7 +11,7 @@ import {
     timeArrGetTimeUnitAndNumber,
 } from '@/utils/timeHandle'
 import { ChartMap, createChart } from '@/chart/chartUtils'
-import { arrGetAddAndDel } from '@/utils/index'
+import { arrGetAddAndDel, dichotomy } from '@/utils/index'
 import { XAxis } from '@/axis/xAxis'
 import { EventHandle } from '@/eventHandle/index'
 import { Cross } from '@/cross/index'
@@ -361,9 +361,7 @@ export default class SimpleKLine {
         })
     }
     test() {
-        const a: any = { a: 1 }
-        const b: any = { b: 10 }
-        b.a = a
-        a.b = b
+        const list = [1, 5, 7, 10]
+        console.log(dichotomy(list, 10, undefined, true), 'dichotomy')
     }
 }

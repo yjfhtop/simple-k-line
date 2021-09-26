@@ -71,3 +71,89 @@ export function arrGetAddAndDel(oldArr: string[], newArr: string[]) {
         delArr,
     }
 }
+
+/**
+ * 二分发找值， 早不到返回 -1
+ * @param list
+ * @param value 要找的目标值
+ * @param getValue
+ * @param approximate 如果找不到，是否取最接近的下标
+ */
+export function dichotomy<T>(
+    list: T[],
+    value: number,
+    getValue?: (item: T) => number,
+    approximate: boolean = true
+): number {
+    const s = 0
+    const e = list.length - 1
+    const defGetValue = function (item: T): number {
+        return item as any
+    }
+    getValue = getValue || defGetValue
+
+    // 数组长度处理 s
+    if (list.length === 0) {
+        return -1
+    } else if (list.length === 1) {
+        const v = getValue(list[0])
+        if (v === value || approximate) {
+            return 0
+        } else {
+            return -1
+        }
+    }
+    // 数组长度处理 e
+
+    // 最大最小值处理 s
+    const sValue = getValue(list[s])
+    const eValue = getValue(list[e])
+    if (value > eValue) {
+        return approximate ? e : -1
+    } else if (value < sValue) {
+        return approximate ? s : -1
+    }
+    // 最大最小值处理 e
+
+    function useDichotomy(
+        list: T[],
+        value: number,
+        getValue: (item: T) => number,
+        s: number,
+        e: number
+    ): number {
+        const center = Math.floor((e - s) / 2) + s
+        const sValue = getValue(list[s])
+        const cValue = getValue(list[center])
+        const eValue = getValue(list[e])
+        if (sValue === value) {
+            return s
+        }
+        if (eValue === value) {
+            return e
+        }
+        if (cValue === value) {
+            return center
+        }
+        if (center === s) {
+            if (approximate) {
+                // 取近似下标
+                const sDiff = cValue - sValue
+                const eDiff = eValue - cValue
+                if (sDiff <= eDiff) {
+                    return s
+                } else {
+                    return e
+                }
+            } else {
+                return -1
+            }
+        }
+        if (cValue < value) {
+            return useDichotomy(list, value, getValue, center, e)
+        } else {
+            return useDichotomy(list, value, getValue, s, center)
+        }
+    }
+    return useDichotomy(list, value, getValue, s, e)
+}
