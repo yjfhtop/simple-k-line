@@ -50,6 +50,7 @@ export class EventHandle {
 
     initEnv() {
         this.kLine.el.addEventListener('mousemove', (e) => {
+            e.stopPropagation()
             this.kLine.showCross = true
             this.nowCoordinate = {
                 x: this.getEffectiveX(e.offsetX),
@@ -57,7 +58,11 @@ export class EventHandle {
             }
             const nowChart = this.nowChart
             // 鼠标按下 并且有 激活的工具，意味着是对工具进行移动，或者点的移动
-            if (this.downCoordinate && this.activeTool) {
+            if (
+                this.downCoordinate &&
+                this.activeTool &&
+                this.activeTool.over
+            ) {
                 this.kLine.showCross = false
                 const yValue = this.activeTool.chart.YAxis.YGetValue(
                     this.activeTool.chart.getDrawEffectiveY(
@@ -151,11 +156,12 @@ export class EventHandle {
         })
 
         this.kLine.el.addEventListener('mousedown', (e) => {
+            e.stopPropagation()
             this.downCoordinate = {
                 x: this.getEffectiveX(e.offsetX),
                 y: this.getEffectiveY(e.offsetY),
             }
-            if (this.activeTool) {
+            if (this.activeTool && !this.activeTool.over) {
                 this.activeTool.nowDotIndex++
                 if (this.activeTool.over) {
                     this.activeTool.chart.toolList.push(this.activeTool)
@@ -188,6 +194,8 @@ export class EventHandle {
 
         // 用于缩放
         this.kLine.el.addEventListener('wheel', (e) => {
+            e.preventDefault()
+            e.stopPropagation()
             const deltaY = e.deltaY
             if (deltaY > 0) {
                 if (this.kLine.useItemWAndSpaceIndex > 0) {
@@ -204,7 +212,6 @@ export class EventHandle {
             this.kLine.standardizationEIndex()
             this.kLine.determineYTxtMaxW()
             this.kLine.drawAll()
-            e.preventDefault()
         })
 
         this.kLine.el.addEventListener('mouseleave', () => {

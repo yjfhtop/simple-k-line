@@ -11,7 +11,7 @@ import {
     TimeDate,
     UnitAndNumber,
 } from '@/utils/timeHandle'
-import { dichotomy } from '@/utils/index'
+import { binarySearch } from '@/utils/index'
 
 // x轴的配置
 export interface XConf {
@@ -248,7 +248,7 @@ export class XAxis {
                     : this.kLine.dataArr.length - 1 + diffNumber
         } else {
             // 数据内
-            index = dichotomy<DataItem>(
+            index = binarySearch<DataItem>(
                 this.kLine.dataArr,
                 value,
                 (item: DataItem) => {

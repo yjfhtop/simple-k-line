@@ -79,7 +79,7 @@ export function arrGetAddAndDel(oldArr: string[], newArr: string[]) {
  * @param getValue
  * @param approximate 如果找不到，是否取最接近的下标
  */
-export function dichotomy<T>(
+export function binarySearch<T>(
     list: T[],
     value: number,
     getValue?: (item: T) => number,
