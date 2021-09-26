@@ -139,6 +139,7 @@ export class MAIndicators extends BaseIndicators {
         const ctx = this.chart.kLine.tc
         const nowItem = this.chart.kLine.dataArr[index]
         const infoTxtConf = this.chart.conf.infoTxtConf
+        if (!nowItem) return
         const showArr: {
             key: string
             conf: MAIndicatorsConfItem
@@ -156,7 +157,7 @@ export class MAIndicators extends BaseIndicators {
 
         const txtArr: { txt: string; color?: string }[] = [
             {
-                txt: `MA(${showArr.map((item) => item.key).join(',')})`,
+                txt: `MA(${showArr.map((item) => item.conf.number).join(',')})`,
             },
         ]
 

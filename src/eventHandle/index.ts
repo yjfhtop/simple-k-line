@@ -53,6 +53,15 @@ export class EventHandle {
         return y
     }
 
+    getEffectiveNowIndex(index: number) {
+        if (index > this.kLine.dataArr.length - 1) {
+            return this.kLine.dataArr.length - 1
+        } else if (index < 0) {
+            return 0
+        }
+        return index
+    }
+
     initEnv() {
         this.kLine.el.addEventListener('mousemove', (e) => {
             e.stopPropagation()
@@ -159,7 +168,9 @@ export class EventHandle {
                 // 判断有没有鼠标在工具上 e
 
                 // nowIndex s
-                this.nowIndex = this.kLine.xAxis.xGetIndex(this.nowCoordinate.x)
+                this.nowIndex = this.getEffectiveNowIndex(
+                    this.kLine.xAxis.xGetIndex(this.nowCoordinate.x)
+                )
                 // nowIndex e
             }
             this.kLine.drawTop()
@@ -228,7 +239,6 @@ export class EventHandle {
         this.kLine.el.addEventListener('mouseleave', () => {
             this.kLine.showCross = false
             this.kLine.drawTop()
-            this.nowIndex = this.kLine.dataArr.length - 1
         })
     }
 }
