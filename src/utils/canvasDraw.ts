@@ -43,7 +43,7 @@ function setDrawStyle(
     drawType: DrawType = DefDrawType,
     drawStyle: DrawStyle = { w: 1, style: '#000' }
 ) {
-    drawStyle = Object.assign({ w: 1, style: '#000' }, deepCopy(drawStyle))
+    drawStyle = drawStyle || {}
     if (drawType === 'stroke') {
         drawStyle.w && (ctx.lineWidth = drawStyle.w)
         drawStyle.lineDash && ctx.setLineDash(drawStyle.lineDash)
