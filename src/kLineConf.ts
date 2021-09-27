@@ -31,16 +31,16 @@ export interface ItemWAndSpace {
 
 // 默认柱子宽度和间隔
 const DefItemWAndSpaceList: ItemWAndSpace[] = [
-    { w: 2, space: 1 },
-    { w: 3, space: 1 },
+    { w: 1, space: 1 },
+    { w: 3, space: 2 },
     { w: 5, space: 2 },
     { w: 7, space: 2 },
-    { w: 8, space: 4 },
-    { w: 10, space: 4 },
-    { w: 12, space: 5 },
-    { w: 14, space: 5 },
-    { w: 16, space: 6 },
-    { w: 18, space: 6 },
+    { w: 9, space: 4 },
+    { w: 11, space: 4 },
+    { w: 13, space: 5 },
+    { w: 15, space: 5 },
+    { w: 17, space: 6 },
+    { w: 19, space: 6 },
 ]
 
 // 需要的数据格式

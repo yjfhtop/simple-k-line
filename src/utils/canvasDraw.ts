@@ -88,10 +88,14 @@ export function drawLine(
 
     // 处理 模糊问题
     if (!drawStyle || !drawStyle.w || isOdd(drawStyle.w)) {
-        startCoordinate.x += 0.5
-        startCoordinate.y += 0.5
-        endCoordinate.x += 0.5
-        endCoordinate.y += 0.5
+        if (startCoordinate.x === endCoordinate.x) {
+            startCoordinate.x += 0.5
+            endCoordinate.x += 0.5
+        }
+        if (startCoordinate.y === endCoordinate.y) {
+            startCoordinate.y += 0.5
+            endCoordinate.y += 0.5
+        }
     }
     // 绘制
     ctx.moveTo(startCoordinate.x, startCoordinate.y)
@@ -150,8 +154,8 @@ export function drawRect(
 
     // 处理模糊边框 rectConfig.drawType === 'stroke' &&
     if (
-        !rectConfig.drawStyle ||
-        !rectConfig.drawStyle.w ||
+        rectConfig.drawType &&
+        rectConfig.drawType === 'stroke' &&
         isOdd(rectConfig.drawStyle.w)
     ) {
         rectConfig.leftTop.x += 0.5

@@ -78,11 +78,11 @@ export class CandleIndicators extends BaseIndicators {
         const minY = this.chart.YAxis.valueGetY(item.min)
 
         const leftTop: Coordinate = {
-            x: topX - itemWHalf,
+            x: Math.ceil(topX - itemWHalf),
             y: topY,
         }
         const rightBottom: Coordinate = {
-            x: topX + itemWHalf,
+            x: Math.ceil(topX + itemWHalf),
             y: bottomY,
         }
         const maxTop: Coordinate = {
@@ -101,7 +101,6 @@ export class CandleIndicators extends BaseIndicators {
             x: topX,
             y: minY,
         }
-
         switch (type) {
             case 'CandleStick':
                 // 方块

@@ -118,7 +118,9 @@ export class XAxis {
     // 绘制开始的x坐标
     get drawStartX() {
         const lastItemY =
-            this.kLine.elWH.w - this.kLine.yW - this.kLine.useItemAllW / 2
+            this.kLine.elWH.w -
+            this.kLine.yW -
+            Math.ceil(this.kLine.useItemAllW / 2)
         return lastItemY - this.deviationLength
     }
 
@@ -304,9 +306,9 @@ export class XAxis {
         }
     }
     indexGetX(index: number) {
-        return (
+        return Math.floor(
             this.drawStartX +
-            (index - this.drawStartIndex) * this.kLine.useItemAllW
+                (index - this.drawStartIndex) * this.kLine.useItemAllW
         )
     }
 }

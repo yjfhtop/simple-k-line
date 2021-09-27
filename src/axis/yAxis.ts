@@ -93,10 +93,10 @@ export class YAxis {
 
     // value 获取 对应canvas的y轴的值
     valueGetY(value: number) {
-        return (
+        return Math.floor(
             this.chart.drawChartRightBottom.y -
-            ((value - this.minValue) * this.chart.drawCharH) /
-                (this.maxValue - this.minValue)
+                ((value - this.minValue) * this.chart.drawCharH) /
+                    (this.maxValue - this.minValue)
         )
     }
 
