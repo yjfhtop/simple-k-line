@@ -56,7 +56,7 @@ export class YAxis {
     }
 
     get conf() {
-        return mergeData(this.chart.conf.yConf, this.chart.kLine.conf.yConf)
+        return this.chart.conf.yConf
     }
     // 确定轴标
     determineScale() {

@@ -329,6 +329,13 @@ export function initConf(conf: KLineConf, kLine: SimpleKLine) {
     // 为每个图表添加默认的配置项 s
     c.chartShowArr.forEach((name) => {
         c.chartConfMap[name] = mergeData(DefBaseChartConf, c.chartConfMap[name])
+
+        // Y轴的 配置项处理 s
+        c.chartConfMap[name].yConf = mergeData(
+            c.yConf,
+            c.chartConfMap[name].yConf
+        )
+        // Y轴的 配置项处理 e
     })
     // 为每个图表添加默认的配置项 e
 

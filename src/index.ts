@@ -308,7 +308,7 @@ export default class SimpleKLine {
         this.calc()
         const txtW = this.getMaxTxtWInAllChart()
         const diff = oldYTxtMaxW - txtW
-        if (txtW === oldYTxtMaxW || (diff > 0 && Math.abs(diff) <= 4)) {
+        if (txtW === oldYTxtMaxW || (diff > 0 && Math.abs(diff) <= 2)) {
             this.yTxtMaxW = txtW
         } else {
             this.yTxtMaxW = txtW
