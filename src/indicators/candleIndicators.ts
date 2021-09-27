@@ -11,7 +11,10 @@ import {
     drawRect,
     drawTxt,
 } from '@/utils/canvasDraw'
-import { CloseIndicatorsConf } from '@/indicators/closeIndicators'
+import {
+    CloseIndicators,
+    CloseIndicatorsConf,
+} from '@/indicators/closeIndicators'
 import { getTxtW } from '@/utils/element'
 import { deepCopy } from '@/utils/dataHandle'
 
@@ -30,6 +33,13 @@ export interface CandleIndicatorsConf {
     // 影线的配置
     hatching?: {
         lineW?: number
+    }
+    // 当前价格的线段样式
+    nowLine?: {
+        lineW?: number
+        color?: string
+        // 本项存在就是虚线
+        lineDash?: number[]
     }
 }
 
@@ -142,8 +152,10 @@ export class CandleIndicators extends BaseIndicators {
         }
     }
     drawTop() {
-        this.drawTopInfoTxt(this.chart.kLine.eventHandle.nowIndex)
+        CloseIndicators.prototype.drawTop.call(this)
     }
 
-    drawTopInfoTxt(index: number) {}
+    drawTopInfoTxt(index: number) {
+        CloseIndicators.prototype.drawTopInfoTxt.call(this, index)
+    }
 }

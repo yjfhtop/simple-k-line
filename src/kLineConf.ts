@@ -234,6 +234,11 @@ const DefCandleIndicatorsConf: CandleIndicatorsConf = {
     hatching: {
         lineW: 1,
     },
+    nowLine: {
+        lineW: 1,
+        color: 'rgb(32, 145, 234)',
+        lineDash: [2, 2],
+    },
 }
 
 // 所有指标配置项的集合---------------------------------------------
@@ -254,8 +259,8 @@ const DefBaseChartConf: BaseChartConf = {
 }
 
 const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
-DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
-// DefMainChartConf.indicatorShowArr = ['candleIndicators']
+// DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
+DefMainChartConf.indicatorShowArr = ['candleIndicators', 'maIndicators']
 
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {
