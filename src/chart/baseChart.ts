@@ -253,6 +253,10 @@ export class BaseChart {
             )
         })
     }
+    // 绘制 图表的 底部线
+    drawBottomLine() {
+        const ctx = this.kLine.bc
+    }
     // 坐标是否在图表中
     inChart(coordinate: Coordinate) {
         return (

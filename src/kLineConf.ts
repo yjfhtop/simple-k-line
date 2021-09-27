@@ -262,9 +262,13 @@ const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
 // DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
 DefMainChartConf.indicatorShowArr = ['candleIndicators', 'maIndicators']
 
+const DefTestChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
+DefTestChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
+
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {
     mainChart: DefMainChartConf,
+    testChart: DefTestChartConf,
 }
 
 // 默认 x轴的配置项
@@ -302,7 +306,7 @@ export const DefKLineConf: KLineConf = {
     useItemWAndSpaceIndex: 5,
     yPadding: { left: 10, right: 10 },
     yConf: DefYConf,
-    chartShowArr: ['mainChart'],
+    chartShowArr: ['mainChart', 'testChart'],
     chartConfMap: DefChartConfMap,
     xConf: DefXConf,
     crossConf: DefCrossConf,
@@ -321,6 +325,12 @@ export function initConf(conf: KLineConf, kLine: SimpleKLine) {
         c.chartShowArr.unshift('mainChart')
     }
     // 保证主图是第一个 e
+
+    // 为每个图表添加默认的配置项 s
+    c.chartShowArr.forEach((name) => {
+        c.chartConfMap[name] = mergeData(DefBaseChartConf, c.chartConfMap[name])
+    })
+    // 为每个图表添加默认的配置项 e
 
     // infoTxtConf 映射到 图表的配置 s
     Object.keys(c.chartConfMap).forEach((key) => {

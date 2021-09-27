@@ -28,7 +28,8 @@ export function isOdd(v: number): boolean {
  */
 export function getDataType(data: any): DataType {
     const typeStr: string = Object.prototype.toString.call(data)
-    const useTypeStr = typeStr.replace('[object ', '').replace(']', '')
+    let useTypeStr = typeStr.slice(8)
+    useTypeStr = useTypeStr.slice(0, useTypeStr.length - 1)
     return useTypeStr as DataType
 }
 
