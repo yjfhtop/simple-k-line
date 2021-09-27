@@ -18,6 +18,7 @@ import { Cross } from '@/cross/index'
 import { createTool, ToolTypes } from '@/tool/toolUtils'
 import { BaseChart } from '@/chart/baseChart'
 import { Lang } from '@/lang/utils'
+import { drawRect } from '@/utils/canvasDraw'
 
 export default class SimpleKLine {
     // 用户提供的容器
@@ -318,9 +319,20 @@ export default class SimpleKLine {
         this.drawBottom()
         this.drawTop()
     }
+    drawBg() {
+        drawRect(this.bc, {
+            leftTop: { x: 0, y: 0 },
+            w: this.elWH.w,
+            h: this.elWH.h,
+            drawStyle: {
+                style: this.conf.bgc,
+            },
+        })
+    }
     // 绘制底部的canvas
     drawBottom() {
         this.clearBc()
+        this.drawBg()
         this.xAxis.draw()
         this.conf.chartShowArr.forEach((name) => {
             const chart = this.chartMap[name]
