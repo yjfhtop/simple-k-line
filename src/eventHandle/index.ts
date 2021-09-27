@@ -234,7 +234,6 @@ export class EventHandle {
             this.kLine.standardizationEIndex()
             this.kLine.determineYTxtMaxW()
             this.kLine.drawAll()
-            console.log(this.kLine.useItem.w, '--w--')
         })
 
         this.kLine.el.addEventListener('mouseleave', () => {

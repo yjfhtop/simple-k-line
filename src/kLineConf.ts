@@ -254,8 +254,8 @@ const DefBaseChartConf: BaseChartConf = {
 }
 
 const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
-// DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
-DefMainChartConf.indicatorShowArr = ['candleIndicators']
+DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
+// DefMainChartConf.indicatorShowArr = ['candleIndicators']
 
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {

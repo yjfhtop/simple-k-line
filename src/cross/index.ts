@@ -31,6 +31,8 @@ export class Cross {
     }
     draw() {
         const x = this.kLine.xAxis.xGetX(this.kLine.eventHandle.nowCoordinate.x)
+        // 这里处理十字线会显示在轴体的问题
+        if (x > this.kLine.chartMaxX) return
         const top = { x, y: 0 }
         const bottom = { x, y: this.kLine.xAxis.leftTop.y }
         const left = { x: 0, y: this.kLine.eventHandle.nowCoordinate.y }
