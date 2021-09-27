@@ -106,8 +106,6 @@ export abstract class BaseTool {
                 date: this.chart.kLine.xAxis.xGetValue(item.x),
             }
         })
-
-        console.log(this.dotArr[1].date - this.oldDotArr[1].date, '-jian')
     }
 
     // // 判断是否在线上

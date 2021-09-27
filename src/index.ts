@@ -58,6 +58,7 @@ export default class SimpleKLine {
     public lang: Lang
 
     private _useItemWAndSpaceIndex: number
+    // 当前 item 宽度 下标
     get useItemWAndSpaceIndex() {
         return this._useItemWAndSpaceIndex
     }
@@ -116,7 +117,7 @@ export default class SimpleKLine {
     get useItem() {
         return this.conf.itemWAndSpaceList[this.useItemWAndSpaceIndex]
     }
-    // 当前使用的 item 的 宽度
+    // 当前使用的 item 的 宽度（包含空隙）
     get useItemAllW() {
         return this.useItem.w + this.useItem.space
     }
@@ -360,15 +361,28 @@ export default class SimpleKLine {
             }
         })
     }
-    // 根据item 获取当前的柱子改显示什么颜色
+    // 根据item 获取当前的柱子该显示什么颜色
     getItemColor(item: DataItem) {
         if (!item) {
             return null
         } else {
-            if (item.close >= item.open) {
+            const type = this.getItemRiseFall(item)
+            if (type === 'rise') {
                 return this.conf.riseFallColor.riseColor
             } else {
                 return this.conf.riseFallColor.fallColor
+            }
+        }
+    }
+    // 获取涨跌
+    getItemRiseFall(item: DataItem) {
+        if (!item) {
+            return null
+        } else {
+            if (item.close >= item.open) {
+                return 'rise'
+            } else {
+                return 'fall'
             }
         }
     }

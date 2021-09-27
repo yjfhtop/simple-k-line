@@ -39,6 +39,7 @@ export class CloseIndicators extends BaseIndicators {
     }
 
     calc(item: DataItem, index: number, isMaxValue: boolean) {
+        // 这个是示列
         if (!item) return
 
         this.cacheKeyArr.push(cacheKey)

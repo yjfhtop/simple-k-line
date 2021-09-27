@@ -20,6 +20,7 @@ import { BaseToolConf } from '@/tool/baseTool'
 import { MAIndicatorsConf } from '@/indicators/maIndicators'
 import SimpleKLine from '@/index'
 import { determineLang, LangType } from '@/lang/utils'
+import { CandleIndicatorsConf } from '@/indicators/candleIndicators'
 // import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
@@ -223,10 +224,23 @@ const DefMAIndicatorsConf: MAIndicatorsConf = [
     },
 ]
 
-// 所有指标配置项的集合
+const DefCandleIndicatorsConf: CandleIndicatorsConf = {
+    column: {
+        type: 'CandleStick',
+        lineW: 1,
+        fallHollow: false,
+        riseHollow: false,
+    },
+    hatching: {
+        lineW: 1,
+    },
+}
+
+// 所有指标配置项的集合---------------------------------------------
 const DefIndicatorsConfMap: IndicatorsConfMap = {
     closeIndicators: DefCloseIndicatorsConf,
     maIndicators: DefMAIndicatorsConf,
+    candleIndicators: DefCandleIndicatorsConf,
 }
 
 // 图表的基础配置
@@ -240,7 +254,8 @@ const DefBaseChartConf: BaseChartConf = {
 }
 
 const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
-DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
+// DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
+DefMainChartConf.indicatorShowArr = ['candleIndicators']
 
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {
