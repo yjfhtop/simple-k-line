@@ -98,13 +98,14 @@ export interface WH {
 /**
  * 获取容器的宽高， 不包含 padding
  * @param el
+ * @param floor 是否向下取整
  */
-export function getEleHW(el: HTMLElement): WH {
+export function getEleHW(el: HTMLElement, floor = true): WH {
     const elData = window.getComputedStyle && window.getComputedStyle(el)
     const H = parseFloat(elData.height)
     const W = parseFloat(elData.width)
     return {
-        w: W,
-        h: H,
+        w: floor ? Math.floor(W) : W,
+        h: floor ? Math.floor(H) : H,
     }
 }

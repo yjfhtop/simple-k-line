@@ -111,6 +111,8 @@ export class CandleIndicators extends BaseIndicators {
             x: topX,
             y: minY,
         }
+        if (index === 91) {
+        }
         switch (type) {
             case 'CandleStick':
                 // 方块
@@ -124,10 +126,12 @@ export class CandleIndicators extends BaseIndicators {
                     },
                 })
                 // 影线
+                console.log('-----------------------------')
                 drawLine(ctx, maxBottom, maxTop, {
                     w: this.conf.hatching.lineW,
                     style: color,
                 })
+                console.log('-----------------------------')
                 drawLine(ctx, minBottom, minTop, {
                     w: this.conf.hatching.lineW,
                     style: color,

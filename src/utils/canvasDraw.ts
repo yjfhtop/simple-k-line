@@ -201,7 +201,6 @@ export function drawRect(
         }
     }
     rectConfig.borderRadius = borderRadius
-
     // 开始绘制
     ctx.save()
     ctx.beginPath()
