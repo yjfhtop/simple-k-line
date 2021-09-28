@@ -58,16 +58,10 @@ export class MAIndicators extends BaseIndicators {
                         index,
                         isMaxValue
                     )
-                    // 尝试计算最大最下值
-                    this.itemTryMaxMin(
-                        useCacheKey,
-                        item,
-                        useValue,
-                        index,
-                        isMaxValue
-                    )
                 }
             }
+            // 尝试计算最大最下值
+            this.itemTryMaxMin(useCacheKey, item, useValue, index, isMaxValue)
         })
     }
 
@@ -80,7 +74,9 @@ export class MAIndicators extends BaseIndicators {
                 const item = this.chart.kLine.dataArr[i]
                 sum += item.close || 0
             }
-            return sum / len
+            return parseFloat(
+                (sum / len).toFixed(this.chart.kLine.conf.showDecimalPlaces)
+            )
         } else {
             return undefined
         }

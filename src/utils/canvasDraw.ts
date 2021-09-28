@@ -89,12 +89,12 @@ export function drawLine(
     // 处理 模糊问题
     if (!drawStyle || !drawStyle.w || isOdd(drawStyle.w)) {
         if (startCoordinate.x === endCoordinate.x) {
-            startCoordinate.x += 0.5
-            endCoordinate.x += 0.5
+            startCoordinate.x = Math.floor(startCoordinate.x) + 0.5
+            endCoordinate.x = Math.floor(endCoordinate.x) + 0.5
         }
         if (startCoordinate.y === endCoordinate.y) {
-            startCoordinate.y += 0.5
-            endCoordinate.y += 0.5
+            startCoordinate.y = Math.floor(startCoordinate.y) + 0.5
+            endCoordinate.y = Math.floor(endCoordinate.y) + 0.5
         }
     }
     // 绘制
