@@ -52,8 +52,18 @@ export class XAxis {
     public number = 0
     // 一个轴标内 小轴标的数目
     public useScaleInsideItemNumber = 0
-    public leftTop: Coordinate
-    public rightBottom: Coordinate
+    get leftTop(): Coordinate {
+        return {
+            x: 0,
+            y: this.kLine.elWH.h - this.conf.h,
+        }
+    }
+    get rightBottom(): Coordinate {
+        return {
+            x: this.kLine.elWH.w,
+            y: this.kLine.elWH.h,
+        }
+    }
     // 对 k线数据的补充，用来补全时间轴的显示
     // public dataList: DataItem[]
     // 轴标上边线段的集合，方便其他图表就行绘制 网格线
@@ -66,14 +76,6 @@ export class XAxis {
         return this.kLine.conf.xConf
     }
     constructor(public kLine: SimpleKLine) {
-        this.leftTop = {
-            x: 0,
-            y: this.kLine.elWH.h - this.conf.h,
-        }
-        this.rightBottom = {
-            x: this.kLine.elWH.w,
-            y: this.kLine.elWH.h,
-        }
         this.determineIntervalUnitAndNumber()
         this.getSupplementDataArr()
         this.determineScale()

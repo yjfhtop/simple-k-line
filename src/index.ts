@@ -195,6 +195,17 @@ export default class SimpleKLine {
         this.drawAll()
     }
 
+    reSize() {
+        this.initContainer(false)
+        this.el.removeChild(this.bEl)
+        this.el.removeChild(this.tEl)
+        this.initCanvas()
+        // 按理来说应该等比缩放的，这里先简单一点
+        this.determineChartMap(true)
+        this.determineYTxtMaxW()
+        this.drawAll()
+    }
+
     // 规范化 EIndex
     standardizationEIndex() {
         const max = this.eIndexMax
@@ -217,14 +228,14 @@ export default class SimpleKLine {
     }
 
     // 初始化自己的容器
-    initContainer() {
+    initContainer(init = true) {
         this.elWH = getEleHW(this.userEl)
-        this.el = document.createElement('div')
+        this.el = this.el || document.createElement('div')
         this.el.style.width = this.elWH.w + 'px'
         this.el.style.height = this.elWH.h + 'px'
         this.el.style.position = 'relative'
 
-        this.userEl.appendChild(this.el)
+        init && this.userEl.appendChild(this.el)
     }
     // 初始化canvas
     initCanvas() {
@@ -235,7 +246,6 @@ export default class SimpleKLine {
             zIndex: '10',
         }
         const mainCanvasObj = createHDCanvas(this.elWH.w, this.elWH.h, style)
-
         style.zIndex = '20'
         const floatCanvasObj = createHDCanvas(this.elWH.w, this.elWH.h, style)
         this.bEl = mainCanvasObj.canvas
@@ -248,12 +258,13 @@ export default class SimpleKLine {
         this.el.appendChild(this.tEl)
     }
     // 确定化图表的映射
-    determineChartMap() {
+    determineChartMap(force = false) {
         if (
             !this.oldConf ||
             (this.oldConf &&
                 this.oldConf.chartShowArr.join('') !==
-                    this.conf.chartShowArr.join(''))
+                    this.conf.chartShowArr.join('')) ||
+            force
         ) {
             // 副图的高度
             const viceChatH = this.allChatH * 0.2

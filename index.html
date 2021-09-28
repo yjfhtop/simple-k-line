@@ -14,8 +14,8 @@
             /*background-color: #000;*/
         }
         #k_line {
-            width: 600px;
-            height: 400px;
+            width: 80vw;
+            height: 80vh;
             margin: 0 auto;
         }
     </style>
@@ -28,6 +28,7 @@
 <button id='pushData'>添加新数据</button>
 <button id='unshiftData'>添加旧数据</button>
 <button id='updateConf'>修改配置项</button>
+<button id='reSize'>大小变化</button>
 <div id="k_line">
 </div>
 </body>
@@ -119,6 +120,11 @@
                 }
             }
         })
+    })
+
+    const reSizeBtn = document.getElementById('reSize')
+    reSizeBtn.addEventListener('click', () => {
+        kLine.reSize()
     })
 </script>
 </html>
