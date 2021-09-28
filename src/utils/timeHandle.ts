@@ -159,7 +159,6 @@ export function dateDiffForm(
 
     const diff = Math.abs(form.getTime() - contrast.getTime())
     let formStr = ''
-
     if (diff >= year) {
         return formDate(form, 'YYYY')
     } else if (diff >= month) {
@@ -177,7 +176,7 @@ export function dateDiffForm(
     } else {
         // 分钟， 小时 一致
         if (formDateArr[2] !== contrastDateArr[2]) {
-            return formDate(form, 'DD HH:mm')
+            return formDate(form, 'MM-DD')
         } else {
             return formDate(form, 'HH:mm')
         }

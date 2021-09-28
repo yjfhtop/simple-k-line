@@ -188,6 +188,9 @@ export class XAxis {
         for (let i = 0; i < this.number * this.useScaleInsideItemNumber; i++) {
             const nowDrawIndex = this.drawStartIndex - i
             const date = this.getIndexTime(nowDrawIndex)
+            const nextDate = this.getIndexTime(
+                nowDrawIndex - this.useScaleInsideItemNumber
+            )
             if (i % this.useScaleInsideItemNumber === 0 && date) {
                 const x = this.drawStartX - this.kLine.useItemAllW * i
                 const y1 = this.leftTop.y
@@ -209,7 +212,7 @@ export class XAxis {
                     }
                 )
                 // txt 绘制 s
-                const txt = dateDiffForm(date, date - this.markDiff)
+                const txt = dateDiffForm(date, nextDate || date - this.markDiff)
                 drawTxt(this.kLine.bc, {
                     txt: txt,
                     coordinate: { x, y: y2 + this.conf.txt.deviationY },

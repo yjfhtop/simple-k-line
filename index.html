@@ -27,6 +27,7 @@
 <button id='updateLastData'>修改最后的数据</button>
 <button id='pushData'>添加新数据</button>
 <button id='unshiftData'>添加旧数据</button>
+<button id='updateConf'>修改配置项</button>
 <div id="k_line">
 </div>
 </body>
@@ -106,6 +107,11 @@
         const dataArr = preDataArr.slice(preIndex - 10, preIndex)
         preIndex -= 10
         kLine.updateData(dataArr, 'addOld')
+    })
+
+    const updateConfBtn = document.getElementById('updateConf')
+    updateConfBtn.addEventListener('click', () => {
+
     })
 </script>
 </html>

@@ -444,6 +444,11 @@ export default class SimpleKLine {
         this.determineYTxtMaxW()
         this.drawAll()
     }
+    // 设置配置项
+    setConf(conf: KLineConf) {
+        initConf(conf, this)
+        this.determineChartMap()
+    }
     test() {
         const list = [1, 2, 100, 200]
     }

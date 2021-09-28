@@ -251,7 +251,7 @@ const DefIndicatorsConfMap: IndicatorsConfMap = {
 // 图表的基础配置
 const DefBaseChartConf: BaseChartConf = {
     // 显示那些指标
-    indicatorShowArr: undefined,
+    indicatorShowArr: [],
     // 指标的配置
     indicatorsConfMap: DefIndicatorsConfMap,
     yConf: DefYConf,
@@ -318,6 +318,10 @@ export const DefKLineConf: KLineConf = {
 }
 
 export function initConf(conf: KLineConf, kLine: SimpleKLine) {
+    if (kLine.conf) {
+        kLine.oldConf = kLine.conf
+    }
+
     const c = mergeData(DefKLineConf, conf || {})
     // 保证主图是第一个 s
     const mainChartIndex = c.chartShowArr.indexOf('mainChart')
@@ -340,16 +344,15 @@ export function initConf(conf: KLineConf, kLine: SimpleKLine) {
             c.chartConfMap[name].yConf
         )
         // Y轴的 配置项处理 e
+
+        // infoTxtConf 映射到 图表的配置 s
+        c.chartConfMap[name].infoTxtConf = mergeData(
+            c.infoTxtConf,
+            c.chartConfMap[name].infoTxtConf
+        )
+        // infoTxtConf 映射到 图表的配置 e
     })
     // 为每个图表添加默认的配置项 e
-
-    // infoTxtConf 映射到 图表的配置 s
-    Object.keys(c.chartConfMap).forEach((key) => {
-        const charConf = c.chartConfMap[key]
-        charConf.infoTxtConf = mergeData(c.infoTxtConf, charConf.infoTxtConf)
-    })
-    // infoTxtConf 映射到 图表的配置 e
-
     kLine.conf = c
     kLine.lang = determineLang(c.lang)
     return c
