@@ -266,13 +266,13 @@ const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
 DefMainChartConf.indicatorShowArr = ['candleIndicators', 'maIndicators']
 // DefMainChartConf.indicatorShowArr = ['maIndicators']
 
-const DefTestChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
-DefTestChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
+// const DefTestChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
+// DefTestChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
 
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {
     mainChart: DefMainChartConf,
-    testChart: DefTestChartConf,
+    // testChart: DefTestChartConf,
 }
 
 // 默认 x轴的配置项
@@ -310,7 +310,7 @@ export const DefKLineConf: KLineConf = {
     useItemWAndSpaceIndex: 5,
     yPadding: { left: 10, right: 10 },
     yConf: DefYConf,
-    chartShowArr: ['mainChart', 'testChart'],
+    chartShowArr: ['mainChart'],
     chartConfMap: DefChartConfMap,
     xConf: DefXConf,
     crossConf: DefCrossConf,

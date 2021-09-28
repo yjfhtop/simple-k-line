@@ -111,7 +111,14 @@
 
     const updateConfBtn = document.getElementById('updateConf')
     updateConfBtn.addEventListener('click', () => {
-
+        kLine.setConf({
+            chartShowArr: ['mainChart', 'test'],
+            chartConfMap: {
+                test: {
+                    indicatorShowArr: ['maIndicators']
+                }
+            }
+        })
     })
 </script>
 </html>

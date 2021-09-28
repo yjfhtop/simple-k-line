@@ -446,8 +446,11 @@ export default class SimpleKLine {
     }
     // 设置配置项
     setConf(conf: KLineConf) {
+        console.log(conf, 'unity')
         initConf(conf, this)
         this.determineChartMap()
+        this.determineYTxtMaxW()
+        this.drawAll()
     }
     test() {
         const list = [1, 2, 100, 200]
