@@ -24,6 +24,10 @@ export interface BaseChartConf {
     yConf?: YConf
     // 用于绘制图表上 文字 信息
     infoTxtConf?: InfoTxtConf
+    bottomLine?: {
+        lineW?: number
+        color?: string
+    }
 }
 
 export class BaseChart {
@@ -222,6 +226,7 @@ export class BaseChart {
                 item.drawBottom()
             })
         })
+        this.drawBottomLine()
     }
     drawTop() {
         this.initInfoTxtCoordinate()
@@ -256,6 +261,18 @@ export class BaseChart {
     // 绘制 图表的 底部线
     drawBottomLine() {
         const ctx = this.kLine.bc
+        drawLine(
+            ctx,
+            {
+                x: this.leftTop.x,
+                y: this.rightBottom.y,
+            },
+            this.rightBottom,
+            {
+                w: this.conf.bottomLine.lineW,
+                style: this.conf.bottomLine.color,
+            }
+        )
     }
     // 坐标是否在图表中
     inChart(coordinate: Coordinate) {

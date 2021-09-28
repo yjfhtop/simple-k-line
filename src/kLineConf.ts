@@ -256,14 +256,18 @@ const DefBaseChartConf: BaseChartConf = {
     indicatorsConfMap: DefIndicatorsConfMap,
     yConf: DefYConf,
     infoTxtConf: DefInfoTxtConf,
+    bottomLine: {
+        lineW: 1,
+        color: '#fff',
+    },
 }
 
 const DefMainChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
-// DefMainChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
-DefMainChartConf.indicatorShowArr = ['maIndicators']
+DefMainChartConf.indicatorShowArr = ['candleIndicators', 'maIndicators']
+// DefMainChartConf.indicatorShowArr = ['maIndicators']
 
 const DefTestChartConf: BaseChartConf = deepCopy(DefBaseChartConf)
-// DefTestChartConf.indicatorShowArr = ['maIndicators']
+DefTestChartConf.indicatorShowArr = ['closeIndicators', 'maIndicators']
 
 // 所有图表的配置
 const DefChartConfMap: ChartConfMap = {
@@ -306,7 +310,7 @@ export const DefKLineConf: KLineConf = {
     useItemWAndSpaceIndex: 5,
     yPadding: { left: 10, right: 10 },
     yConf: DefYConf,
-    chartShowArr: ['mainChart'],
+    chartShowArr: ['mainChart', 'testChart'],
     chartConfMap: DefChartConfMap,
     xConf: DefXConf,
     crossConf: DefCrossConf,

@@ -170,18 +170,18 @@ export class XAxis {
     }
 
     draw() {
-        drawLine(
-            this.kLine.bc,
-            this.leftTop,
-            {
-                x: this.rightBottom.x,
-                y: this.leftTop.y,
-            },
-            {
-                w: this.conf.axisLine.lineW,
-                style: this.conf.axisLine.color,
-            }
-        )
+        // drawLine(
+        //     this.kLine.bc,
+        //     this.leftTop,
+        //     {
+        //         x: this.rightBottom.x,
+        //         y: this.leftTop.y,
+        //     },
+        //     {
+        //         w: this.conf.axisLine.lineW,
+        //         style: this.conf.axisLine.color,
+        //     }
+        // )
 
         this.axisMarkArr = []
         // 轴标和文字 s
