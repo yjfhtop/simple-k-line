@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            padding-top: 40px;
+            /*background-color: #000;*/
+        }
+        #k_line {
+            width: 80vw;
+            height: 80vh;
+            margin: 0 auto;
+        }
+    </style>
+    <script src='testDate/5minute.js'></script>
+    <script src='dist/index.min.js'></script>
+
+</head>
+<body>
+<button id='addTool'>添加工具</button>
+<button id='updateLastData'>修改最后的数据</button>
+<button id='pushData'>添加新数据</button>
+<button id='unshiftData'>添加旧数据</button>
+<button id='updateConf'>修改配置项</button>
+<button id='reSize'>大小变化</button>
+<div id="k_line">
+</div>
+</body>
+<script>
+    var second = 1000
+    var minute = second * 60
+    var hour = minute * 60
+    var day = hour * 24
+    var dataList = []
+    var startDate = new Date('2018-10-01').getTime()
+    var diffDate = minute * 1
+
+    for (var i = 0; i < 100; i++) {
+        var maxVale = Math.floor(Math.random() * 3000) + 3000
+        var diffVale = Math.floor(Math.random() * 3000)
+        var minValue = Math.abs(maxVale - diffVale)
+        maxVale = Math.max(maxVale, minValue)
+        minValue = Math.min(maxVale, minValue)
+
+        var open = minValue + Math.floor(Math.random() * diffVale)
+        var close = minValue + Math.floor(Math.random() * diffVale)
+        dataList.push({
+            close: close,
+            open: open,
+            min: minValue,
+            max: maxVale,
+            date: startDate + i * diffDate,
+            turnover: 10000 + Math.floor(Math.random() * 100000)
+        })
+    }
+
+    var fiveMinuteArr = []
+    fiveMinute.forEach(function (item) {
+        return {
+            close: parseFloat(item.close),
+            open: parseFloat(item.open),
+            min: parseFloat(item.low),
+            max: parseFloat(item.high),
+            date: new Date(item.day).getTime(),
+            turnover: parseFloat(item.volume)
+        }
+    })
+    var useDataArr = fiveMinuteArr.slice(50, 150)
+    var lastDataArr = fiveMinuteArr.slice(150)
+    var preDataArr = fiveMinuteArr.slice(0, 50)
+    var sIndex = 0
+    var preIndex = 50
+
+    var kLine = new SimpleKLine('#k_line', useDataArr)
+
+    var addTool = document.getElementById('addTool')
+    addTool.addEventListener('click', function() {
+        kLine.addTool('triangle')
+    })
+    console.log(kLine)
+
+
+    // 修改最后的数据
+    var updateDataBtn = document.getElementById('updateLastData')
+    updateDataBtn.addEventListener('click', function() {
+        var item = useDataArr[useDataArr.length - 1]
+        var diff = item.max - item.min
+        item.close = Math.floor(Math.random() * diff) + item.min
+        kLine.updateData(item, 'lastItem')
+    })
+
+    // 添加数据
+    var pushDataBtn = document.getElementById('pushData')
+    pushDataBtn.addEventListener('click', function() {
+        var addArr = lastDataArr.slice(sIndex, sIndex += 20)
+        kLine.updateData(addArr, 'addNew')
+    })
+
+    // 添加旧数据
+    var unshiftDataBtn = document.getElementById('unshiftData')
+    unshiftDataBtn.addEventListener('click', function() {
+        if (preIndex < 0) return
+        var dataArr = preDataArr.slice(preIndex - 10, preIndex)
+        preIndex -= 10
+        kLine.updateData(dataArr, 'addOld')
+    })
+
+    var updateConfBtn = document.getElementById('updateConf')
+    updateConfBtn.addEventListener('click', function() {
+        kLine.setConf({
+            chartShowArr: ['mainChart', 'test'],
+            chartConfMap: {
+                test: {
+                    indicatorShowArr: ['maIndicators']
+                }
+            }
+        })
+    })
+
+    var reSizeBtn = document.getElementById('reSize')
+    reSizeBtn.addEventListener('click', function() {
+        kLine.reSize()
+    })
+</script>
+</html>
