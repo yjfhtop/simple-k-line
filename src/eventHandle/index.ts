@@ -218,6 +218,8 @@ export class EventHandle {
         this.kLine.el.addEventListener('wheel', (e) => {
             e.preventDefault()
             e.stopPropagation()
+            // 如果有工具在使用，不应该缩放
+            if (this.activeTool) return
             const deltaY = e.deltaY
             if (deltaY > 0) {
                 if (this.kLine.useItemWAndSpaceIndex > 0) {

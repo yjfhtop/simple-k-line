@@ -235,7 +235,7 @@ export default class SimpleKLine {
         if (
             !this.oldConf ||
             (this.oldConf &&
-                this.oldConf.chartShowArr.join('') ===
+                this.oldConf.chartShowArr.join('') !==
                     this.conf.chartShowArr.join(''))
         ) {
             // 副图的高度
@@ -397,6 +397,35 @@ export default class SimpleKLine {
                 return 'fall'
             }
         }
+    }
+    // 修改数据
+    updateData(
+        newData: DataItem | DataItem[],
+        type: 'all' | 'lastItem' | 'addNew' | 'addOld' = 'all'
+    ) {
+        newData = deepCopy(newData)
+        switch (type) {
+            case 'all':
+                this.dataArr = newData as any
+                this.eIndex = newData.length - 1
+                break
+            case 'lastItem':
+                this.dataArr[this.dataArr.length - 1] = deepCopy(
+                    newData
+                ) as DataItem
+                break
+            case 'addNew':
+                this.dataArr.push(...(newData as DataItem[]))
+                this.eIndex += newData.length
+                break
+            case 'addOld':
+                // 保证位置不变
+                this.dataArr.unshift(...(newData as DataItem[]))
+                this.eIndex += newData.length
+                break
+        }
+        this.determineYTxtMaxW()
+        this.drawAll()
     }
     test() {
         const list = [1, 2, 100, 200]

@@ -23,7 +23,10 @@
 
 </head>
 <body>
-<button id='addTool'>add Tool</button>
+<button id='addTool'>添加工具</button>
+<button id='updateLastData'>修改最后的数据</button>
+<button id='pushData'>添加新数据</button>
+<button id='unshiftData'>添加旧数据</button>
 <div id="k_line">
 
 </div>
@@ -66,13 +69,43 @@
             turnover: parseFloat(item.volume)
         }
     })
+    const useDataArr = fiveMinuteArr.slice(50, 150)
+    const lastDataArr = fiveMinuteArr.slice(150)
+    const preDataArr = fiveMinuteArr.slice(0, 50)
+    let sIndex = 0
+    let preIndex = 50
 
-    const kLine = new SimpleKLine('#k_line', fiveMinuteArr)
+    const kLine = new SimpleKLine('#k_line', useDataArr)
 
     const addTool = document.getElementById('addTool')
     addTool.addEventListener('click', () => {
         kLine.addTool('triangle')
     })
     console.log(kLine)
+
+
+    // 修改最后的数据
+    const updateDataBtn = document.getElementById('updateLastData')
+    updateDataBtn.addEventListener('click', () => {
+        const item = useDataArr[useDataArr.length - 1]
+        item.close = Math.floor(Math.random() * 2000) + 1000
+        kLine.updateData(item, 'lastItem')
+    })
+
+    // 添加数据
+    const pushDataBtn = document.getElementById('pushData')
+    pushDataBtn.addEventListener('click', () => {
+        const addArr = lastDataArr.slice(sIndex, sIndex += 20)
+        kLine.updateData(addArr, 'addNew')
+    })
+
+    // 添加旧数据
+    const unshiftDataBtn = document.getElementById('unshiftData')
+    unshiftDataBtn.addEventListener('click', ()=> {
+        if (preIndex < 0) return
+        const dataArr = preDataArr.slice(preIndex - 10, preIndex)
+        preIndex -= 10
+        kLine.updateData(dataArr, 'addOld')
+    })
 </script>
 </html>
