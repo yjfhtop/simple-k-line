@@ -63,20 +63,37 @@ export default class SimpleKLine {
     get useItemWAndSpaceIndex() {
         return this._useItemWAndSpaceIndex
     }
-    set useItemWAndSpaceIndex(v) {
+
+    set useItemWAndSpaceIndex(v: number) {
+        if (
+            v < 0 ||
+            v > this.conf.itemWAndSpaceList.length - 1 ||
+            v === this.useItemWAndSpaceIndex
+        ) {
+            return
+        }
         this._useItemWAndSpaceIndex = v
+        this.standardizationEIndex()
         this.determineYTxtMaxW()
+        this.standardizationEIndex()
+
         this.xAxis.getSupplementDataArr()
         this.xAxis.determineScale()
     }
-
     get eIndexMax() {
         return (
             this.dataArr.length -
-            Math.min(this.conf.minItem, this.dataArr.length) +
+            1 +
             this.itemNumber -
-            1
+            Math.min(this.conf.minItem, this.dataArr.length)
         )
+
+        // return (
+        //     this.dataArr.length -
+        //     Math.min(this.conf.minItem, this.dataArr.length) +
+        //     this.itemNumber -
+        //     1
+        // )
     }
     get eIndexMin() {
         return Math.min(this.dataArr.length - 1, this.conf.minItem - 1)

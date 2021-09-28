@@ -221,20 +221,9 @@ export class EventHandle {
             // 如果有工具在使用，不应该缩放
             if (this.activeTool) return
             const deltaY = e.deltaY
-            if (deltaY > 0) {
-                if (this.kLine.useItemWAndSpaceIndex > 0) {
-                    this.kLine.useItemWAndSpaceIndex--
-                }
-            } else {
-                if (
-                    this.kLine.useItemWAndSpaceIndex <
-                    this.kLine.conf.itemWAndSpaceList.length - 1
-                ) {
-                    this.kLine.useItemWAndSpaceIndex++
-                }
-            }
-            this.kLine.standardizationEIndex()
-            this.kLine.determineYTxtMaxW()
+            let nextIndex =
+                this.kLine.useItemWAndSpaceIndex + (deltaY > 0 ? -1 : 1)
+            this.kLine.useItemWAndSpaceIndex = nextIndex
             this.kLine.drawAll()
         })
 

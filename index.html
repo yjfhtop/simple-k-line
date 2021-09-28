@@ -28,7 +28,6 @@
 <button id='pushData'>添加新数据</button>
 <button id='unshiftData'>添加旧数据</button>
 <div id="k_line">
-
 </div>
 </body>
 <script>
@@ -88,7 +87,8 @@
     const updateDataBtn = document.getElementById('updateLastData')
     updateDataBtn.addEventListener('click', () => {
         const item = useDataArr[useDataArr.length - 1]
-        item.close = Math.floor(Math.random() * 2000) + 1000
+        const diff = item.max - item.min
+        item.close = Math.floor(Math.random() * diff) + item.min
         kLine.updateData(item, 'lastItem')
     })
 
