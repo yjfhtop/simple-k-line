@@ -101,7 +101,7 @@ export abstract class BaseMultipleIndicators extends BaseIndicators {
         }
     }
 
-    // 这里是绘制折线.... 子类可以不使用
+    // 这里是绘制折线.... 子类可以不使用重写即可
     drawBottom() {
         this.calcDotArr()
         this.drawIndicators()
@@ -118,6 +118,10 @@ export abstract class BaseMultipleIndicators extends BaseIndicators {
                 },
             })
         })
+    }
+
+    drawTop() {
+        this.drawTopInfoTxt(this.chart.kLine.eventHandle.nowIndex)
     }
 
     drawTopInfoTxt(index: number) {
@@ -141,9 +145,7 @@ export abstract class BaseMultipleIndicators extends BaseIndicators {
             const value = nowItem[key]
             if (value === undefined) return
 
-            const txt = `${this.topInfoName}(${
-                item.conf.number
-            }): ${value.toFixed(this.chart.kLine.conf.triggerOldNumber)}`
+            const txt = `${this.topInfoName}(${item.conf.number}): ${value}`
             const color = item.conf.color
 
             txtArr.push({

@@ -10,9 +10,9 @@ export abstract class BaseIndicators {
     // 子类实现
     // 指标的名称
     public abstract name: IndicatorsNames
-    public abstract cacheKey: string
+    public cacheKey: string
     // 用于 顶部文字的绘制
-    public abstract topInfoName: string
+    public topInfoName: string
     // 子类实现
 
     public cacheKeyArr: string[]
@@ -26,7 +26,7 @@ export abstract class BaseIndicators {
     public minIndexCacheKey = ''
 
     constructor(public chart: BaseChart) {
-        // this.chart = chart
+        this.chart = chart
     }
 
     abstract get conf(): any
