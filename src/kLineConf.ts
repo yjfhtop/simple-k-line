@@ -242,10 +242,10 @@ const DefCandleIndicatorsConf: CandleIndicatorsConf = {
         lineDash: [2, 2],
     },
     triangle: {
-        w: 5,
-        h: 5,
+        w: 6,
+        h: 6,
         lineLen: 10,
-        lineW: 1,
+        lineW: 2,
         color: '#ccc',
     },
 }

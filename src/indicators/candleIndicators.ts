@@ -199,6 +199,7 @@ export class CandleIndicators extends BaseIndicators {
                 y: maxC.y,
             },
             {
+                w: this.conf.triangle.lineW,
                 style: this.conf.triangle.color,
             }
         )
