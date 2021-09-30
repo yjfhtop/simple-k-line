@@ -83,6 +83,10 @@ export class YAxis {
         this.minValue = scaleData.min
         this.step = scaleData.step
 
+        if (this.conf.zeroMust) {
+            console.log(scaleData, 'scaleData')
+        }
+
         this.scaleValueArr = []
         this.scaleShowValueArr = []
         for (let i = this.minValue; i <= this.maxValue; i += this.step) {

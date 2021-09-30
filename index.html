@@ -67,7 +67,7 @@
             min: parseFloat(item.low),
             max: parseFloat(item.high),
             date: new Date(item.day).getTime(),
-            turnover: parseFloat(item.volume)
+            turnover: parseFloat(item.volume / 10000000)
         }
     })
     const useDataArr = fiveMinuteArr.slice(50, 150)

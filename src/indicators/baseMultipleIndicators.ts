@@ -154,7 +154,8 @@ export abstract class BaseMultipleIndicators extends BaseIndicators {
             })
         })
 
-        this.drawTopInfoTxtBefore && this.drawTopInfoTxtBefore(index, txtArr)
+        this.drawTopInfoTxtBefore &&
+            this.drawTopInfoTxtBefore(index, txtArr, nowItem)
 
         txtArr.forEach((item) => {
             const txtLen = getTxtW(
@@ -181,5 +182,9 @@ export abstract class BaseMultipleIndicators extends BaseIndicators {
         this.chart.initInfoTxtCoordinateX()
     }
     // 在 drawTopInfoTxt 绘制开始之前, 可以对绘制做处理
-    drawTopInfoTxtBefore(index: number, txtArr: TxtAndColor[]) {}
+    drawTopInfoTxtBefore(
+        index: number,
+        txtArr: TxtAndColor[],
+        nowItem: DataItem
+    ) {}
 }

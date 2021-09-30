@@ -1,6 +1,7 @@
 import { DataItem } from '@/kLineConf'
 import { BaseChart } from '@/chart/baseChart'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
+import { Coordinate, drawRect } from '@/utils/canvasDraw'
 
 /**
  *指标的基础类
@@ -127,5 +128,35 @@ export abstract class BaseIndicators {
         } else {
             return undefined
         }
+    }
+
+    // todo 是不是所有的绘制方法放在这个class 下面， 其他指标进行绘制调用这个 绘制的方法， 一次绘制一个， 这样有动画效果
+    // 绘制 从底部往上的 柱子
+    drawBottomColumn(index: number, key: string) {
+        const item = this.chart.kLine.dataArr[index]
+        const v = item[key]
+        if (v === undefined || v === null) return
+
+        const x = this.chart.kLine.xAxis.indexGetX(index)
+        const y = this.chart.YAxis.valueGetY(v)
+        const ctx = this.chart.kLine.bc
+        const itemW = this.chart.kLine.useItem.w
+        const itemWHalf = itemW / 2
+        const h = this.chart.drawChartRightBottom.y - y
+
+        const leftTop: Coordinate = {
+            x: Math.ceil(x - itemWHalf),
+            y: y,
+        }
+        const color = this.chart.kLine.getItemColor(item)
+        drawRect(ctx, {
+            leftTop,
+            w: itemW,
+            h,
+            drawType: 'full',
+            drawStyle: {
+                style: color,
+            },
+        })
     }
 }

@@ -18,6 +18,7 @@ import {
     BaseMultipleIndicators,
     BaseMultipleIndicatorsItem,
     CalcShowItem,
+    TxtAndColor,
 } from '@/indicators/baseMultipleIndicators'
 export interface VolumeIndicatorsItem extends BaseMultipleIndicatorsItem {}
 
@@ -43,5 +44,38 @@ export class VolumeIndicators extends BaseMultipleIndicators {
             'turnover'
         )
         return data
+    }
+
+    calc(item: DataItem, index: number, isMaxValue: boolean) {
+        super.calc(item, index, isMaxValue)
+
+        this.itemTryMaxMin('turnover', item, item.turnover, index, isMaxValue)
+    }
+
+    drawBottom() {
+        for (
+            let i = this.chart.kLine.drawSIndex;
+            i <= this.chart.kLine.drawEIndex;
+            i++
+        ) {
+            const item = this.chart.kLine.dataArr[i]
+            if (!item) continue
+            this.drawBottomColumn(i, 'turnover')
+        }
+        super.drawBottom()
+    }
+
+    drawTopInfoTxtBefore(
+        index: number,
+        txtArr: TxtAndColor[],
+        nowItem: DataItem
+    ) {
+        const v = nowItem['turnover'].toFixed(
+            this.chart.kLine.conf.showDecimalPlaces
+        )
+        if (!v) return
+        txtArr.splice(1, 0, {
+            txt: `${this.topInfoName}: ${v}`,
+        })
     }
 }
