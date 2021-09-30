@@ -1,17 +1,8 @@
 import { createHDCanvas, getContainerEl, getEleHW, WH } from '@/utils/element'
-import { logError, logTag } from '@/utils/log'
+import { logError } from '@/utils/log'
 import { DataItem, initConf, KLineConf } from '@/kLineConf'
 import { deepCopy } from '@/utils/dataHandle'
-import {
-    addTime,
-    formDate,
-    getMonthAllDayNumber,
-    isLastDay,
-    isLeapYear,
-    timeArrGetTimeUnitAndNumber,
-} from '@/utils/timeHandle'
 import { ChartMap, createChart } from '@/chart/chartUtils'
-import { arrGetAddAndDel } from '@/utils/index'
 import { XAxis } from '@/axis/xAxis'
 import { EventHandle } from '@/eventHandle/index'
 import { Cross } from '@/cross/index'

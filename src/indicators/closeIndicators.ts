@@ -1,14 +1,13 @@
 /**
  * close 指标, 分时？？ 大概
  */
-import { DataItem, DefInfoTxtConf } from '@/kLineConf'
+import { DataItem } from '@/kLineConf'
 import { BaseIndicators } from '@/indicators/baseIndicators'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 import {
     Coordinate,
     drawBrokenLine,
     drawLine,
-    drawRect,
     drawTxt,
 } from '@/utils/canvasDraw'
 import { formDate } from '@/utils/timeHandle'
@@ -83,10 +82,6 @@ export class CloseIndicators extends BaseIndicators {
         const lastItem =
             this.chart.kLine.dataArr[this.chart.kLine.dataArr.length - 1]
         let value = lastItem.close
-
-        const x = this.chart.kLine.xAxis.indexGetX(
-            this.chart.kLine.dataArr.length - 1
-        )
         const y = this.chart.YAxis.valueGetY(value)
 
         // 当前收盘价

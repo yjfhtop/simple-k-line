@@ -1,13 +1,10 @@
 import {
     calcScaleNumber,
-    DefScaleCalcConfig,
-    mergeData,
     scaleCalc,
     ScaleCalcConfig,
     SymmetricalType,
 } from '@/utils/dataHandle'
 import { BaseChart } from '@/chart/baseChart'
-import { getMagnitudeNumber } from '@/utils/format'
 import { getTxtW } from '@/utils/element'
 import { drawLine, drawTxt } from '@/utils/canvasDraw'
 
@@ -82,10 +79,6 @@ export class YAxis {
         this.maxValue = scaleData.max
         this.minValue = scaleData.min
         this.step = scaleData.step
-
-        if (this.conf.zeroMust) {
-            console.log(scaleData, 'scaleData')
-        }
 
         this.scaleValueArr = []
         this.scaleShowValueArr = []

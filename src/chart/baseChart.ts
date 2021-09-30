@@ -9,9 +9,7 @@ import {
 import { YAxis, YConf } from '@/axis/yAxis'
 import { BaseTool } from '@/tool/baseTool'
 import { createIndicators } from '@/indicators/indicatorsUtils'
-import { deepCopy } from '@/utils/dataHandle'
 import { getMagnitudeNumber } from '@/utils/format'
-// import { ChartNames } from '@/chart/chartUtils'
 
 /**
  * 图表类

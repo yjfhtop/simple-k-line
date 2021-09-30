@@ -3,17 +3,10 @@
  */
 import { deepCopy, DefScaleCalcConfig, mergeData } from '@/utils/dataHandle'
 import { YConf } from '@/axis/yAxis'
-import { DefSectorConfig } from '@/utils/canvasDraw'
 import { ChartConfMap } from '@/chart/chartUtils'
-import {
-    CloseIndicators,
-    CloseIndicatorsConf,
-} from '@/indicators/closeIndicators'
+import { CloseIndicatorsConf } from '@/indicators/closeIndicators'
 import { BaseChartConf } from '@/chart/baseChart'
-import {
-    IndicatorsConfMap,
-    IndicatorsNames,
-} from '@/indicators/indicatorsUtils'
+import { IndicatorsConfMap } from '@/indicators/indicatorsUtils'
 import { XConf } from '@/axis/xAxis'
 import { CrossConf } from '@/cross/index'
 import { BaseToolConf } from '@/tool/baseTool'
@@ -22,7 +15,6 @@ import SimpleKLine from '@/index'
 import { determineLang, LangType } from '@/lang/utils'
 import { CandleIndicatorsConf } from '@/indicators/candleIndicators'
 import { VolumeIndicatorsConf } from '@/indicators/volumeIndicators'
-// import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
 export interface ItemWAndSpace {

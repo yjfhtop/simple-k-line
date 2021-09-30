@@ -3,7 +3,6 @@
  */
 import SimpleKLine from '@/index'
 import { drawLine, drawRect, drawTxt } from '@/utils/canvasDraw'
-import { getTxtW } from '@/utils/element'
 import { formDate } from '@/utils/timeHandle'
 
 export interface CrossConf {

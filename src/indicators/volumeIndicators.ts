@@ -2,18 +2,7 @@
  * VOL 指标
  */
 import { DataItem } from '@/kLineConf'
-import { BaseIndicators } from '@/indicators/baseIndicators'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
-import {
-    Coordinate,
-    drawBrokenLine,
-    drawLine,
-    drawRect,
-    drawTxt,
-} from '@/utils/canvasDraw'
-import { CloseIndicatorsConf } from '@/indicators/closeIndicators'
-import { getTxtW } from '@/utils/element'
-import { deepCopy } from '@/utils/dataHandle'
 import {
     BaseMultipleIndicators,
     BaseMultipleIndicatorsItem,

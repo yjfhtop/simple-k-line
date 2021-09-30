@@ -1,4 +1,4 @@
-import { calcScaleNumber, deepCopy } from '@/utils/dataHandle'
+import { calcScaleNumber } from '@/utils/dataHandle'
 import SimpleKLine from '@/index'
 import { DataItem } from '@/kLineConf'
 
@@ -6,7 +6,6 @@ import { Coordinate, drawLine, drawTxt } from '@/utils/canvasDraw'
 import {
     addTime,
     dateDiffForm,
-    formDate,
     timeArrGetTimeUnitAndNumber,
     TimeDate,
     UnitAndNumber,
@@ -90,8 +89,6 @@ export class XAxis {
                 minScaleW: 70,
             }
         )
-        const min = scaleNumberData.minScaleInsideItemNumber
-        const max = scaleNumberData.maxScaleInsideItemNumber
 
         this.scaleW = scaleNumberData.scaleW
         this.number = scaleNumberData.number

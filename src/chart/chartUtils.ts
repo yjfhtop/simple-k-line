@@ -1,7 +1,5 @@
-// import { MainChart, MainChartConf } from '@/chart/mainChart'
 import { BaseChart, BaseChartConf } from '@/chart/baseChart'
 import SimpleKLine from '@/index'
-import { Coordinate } from '@/utils/canvasDraw'
 
 export interface ChartMap {
     [key: string]: BaseChart

@@ -1,4 +1,3 @@
-import { Coordinate } from '@/utils/canvasDraw'
 import { getDataType } from '@/utils/index'
 
 /**

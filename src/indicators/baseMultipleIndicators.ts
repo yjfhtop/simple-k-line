@@ -2,7 +2,6 @@ import { BaseIndicators } from '@/indicators/baseIndicators'
 import { DataItem } from '@/kLineConf'
 import { Coordinate, drawBrokenLine, drawTxt } from '@/utils/canvasDraw'
 import { MAIndicatorsConfItem } from '@/indicators/maIndicators'
-import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 import { getTxtW } from '@/utils/element'
 
 export interface BaseMultipleIndicatorsItem {
