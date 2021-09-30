@@ -126,6 +126,8 @@ export interface KLineConf {
     crossConf?: CrossConf
     // 工具的基础配置
     toolConf?: BaseToolConf
+    triggerNewNumber?: number
+    triggerOldNumber?: number
 }
 
 const DefToolConf: BaseToolConf = {
@@ -315,6 +317,8 @@ export const DefKLineConf: KLineConf = {
     xConf: DefXConf,
     crossConf: DefCrossConf,
     toolConf: DefToolConf,
+    triggerNewNumber: 20,
+    triggerOldNumber: 20,
 }
 
 export function initConf(conf: KLineConf, kLine: SimpleKLine) {

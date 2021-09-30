@@ -126,12 +126,10 @@ export class CandleIndicators extends BaseIndicators {
                     },
                 })
                 // 影线
-                console.log('-----------------------------')
                 drawLine(ctx, maxBottom, maxTop, {
                     w: this.conf.hatching.lineW,
                     style: color,
                 })
-                console.log('-----------------------------')
                 drawLine(ctx, minBottom, minTop, {
                     w: this.conf.hatching.lineW,
                     style: color,

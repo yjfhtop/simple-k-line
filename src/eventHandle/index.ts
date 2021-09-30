@@ -119,6 +119,9 @@ export class EventHandle {
                     this.kLine.determineYTxtMaxW()
                     this.kLine.xAxis.getSupplementDataArr()
                     this.kLine.drawAll()
+
+                    this.kLine.callEvent('loadNew')
+                    this.kLine.callEvent('loadOld')
                 }
             }
             // 是否有激活的工具
@@ -225,6 +228,8 @@ export class EventHandle {
                 this.kLine.useItemWAndSpaceIndex + (deltaY > 0 ? -1 : 1)
             this.kLine.useItemWAndSpaceIndex = nextIndex
             this.kLine.drawAll()
+            this.kLine.callEvent('loadNew')
+            this.kLine.callEvent('loadOld')
         })
 
         this.kLine.el.addEventListener('mouseleave', () => {

@@ -457,13 +457,102 @@ export default class SimpleKLine {
     }
     // 设置配置项
     setConf(conf: KLineConf) {
-        console.log(conf, 'unity')
         initConf(conf, this)
         this.determineChartMap()
         this.determineYTxtMaxW()
         this.drawAll()
     }
+    private _canLoadNew = true
+    private _canLoadOld = true
+    private _loadingData = false
+    setCanLoadNew(v: boolean) {
+        this._canLoadNew = v
+    }
+    setCanLoadOld(v: boolean) {
+        this._canLoadOld = v
+    }
+    setLoadingData(v: boolean) {
+        this._loadingData = v
+    }
+    public eventListObj: EventListObj = {}
+    // 添加事件
+    on<T extends EventName>(name: T, cbk: EventObj[T]) {
+        if (!this.eventListObj[name]) {
+            this.eventListObj[name] = []
+        }
+        this.eventListObj[name].push(cbk as any)
+    }
+    // 能否执行 加载新数据
+    canLoadNewEvent() {
+        if (
+            this._loadingData ||
+            !this._canLoadNew ||
+            this.dataArr.length - this.conf.triggerNewNumber > this.eIndex
+        ) {
+            return false
+        }
+        return true
+    }
+    // 能否执行 加载新数据
+    canLoadOldEvent() {
+        if (
+            this._loadingData ||
+            !this._canLoadOld ||
+            this.sIndex > this.conf.triggerOldNumber
+        ) {
+            return false
+        }
+        return true
+    }
+    // 执行事件
+    callEvent(name: EventName) {
+        const eventList = this.eventListObj[name]
+        if (!eventList || eventList.length === 0) {
+            return
+        }
+        const argArr: any[] = []
+        switch (name) {
+            case 'loadNew':
+                if (!this.canLoadNewEvent()) {
+                    return
+                }
+                this.setLoadingData(true)
+                argArr[0] = this.setLoadingData.bind(this, false)
+                argArr[1] = this.setCanLoadNew.bind(this, false)
+                break
+            case 'loadOld':
+                if (!this.canLoadOldEvent()) {
+                    return
+                }
+                this.setLoadingData(true)
+                argArr[0] = this.setLoadingData.bind(this, false)
+                argArr[1] = this.setCanLoadOld.bind(this, false)
+                break
+        }
+        eventList.forEach((cb: any) => {
+            cb(...argArr)
+        })
+    }
     test() {
         const list = [1, 2, 100, 200]
     }
 }
+
+export interface EventObj {
+    loadNew?: (
+        dataLoadingOverCbk: () => void,
+        disableLoadNew: () => void
+    ) => void
+    loadOld?: () => void
+}
+
+export type EventName = keyof EventObj
+
+type EventListObj = {
+    [key in EventName]?: EventObj[key][]
+}
+
+// const a = new SimpleKLine('ss', [], {})
+// a.on('loadNew', (over) => {
+//     over()
+// })
