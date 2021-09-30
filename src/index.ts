@@ -145,12 +145,12 @@ export default class SimpleKLine {
     }
     // 能够展示的 item 个数
     get itemNumber() {
-        const data = Math.floor((this.elWH.w - this.yW) / this.useItemAllW)
+        const data = Math.round((this.elWH.w - this.yW) / this.useItemAllW)
         return data
     }
     // 在图表内的绘制的开始下标
     get sIndex() {
-        return this.eIndex - this.itemNumber
+        return this.eIndex - this.itemNumber + 1
     }
     // 所有图表的高度
     get allChatH() {
@@ -314,11 +314,13 @@ export default class SimpleKLine {
                 logError('calc', 'chart non-existent')
             }
         })
+        const sIndex = this.sIndex
+        const eIndex = this.eIndex
         for (let i = this.drawSIndex; i <= this.drawEIndex; i++) {
             const item = this.dataArr[i]
             if (item) {
                 // 是否在最大最小值的取值范围内
-                const isMaxValue = i >= this.drawSIndex && i <= this.drawEIndex
+                const isMaxValue = i >= sIndex && i <= eIndex
                 this.conf.chartShowArr.forEach((name) => {
                     const chart = this.chartMap[name]
                     chart.calcAll(item, i, isMaxValue)

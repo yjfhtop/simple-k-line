@@ -241,6 +241,13 @@ const DefCandleIndicatorsConf: CandleIndicatorsConf = {
         color: 'rgb(32, 145, 234)',
         lineDash: [2, 2],
     },
+    triangle: {
+        w: 5,
+        h: 5,
+        lineLen: 10,
+        lineW: 1,
+        color: '#ccc',
+    },
 }
 
 // 所有指标配置项的集合---------------------------------------------

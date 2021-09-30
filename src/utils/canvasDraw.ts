@@ -431,7 +431,7 @@ export function drawSector(
     ctx.restore()
 }
 
-export type Direction = 'top' | 'left' | 'right' | 'bottom'
+export type Direction = 'top' | 'left' | 'right' | 'bottom' | 'auto'
 
 export interface TriangleConf {
     topCoordinate: Coordinate
@@ -529,6 +529,26 @@ export function drawTriangle(
     ctx.restore()
     return cCoordinate
 }
+// interface ArrowConf extends TriangleConf {
+//     lineW?: number
+//     lineLen?: number
+// }
+//
+// const DefArrowConf = mergeData(
+//     DefTriangleConf as ArrowConf,
+//     { lineW: 1, lineLen: 10 } as any
+// )
+//
+// export function drawArrow(ctx: CanvasRenderingContext2D, conf: ArrowConf) {
+//     conf = mergeData(DefArrowConf, conf)
+//     const c = conf
+//     const cCoordinate = drawTriangle(ctx, conf)
+//     if (c.direction === 'auto') {
+//
+//     }
+//     switch (c.direction) {
+//     }
+// }
 
 interface TxtConf {
     // 坐标
@@ -604,7 +624,7 @@ export const DefBrokenLineConfig: BrokenLineConfig = {
     drawStyle: deepCopy(DefDrawStyle),
 }
 
-// todo 三次方得优化
+// todo 曲线绘制得优化
 // 三次方贝赛尔曲线 控制点计算, 好像有问
 // 参考 https://wenku.baidu.com/view/c790f8d46bec0975f565e211.html
 // 折线绘制

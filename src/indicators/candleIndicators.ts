@@ -6,9 +6,11 @@ import { BaseIndicators } from '@/indicators/baseIndicators'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 import {
     Coordinate,
+    Direction,
     drawBrokenLine,
     drawLine,
     drawRect,
+    drawTriangle,
     drawTxt,
 } from '@/utils/canvasDraw'
 import {
@@ -40,6 +42,13 @@ export interface CandleIndicatorsConf {
         color?: string
         // 本项存在就是虚线
         lineDash?: number[]
+    }
+    triangle?: {
+        w?: number
+        h?: number
+        lineW?: number
+        lineLen?: number
+        color?: string
     }
 }
 
@@ -151,6 +160,68 @@ export class CandleIndicators extends BaseIndicators {
             i++
         ) {
             this.drawColumn(this.conf.column.type, i)
+        }
+        // 最大最小值的绘制 s
+        this.drawMinMax('max')
+        this.drawMinMax('min')
+        // 最大最小值的绘制 e
+    }
+    drawMinMax(type: 'min' | 'max') {
+        const max = type === 'max' ? this.maxValue : this.minValue
+        const maxIndex = type === 'max' ? this.maxIndex : this.minIndex
+        const txtSpacing = 5
+        const maxCoordinate: Coordinate = {
+            x: this.chart.kLine.xAxis.indexGetX(maxIndex),
+            y: this.chart.YAxis.valueGetY(max),
+        }
+        const maxD = this.getTriangleDirection(maxCoordinate.x)
+        const maxC = drawTriangle(this.chart.kLine.bc, {
+            topCoordinate: maxCoordinate,
+            direction: maxD,
+            drawType: 'full',
+            drawStyle: {
+                style: this.conf.triangle.color,
+            },
+        })
+        const maxLineEndX =
+            maxC.x +
+            (maxD === 'left'
+                ? this.conf.triangle.lineLen
+                : -this.conf.triangle.lineLen)
+
+        const maxLineTxtEndX =
+            maxLineEndX + (maxD === 'left' ? txtSpacing : -txtSpacing)
+        drawLine(
+            this.chart.kLine.bc,
+            maxC,
+            {
+                x: maxLineEndX,
+                y: maxC.y,
+            },
+            {
+                style: this.conf.triangle.color,
+            }
+        )
+        drawTxt(this.chart.kLine.bc, {
+            coordinate: { x: maxLineTxtEndX, y: maxC.y + 1 },
+            txt: max,
+            direction: maxD === 'left' ? 'ltr' : 'rtl',
+            textBaseline: 'middle',
+            drawStyle: {
+                style: this.conf.triangle.color,
+            },
+        })
+    }
+    getTriangleDirection(x: number): Direction {
+        const sX = this.chart.drawChartLeftTop.x
+        const eX = this.chart.drawChartRightBottom.x
+
+        const sDiff = Math.abs(x - sX)
+        const eDiff = Math.abs(x - eX)
+        if (sDiff >= eDiff) {
+            return 'right'
+        } else {
+            return 'left'
         }
     }
     drawTop() {
