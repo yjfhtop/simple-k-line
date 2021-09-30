@@ -99,4 +99,21 @@ export abstract class BaseIndicators {
             }
         }
     }
+
+    // len 求几个的平均数，  结束的下标（从这个下标往前）, key 是缓存的key
+    calcAverage(len: number, index: number, key: string): number {
+        if (index >= len - 1) {
+            const sIndex = index - len + 1
+            let sum = 0
+            for (let i = sIndex; i <= index; i++) {
+                const item = this.chart.kLine.dataArr[i]
+                sum += item[key] || 0
+            }
+            return parseFloat(
+                (sum / len).toFixed(this.chart.kLine.conf.showDecimalPlaces)
+            )
+        } else {
+            return undefined
+        }
+    }
 }

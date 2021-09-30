@@ -45,7 +45,7 @@ export class MAIndicators extends BaseIndicators {
                 useValue === undefined ||
                 index === this.chart.kLine.dataArr.length - 1
             ) {
-                useValue = this.calcAverage(itemConf.number, index)
+                useValue = this.calcAverage(itemConf.number, index, 'close')
                 // 不足以计算
                 if (useValue === undefined) {
                     return
@@ -63,23 +63,6 @@ export class MAIndicators extends BaseIndicators {
             // 尝试计算最大最下值
             this.itemTryMaxMin(useCacheKey, item, useValue, index, isMaxValue)
         })
-    }
-
-    // len 求几个的平均数，  结束的下标（从这个下标往前）
-    calcAverage(len: number, index: number): number {
-        if (index >= len - 1) {
-            const sIndex = index - len + 1
-            let sum = 0
-            for (let i = sIndex; i <= index; i++) {
-                const item = this.chart.kLine.dataArr[i]
-                sum += item.close || 0
-            }
-            return parseFloat(
-                (sum / len).toFixed(this.chart.kLine.conf.showDecimalPlaces)
-            )
-        } else {
-            return undefined
-        }
     }
     drawBottom() {
         const dataArr: {
