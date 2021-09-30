@@ -2,6 +2,7 @@ import { DataItem } from '@/kLineConf'
 import { BaseChart } from '@/chart/baseChart'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
 import { Coordinate, drawRect } from '@/utils/canvasDraw'
+// todo  这里有更好的处理， 基础的绘制方法集中在本class, 在绘制开始时（计算指标需要的指标： 由子类实现），然后便利起止项目(使用本class的绘制方法)一个个绘制
 
 /**
  *指标的基础类
