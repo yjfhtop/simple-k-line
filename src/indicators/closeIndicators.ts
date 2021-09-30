@@ -27,10 +27,11 @@ export interface CloseIndicatorsConf {
     }
 }
 
-const cacheKey = '_close'
+// const this.cacheKey = '_close'
 export class CloseIndicators extends BaseIndicators {
     public name: IndicatorsNames = 'closeIndicators'
     public cacheKeyArr: string[] = []
+    public cacheKey = '_close'
 
     get conf() {
         return this.chart.conf.indicatorsConfMap[
@@ -42,16 +43,16 @@ export class CloseIndicators extends BaseIndicators {
         // 这个是示列
         if (!item) return
 
-        this.cacheKeyArr.push(cacheKey)
-        let useValue = item[cacheKey]
+        this.cacheKeyArr.push(this.cacheKey)
+        let useValue = item[this.cacheKey]
         if (
             useValue === undefined ||
             index === this.chart.kLine.dataArr.length - 1
         ) {
             useValue = item.close
-            this.cacheData(cacheKey, item, useValue, index, isMaxValue)
+            this.cacheData(this.cacheKey, item, useValue, index, isMaxValue)
         }
-        this.itemTryMaxMin(cacheKey, item, useValue, index, isMaxValue)
+        this.itemTryMaxMin(this.cacheKey, item, useValue, index, isMaxValue)
     }
     drawBottom() {
         const dotArr: Coordinate[] = []
@@ -61,9 +62,9 @@ export class CloseIndicators extends BaseIndicators {
             i++
         ) {
             const item = this.chart.kLine.dataArr[i]
-            if (item && item[cacheKey] !== undefined) {
+            if (item && item[this.cacheKey] !== undefined) {
                 const x = this.chart.kLine.xAxis.indexGetX(i)
-                const y = this.chart.YAxis.valueGetY(item[cacheKey])
+                const y = this.chart.YAxis.valueGetY(item[this.cacheKey])
                 dotArr.push({
                     x,
                     y,

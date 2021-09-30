@@ -53,7 +53,6 @@ export interface CandleIndicatorsConf {
 }
 
 // 由于有多个指标， 使用的缓存key 为 cacheKey + MAIndicatorsConfItem.number
-const cacheKey = '_candle'
 export class CandleIndicators extends BaseIndicators {
     public name: IndicatorsNames = 'candleIndicators'
     public cacheKeyArr: string[] = []

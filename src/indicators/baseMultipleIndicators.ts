@@ -1,72 +1,65 @@
-/**
- * MA 移动平均线指标
- */
-import { DataItem } from '@/kLineConf'
 import { BaseIndicators } from '@/indicators/baseIndicators'
+import { DataItem } from '@/kLineConf'
+import { Coordinate, drawBrokenLine, drawTxt } from '@/utils/canvasDraw'
+import { MAIndicatorsConfItem } from '@/indicators/maIndicators'
 import { IndicatorsNames } from '@/indicators/indicatorsUtils'
-import {
-    Coordinate,
-    drawBrokenLine,
-    drawLine,
-    drawRect,
-    drawTxt,
-} from '@/utils/canvasDraw'
-import { CloseIndicatorsConf } from '@/indicators/closeIndicators'
 import { getTxtW } from '@/utils/element'
-import { deepCopy } from '@/utils/dataHandle'
-// close的配置项
-export interface MAIndicatorsConfItem {
+
+export interface BaseMultipleIndicatorsItem {
     lineW: number
     color: string
     show?: boolean
     number: number
 }
 
-export type MAIndicatorsConf = MAIndicatorsConfItem[]
+export interface CalcShowItem {
+    key: string
+    conf: BaseMultipleIndicatorsItem
+    dotArr: Coordinate[]
+}
+export interface TxtAndColor {
+    txt: string
+    color?: string
+}
 
-// 由于有多个指标， 使用的缓存key 为 this.cacheKey + MAIndicatorsConfItem.number
-// const this.cacheKey = '_MA'
-export class MAIndicators extends BaseIndicators {
-    public name: IndicatorsNames = 'maIndicators'
-    public cacheKeyArr: string[] = []
-    public cacheKey = '_MA'
-    public topInfoName = 'MA'
-
+export type BaseMultipleIndicatorsConf = BaseMultipleIndicatorsItem[]
+export abstract class BaseMultipleIndicators extends BaseIndicators {
+    public showItemArr: CalcShowItem[] = []
+    // public topInfoTxt: string = ''
     get conf() {
-        return this.chart.conf.indicatorsConfMap[this.name] as MAIndicatorsConf
+        return this.chart.conf.indicatorsConfMap[
+            this.name
+        ] as BaseMultipleIndicatorsConf
     }
 
     calc(item: DataItem, index: number, isMaxValue: boolean) {
-        if (!item) return
-        this.conf.forEach((itemConf) => {
-            if (!itemConf.show) return
-            const useCacheKey = this.cacheKey + itemConf.number
+        this.getShowItemArr()
+        this.showItemArr.forEach((calcShowItem) => {
+            const useCacheKey = calcShowItem.key
             let useValue = item[useCacheKey]
+
             // 需要计算
             if (
                 useValue === undefined ||
                 index === this.chart.kLine.dataArr.length - 1
             ) {
-                useValue = this.calcAverage(itemConf.number, index, 'close')
-                // 不足以计算
-                if (useValue === undefined) {
-                    return
-                } else {
-                    // 缓存
-                    this.cacheData(
-                        useCacheKey,
-                        item,
-                        useValue,
-                        index,
-                        isMaxValue
-                    )
-                }
+                // 计算
+                useValue = this.calcItem(calcShowItem, item, index, isMaxValue)
+                // 缓存
+                this.cacheData(useCacheKey, item, useValue, index, isMaxValue)
             }
-            // 尝试计算最大最下值
             this.itemTryMaxMin(useCacheKey, item, useValue, index, isMaxValue)
         })
     }
-    drawBottom() {
+    // 计算单个项目
+    abstract calcItem(
+        calcShowItem: CalcShowItem,
+        item: DataItem,
+        index: number,
+        isMaxValue: boolean
+    ): number
+    // 获取要显示的 CalcShowItem 数组
+    getShowItemArr() {
         const dataArr: {
             key: string
             conf: MAIndicatorsConfItem
@@ -81,6 +74,12 @@ export class MAIndicators extends BaseIndicators {
                 dotArr: [],
             })
         })
+        this.showItemArr = dataArr
+    }
+
+    // 计算showItemArr 的DotArr
+    calcDotArr() {
+        const dataArr = this.showItemArr
         for (
             let i = this.chart.kLine.drawSIndex;
             i <= this.chart.kLine.drawEIndex;
@@ -100,9 +99,17 @@ export class MAIndicators extends BaseIndicators {
                 })
             })
         }
+    }
 
+    // 这里是绘制折线.... 子类可以不使用
+    drawBottom() {
+        this.calcDotArr()
+        this.drawIndicators()
+    }
+    // 绘制 item 的线段， 这里默认是绘制折线，子类不需要可以修改
+    drawIndicators() {
         const cxt = this.chart.kLine.bc
-        dataArr.forEach((item) => {
+        this.showItemArr.forEach((item) => {
             drawBrokenLine(cxt, item.dotArr, {
                 lineType: 'sharp',
                 drawStyle: {
@@ -112,33 +119,20 @@ export class MAIndicators extends BaseIndicators {
             })
         })
     }
-    drawTop() {
-        this.drawTopInfoTxt(this.chart.kLine.eventHandle.nowIndex)
-    }
 
     drawTopInfoTxt(index: number) {
         const ctx = this.chart.kLine.tc
         const nowItem = this.chart.kLine.dataArr[index]
         const infoTxtConf = this.chart.conf.infoTxtConf
         if (!nowItem) return
-        const showArr: {
-            key: string
-            conf: MAIndicatorsConfItem
-        }[] = []
-        this.conf.forEach((conf) => {
-            if (!conf.show) return
-            const key = this.cacheKey + conf.number
-            showArr.push({
-                key,
-                conf,
-            })
-        })
-
+        const showArr = this.showItemArr
         if (showArr.length === 0) return
 
-        const txtArr: { txt: string; color?: string }[] = [
+        const txtArr: TxtAndColor[] = [
             {
-                txt: `MA(${showArr.map((item) => item.conf.number).join(',')})`,
+                txt: `${this.topInfoName}(${showArr
+                    .map((item) => item.conf.number)
+                    .join(',')})`,
             },
         ]
 
@@ -147,7 +141,9 @@ export class MAIndicators extends BaseIndicators {
             const value = nowItem[key]
             if (value === undefined) return
 
-            const txt = `MA(${item.conf.number}): ${value.toFixed(2)}`
+            const txt = `${this.topInfoName}(${
+                item.conf.number
+            }): ${value.toFixed(this.chart.kLine.conf.triggerOldNumber)}`
             const color = item.conf.color
 
             txtArr.push({
@@ -155,6 +151,8 @@ export class MAIndicators extends BaseIndicators {
                 color,
             })
         })
+
+        this.drawTopInfoTxtBefore && this.drawTopInfoTxtBefore(index, txtArr)
 
         txtArr.forEach((item) => {
             const txtLen = getTxtW(
@@ -180,4 +178,6 @@ export class MAIndicators extends BaseIndicators {
         this.chart.infoTxtCoordinate.y += infoTxtConf.size + infoTxtConf.ySpace
         this.chart.initInfoTxtCoordinateX()
     }
+    // 在 drawTopInfoTxt 绘制开始之前, 可以对绘制做处理
+    drawTopInfoTxtBefore(index: number, txtArr: TxtAndColor[]) {}
 }

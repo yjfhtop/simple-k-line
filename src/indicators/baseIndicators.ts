@@ -7,9 +7,15 @@ import { IndicatorsNames } from '@/indicators/indicatorsUtils'
  */
 
 export abstract class BaseIndicators {
+    // 子类实现
     // 指标的名称
     public abstract name: IndicatorsNames
-    public abstract cacheKeyArr: string[]
+    public abstract cacheKey: string
+    // 用于 顶部文字的绘制
+    public abstract topInfoName: string
+    // 子类实现
+
+    public cacheKeyArr: string[]
 
     // 最大最小值的下标
     public maxIndex = -1
@@ -19,10 +25,11 @@ export abstract class BaseIndicators {
     public maxIndexCacheKey = ''
     public minIndexCacheKey = ''
 
-    // abstract public
     constructor(public chart: BaseChart) {
         // this.chart = chart
     }
+
+    abstract get conf(): any
 
     // 计算指标需要的数据, 可能这个指标有多条（数据），那么就应该便利循环
     abstract calc(item: DataItem, index: number, isMaxValue: boolean): void
@@ -35,11 +42,13 @@ export abstract class BaseIndicators {
         index: number,
         isMaxValue: boolean
     ) {
+        if (value === undefined || value === null) return
         item[cacheKey] = value
     }
-    // 指标的绘制方法
+    // 子类实现 指标的绘制方法
     abstract drawBottom(): void
     abstract drawTop(): void
+    // 子类实现 指标的绘制方法
 
     drawAll() {
         this.drawBottom()
@@ -87,6 +96,7 @@ export abstract class BaseIndicators {
         index: number,
         isMaxValue: boolean
     ) {
+        if (value === undefined || value === null) return
         if (isMaxValue) {
             // 最大值变化
             if (value >= this.maxValue) {
