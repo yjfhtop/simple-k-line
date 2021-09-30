@@ -76,7 +76,18 @@
     let sIndex = 0
     let preIndex = 50
 
-    const kLine = new SimpleKLine('#k_line', useDataArr)
+    const conf = {
+        chartShowArr: ['mainChart', 'testChart'],
+        chartConfMap: {
+            testChart: {
+                indicatorShowArr: ['volumeIndicators'],
+                yConf: {
+                    zeroMust: true
+                }
+            }
+        }
+    }
+    const kLine = new SimpleKLine('#k_line', useDataArr, conf)
 
     const addTool = document.getElementById('addTool')
     addTool.addEventListener('click', () => {

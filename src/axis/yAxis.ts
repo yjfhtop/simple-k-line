@@ -4,6 +4,7 @@ import {
     mergeData,
     scaleCalc,
     ScaleCalcConfig,
+    SymmetricalType,
 } from '@/utils/dataHandle'
 import { BaseChart } from '@/chart/baseChart'
 import { getMagnitudeNumber } from '@/utils/format'
@@ -36,6 +37,10 @@ export interface YConf {
     }
     // 轴标配置
     scaleCalcConfig?: ScaleCalcConfig
+    // 轴标是否需要对称对称
+    symmetrical?: SymmetricalType
+    // 是否需要 0 刻度
+    zeroMust?: boolean
 }
 
 /**
@@ -68,7 +73,11 @@ export class YAxis {
         const scaleData = scaleCalc(
             this.chart.maxValue,
             this.chart.minValue,
-            scaleNumberData.number
+            scaleNumberData.number,
+            {
+                symmetrical: this.conf.symmetrical,
+                zeroMust: this.conf.zeroMust,
+            }
         )
         this.maxValue = scaleData.max
         this.minValue = scaleData.min
@@ -78,7 +87,7 @@ export class YAxis {
         this.scaleShowValueArr = []
         for (let i = this.minValue; i <= this.maxValue; i += this.step) {
             // const showTxt = getMagnitudeNumber(i)
-            const showTxt = this.chart.formData(i)
+            const showTxt = this.chart.formYData(i)
             const showTxtW = getTxtW(
                 this.chart.kLine.bc,
                 showTxt,

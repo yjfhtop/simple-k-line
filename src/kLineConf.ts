@@ -21,6 +21,7 @@ import { MAIndicatorsConf } from '@/indicators/maIndicators'
 import SimpleKLine from '@/index'
 import { determineLang, LangType } from '@/lang/utils'
 import { CandleIndicatorsConf } from '@/indicators/candleIndicators'
+import { VolumeIndicatorsConf } from '@/indicators/volumeIndicators'
 // import { MainChartConf } from '@/chart/mainChart'
 
 // item 的宽度 和 空隙
@@ -184,6 +185,7 @@ const DefYConf: YConf = {
         lineW: 1,
     },
     scaleCalcConfig: DefScaleCalcConfig,
+    // symmetricalType: ''
 }
 
 // 默认 close 配置
@@ -250,11 +252,33 @@ const DefCandleIndicatorsConf: CandleIndicatorsConf = {
     },
 }
 
+const DefVolumeIndicatorsConf: VolumeIndicatorsConf = [
+    {
+        lineW: 1,
+        color: '#F8E71C',
+        show: true,
+        number: 7,
+    },
+    {
+        lineW: 1,
+        color: '#50E3C2',
+        show: false,
+        number: 30,
+    },
+    {
+        lineW: 1,
+        color: '#F600FF',
+        show: false,
+        number: 60,
+    },
+]
+
 // 所有指标配置项的集合---------------------------------------------
 const DefIndicatorsConfMap: IndicatorsConfMap = {
     closeIndicators: DefCloseIndicatorsConf,
     maIndicators: DefMAIndicatorsConf,
     candleIndicators: DefCandleIndicatorsConf,
+    volumeIndicators: DefVolumeIndicatorsConf,
 }
 
 // 图表的基础配置

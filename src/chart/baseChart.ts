@@ -10,6 +10,7 @@ import { YAxis, YConf } from '@/axis/yAxis'
 import { BaseTool } from '@/tool/baseTool'
 import { createIndicators } from '@/indicators/indicatorsUtils'
 import { deepCopy } from '@/utils/dataHandle'
+import { getMagnitudeNumber } from '@/utils/format'
 // import { ChartNames } from '@/chart/chartUtils'
 
 /**
@@ -284,8 +285,11 @@ export class BaseChart {
         )
     }
 
-    formData(v: number) {
-        return Math.floor(v) + ''
+    formYData(v: number) {
+        if (this.YAxis.maxValue > 10000) {
+            return getMagnitudeNumber(v, this.kLine.conf.showDecimalPlaces)
+        }
+        return v.toFixed(this.kLine.conf.showDecimalPlaces)
     }
 
     // 获取绘制有效的 Y

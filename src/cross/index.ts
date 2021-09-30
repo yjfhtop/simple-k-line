@@ -58,7 +58,7 @@ export class Cross {
         })
         const nowChart = this.kLine.eventHandle.nowChart
 
-        const value = nowChart.formData(
+        const value = nowChart.formYData(
             nowChart.YGetValue(this.kLine.eventHandle.nowCoordinate.y)
         )
         const date = this.kLine.xAxis.xGetValue(x)
