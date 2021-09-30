@@ -9,12 +9,17 @@ import {
     CandleIndicators,
     CandleIndicatorsConf,
 } from '@/indicators/candleIndicators'
+import {
+    VolumeIndicators,
+    VolumeIndicatorsConf,
+} from '@/indicators/volumeIndicators'
 
 // 指标的映射
 export interface IndicatorsMap {
     closeIndicators?: CloseIndicators
     maIndicators?: MAIndicators
     candleIndicators?: CloseIndicators
+    volumeIndicators?: VolumeIndicators
 }
 
 // 指标的配置项
@@ -22,6 +27,7 @@ export interface IndicatorsConfMap {
     closeIndicators?: CloseIndicatorsConf
     maIndicators?: MAIndicatorsConf
     candleIndicators?: CandleIndicatorsConf
+    volumeIndicators?: VolumeIndicatorsConf
 }
 
 export type IndicatorsNames = keyof IndicatorsMap
@@ -42,5 +48,7 @@ export function createIndicators<T = BaseIndicators>(
             return new MAIndicators(chart) as any as T
         case 'candleIndicators':
             return new CandleIndicators(chart) as any as T
+        case 'volumeIndicators':
+            return new VolumeIndicators(chart) as any as T
     }
 }

@@ -18,6 +18,8 @@ export abstract class BaseIndicators {
     // 最大最小值对应存储的key
     public maxIndexCacheKey = ''
     public minIndexCacheKey = ''
+
+    // abstract public
     constructor(public chart: BaseChart) {
         // this.chart = chart
     }
