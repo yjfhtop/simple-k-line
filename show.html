@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="dist/index.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            /*background-color: #fff;*/
+            background-color: #000;
+        }
+        .c {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+        }
+        .tools {
+            width: 60px;
+        }
+        .tool-item {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+        .tool-item:hover {
+            background-color: #515151;
+        }
+        .tool-item img {
+            width: 30px;
+        }
+        #k_line {
+            flex: 1;
+        }
+    </style>
+    <script src='testDate/5minute.js'></script>
+
+</head>
+<body>
+<div class='c'>
+    <div class='tools'>
+        <div class='tool-item' data-tool-name='triangle'>
+            <img src='./img/triangle.svg' alt=''>
+        </div>
+        <div class='tool-item' data-tool-name='lineSegment'>
+            <img src='./img/lineSegment.svg' alt=''>
+        </div>
+    </div>
+    <div id="k_line">
+    </div>
+</div>
+
+</body>
+<script>
+    const second = 1000
+    const minute = second * 60
+    const hour = minute * 60
+    const day = hour * 24
+    let dataList = []
+    const startDate = new Date('2018-10-01').getTime()
+    const diffDate = minute * 1
+
+    for (let i = 0; i < 100; i++) {
+        let maxVale = Math.floor(Math.random() * 3000) + 3000
+        const diffVale = Math.floor(Math.random() * 3000)
+        let minValue = Math.abs(maxVale - diffVale)
+        maxVale = Math.max(maxVale, minValue)
+        minValue = Math.min(maxVale, minValue)
+
+        const open = minValue + Math.floor(Math.random() * diffVale)
+        const close = minValue + Math.floor(Math.random() * diffVale)
+        dataList.push({
+            close: close,
+            open: open,
+            min: minValue,
+            max: maxVale,
+            date: startDate + i * diffDate,
+            turnover: 10000 + Math.floor(Math.random() * 100000)
+        })
+    }
+
+    const fiveMinuteArr = fiveMinute.map(item => {
+        return {
+            close: parseFloat(item.close),
+            open: parseFloat(item.open),
+            min: parseFloat(item.low),
+            max: parseFloat(item.high),
+            date: new Date(item.day).getTime(),
+            turnover: parseFloat(item.volume / 10000000)
+        }
+    })
+    const useDataArr = fiveMinuteArr.slice(50, 150)
+    const lastDataArr = fiveMinuteArr.slice(150)
+    const preDataArr = fiveMinuteArr.slice(0, 50)
+    let sIndex = 0
+    let preIndex = 50
+
+    const conf = {
+        chartShowArr: ['mainChart', 'testChart'],
+        chartConfMap: {
+            testChart: {
+                indicatorShowArr: ['volumeIndicators'],
+                yConf: {
+                    zeroMust: true
+                }
+            }
+        }
+    }
+    const kLine = new SimpleKLine('#k_line', useDataArr, conf)
+
+    const toolC = document.querySelector('.tools')
+    toolC.addEventListener('click', (e) => {
+        if (e.target === toolC) {
+            return
+        }
+        const toolName = e.target.dataset.toolName || e.target.parentElement.dataset.toolName
+        if (toolName) {
+            kLine.addTool(toolName)
+        }
+    })
+
+    kLine.on('loadOld', (overCbK, disCbk) => {
+        setTimeout(() => {
+            try {
+                if (preIndex < 0) disCbk()
+                const dataArr = preDataArr.slice(preIndex - 10, preIndex)
+                preIndex -= 10
+                kLine.updateData(dataArr, 'addOld')
+            } catch (e) {
+
+            } finally {
+                overCbK()
+            }
+        }, 1000)
+    })
+
+
+    // 修改最后的数据
+    const updateLastData = function() {
+        const item = useDataArr[useDataArr.length - 1]
+        const diff = item.max - item.min
+        item.close = Math.floor(Math.random() * diff) + item.min
+        kLine.updateData(item, 'lastItem')
+    }
+    setInterval(() => {
+        updateLastData()
+    }, 1000)
+    window.addEventListener('resize', () => {
+        kLine.reSize()
+    })
+</script>
+</html>
