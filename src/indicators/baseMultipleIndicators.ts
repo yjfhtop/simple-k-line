@@ -79,6 +79,12 @@ export abstract class BaseMultipleIndicators extends BaseIndicators {
     // 计算showItemArr 的DotArr
     calcDotArr() {
         const dataArr = this.showItemArr
+
+        // 添加之前先清空
+        dataArr.forEach((citem: any) => {
+            citem.dotArr = []
+        })
+
         for (
             let i = this.chart.kLine.drawSIndex;
             i <= this.chart.kLine.drawEIndex;
