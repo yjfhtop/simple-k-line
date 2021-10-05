@@ -98,20 +98,20 @@
     // kLine.on('loadNew', () => {
     //
     // })
-    kLine.on('loadOld', (overCbK, disCbk) => {
-        setTimeout(() => {
-            try {
-                if (preIndex < 0) disCbk()
-                const dataArr = preDataArr.slice(preIndex - 10, preIndex)
-                preIndex -= 10
-                kLine.updateData(dataArr, 'addOld')
-            } catch (e) {
-
-            } finally {
-                overCbK()
-            }
-        }, 1000)
-    })
+    // kLine.on('loadOld', (overCbK, disCbk) => {
+    //     setTimeout(() => {
+    //         try {
+    //             if (preIndex < 0) disCbk()
+    //             const dataArr = preDataArr.slice(preIndex - 10, preIndex)
+    //             preIndex -= 10
+    //             kLine.updateData(dataArr, 'addOld')
+    //         } catch (e) {
+    //
+    //         } finally {
+    //             overCbK()
+    //         }
+    //     }, 1000)
+    // })
 
 
     // 修改最后的数据

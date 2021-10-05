@@ -166,7 +166,10 @@ export class CandleIndicators extends BaseIndicators {
         // 最大最小值的绘制 e
     }
     drawMinMax(type: 'min' | 'max') {
-        const max = type === 'max' ? this.maxValue : this.minValue
+        let max = type === 'max' ? this.maxValue : this.minValue
+        if (max !== undefined && max !== null) {
+            max = max.toFixed(this.chart.kLine.conf.showDecimalPlaces)
+        }
         const maxIndex = type === 'max' ? this.maxIndex : this.minIndex
         const txtSpacing = 5
         const maxCoordinate: Coordinate = {
