@@ -248,11 +248,11 @@ export class BaseChart {
                 this.kLine.bc,
                 {
                     x: item.x,
-                    y: this.leftTop.y,
+                    y: this.drawChartLeftTop.y,
                 },
                 {
                     x: item.x,
-                    y: this.rightBottom.y,
+                    y: this.drawChartRightBottom.y,
                 },
                 {
                     w: this.kLine.conf.xConf.gridLine.lineW,
