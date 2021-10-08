@@ -186,6 +186,7 @@ export default class SimpleKLine {
         this.drawAll()
     }
 
+    // todo resize 时应该等比缩放
     reSize() {
         this.initContainer(false)
         this.el.removeChild(this.bEl)
@@ -386,11 +387,11 @@ export default class SimpleKLine {
         this.eventHandle.activeTool = tool
     }
     // 便利显示的图表
-    eachShowChart(cbk: (c: BaseChart) => void) {
-        this.conf.chartShowArr.forEach((name) => {
+    eachShowChart(cbk: (c: BaseChart, index?: number) => void) {
+        this.conf.chartShowArr.forEach((name, index) => {
             const chart = this.chartMap[name]
             if (chart) {
-                cbk(chart)
+                cbk(chart, index)
             }
         })
     }

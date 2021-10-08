@@ -2,6 +2,12 @@ import { BaseTool } from '@/tool/baseTool'
 import { Coordinate } from '@/utils/canvasDraw'
 import SimpleKLine from '@/index'
 import { deepCopy } from '@/utils/dataHandle'
+import { BaseChart } from '@/chart/baseChart'
+
+export interface CanDragChartMap {
+    topChart: BaseChart
+    bottomChart: BaseChart
+}
 
 export class EventHandle {
     // 鼠标在工具上的工具，当 鼠标按下时， hoverTool 将会变为 activeTool
@@ -16,6 +22,7 @@ export class EventHandle {
     public nowCoordinate: Coordinate
     // 当前的下标, 主要为提示文字使用
     public nowIndex: number
+    public canDragChartMap: CanDragChartMap
     constructor(public kLine: SimpleKLine) {
         this.initEnv()
         this.nowIndex = this.kLine.dataArr.length - 1
@@ -62,6 +69,36 @@ export class EventHandle {
         return index
     }
 
+    // 判断是否能够拖拽图表, 能够拖拽返回上下图表
+    canDragChart(y: number, saveOld = false) {
+        const dragChartNumber = this.kLine.conf.dragChartNumber
+        for (
+            let index = 0;
+            index < this.kLine.conf.chartShowArr.length;
+            index++
+        ) {
+            const topChart =
+                this.kLine.chartMap[this.kLine.conf.chartShowArr[index]]
+            const bottomChart =
+                this.kLine.chartMap[this.kLine.conf.chartShowArr[index + 1]]
+            if (!topChart || !bottomChart) continue
+            if (index && index >= this.kLine.conf.chartShowArr.length - 1) {
+            } else {
+                const min = topChart.rightBottom.y - dragChartNumber
+                const max = topChart.rightBottom.y + dragChartNumber
+                if (y >= min && y <= max) {
+                    topChart.saveOld()
+                    bottomChart.saveOld()
+                    return {
+                        topChart: topChart,
+                        bottomChart: bottomChart,
+                    }
+                }
+            }
+        }
+        return null
+    }
+
     initEnv() {
         this.kLine.el.addEventListener('mousemove', (e) => {
             e.stopPropagation()
@@ -104,6 +141,20 @@ export class EventHandle {
                     this.activeTool.move(yDiff, xDiff)
                 }
             }
+            // 鼠标按下，可拖动图表
+            else if (this.downCoordinate && this.canDragChartMap) {
+                const diff = Math.floor(
+                    this.nowCoordinate.y - this.downCoordinate.y
+                )
+                const { topChart, bottomChart } = this.canDragChartMap
+                this.kLine.showCross = false
+                topChart.chartH = topChart.oldChartH + diff
+                bottomChart.topY = bottomChart.oldTopY + diff
+                bottomChart.chartH = bottomChart.oldChartH - diff
+                topChart.YAxis.determineScale()
+                bottomChart.YAxis.determineScale()
+                this.kLine.drawBottom()
+            }
             // 没有激活的工具下按下， 然后拖动， 相当于图表的左右拖动
             else if (!this.activeTool && this.downCoordinate) {
                 this.kLine.showCross = false
@@ -124,7 +175,7 @@ export class EventHandle {
                     this.kLine.callEvent('loadOld')
                 }
             }
-            // 是否有激活的工具
+            // 是否有激活的工具, 主要是工具的绘制相关
             else if (this.activeTool) {
                 this.kLine.showCross = false
                 // 还没有确定点的 工具是可切换所在的图表的 s
@@ -148,7 +199,7 @@ export class EventHandle {
                     this.activeTool.setDot({ date, value })
                 }
             }
-            // 没有选中的工具， 鼠标也不是按下的状态， 处理 hoverTool 和 nowIndex
+            // 没有选中的工具， 鼠标也不是按下的状态， 处理 hoverTool 和 nowIndex, 和 图表拖拽的鼠标样式
             else if (!this.activeTool && !this.downCoordinate) {
                 // 判断有没有鼠标在工具上 s
                 let hasHoverTool = false
@@ -175,6 +226,12 @@ export class EventHandle {
                     this.kLine.xAxis.xGetIndex(this.nowCoordinate.x)
                 )
                 // nowIndex e
+
+                if (this.canDragChart(this.nowCoordinate.y)) {
+                    this.kLine.el.style.cursor = 'row-resize'
+                } else {
+                    this.kLine.el.style.cursor = 'default'
+                }
             }
             this.kLine.drawTop()
             this.oldCoordinate = { ...this.nowCoordinate }
@@ -205,6 +262,12 @@ export class EventHandle {
                     this.kLine.drawTop()
                 }
                 // 如果不是点的话，就是线
+            } else {
+                // 为表格拖拽准备
+                this.canDragChartMap = this.canDragChart(
+                    this.downCoordinate.y,
+                    true
+                )
             }
         })
 

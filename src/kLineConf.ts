@@ -121,6 +121,8 @@ export interface KLineConf {
     toolConf?: BaseToolConf
     triggerNewNumber?: number
     triggerOldNumber?: number
+    // 拖拽图表的误差范围
+    dragChartNumber?: number
 }
 
 const DefToolConf: BaseToolConf = {
@@ -342,6 +344,7 @@ export const DefKLineConf: KLineConf = {
     toolConf: DefToolConf,
     triggerNewNumber: 20,
     triggerOldNumber: 20,
+    dragChartNumber: 5,
 }
 
 export function initConf(conf: KLineConf, kLine: SimpleKLine) {

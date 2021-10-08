@@ -51,6 +51,10 @@ export class BaseChart {
     // 用于绘制图表上信息的的起始坐标
     public infoTxtCoordinate: Coordinate
 
+    // 存储旧的，用于表格的上下拖拽
+    public oldTopY: number
+    public oldChartH: number
+
     constructor(
         // 图表的名称
         public chartName: string,
@@ -302,4 +306,11 @@ export class BaseChart {
         }
         return y
     }
+    saveOld() {
+        this.oldTopY = this.topY
+        this.oldChartH = this.chartH
+    }
+    // reSize() {
+    //     this.YAxis.determineScale()
+    // }
 }
