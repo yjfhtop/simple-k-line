@@ -143,11 +143,20 @@ export class EventHandle {
             }
             // 鼠标按下，可拖动图表
             else if (this.downCoordinate && this.canDragChartMap) {
+                this.kLine.showCross = false
                 const diff = Math.floor(
                     this.nowCoordinate.y - this.downCoordinate.y
                 )
                 const { topChart, bottomChart } = this.canDragChartMap
-                this.kLine.showCross = false
+                const minH = this.kLine.conf.chartMinH
+
+                const nextTopChartH = topChart.oldChartH + diff
+                const nextBottomChartH = bottomChart.oldChartH - diff
+
+                if (nextBottomChartH < minH || nextTopChartH < minH) {
+                    return
+                }
+
                 topChart.chartH = topChart.oldChartH + diff
                 bottomChart.topY = bottomChart.oldTopY + diff
                 bottomChart.chartH = bottomChart.oldChartH - diff

@@ -80,9 +80,15 @@ export class YAxis {
         this.minValue = scaleData.min
         this.step = scaleData.step
 
+        if (scaleData.max === Infinity) {
+            console.log(1)
+        }
+        console.log(scaleData, 'scaleData')
+
         this.scaleValueArr = []
         this.scaleShowValueArr = []
         for (let i = this.minValue; i <= this.maxValue; i += this.step) {
+            console.log('for')
             // const showTxt = getMagnitudeNumber(i)
             const showTxt = this.chart.formYData(i)
             const showTxtW = getTxtW(

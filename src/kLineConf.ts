@@ -121,8 +121,10 @@ export interface KLineConf {
     toolConf?: BaseToolConf
     triggerNewNumber?: number
     triggerOldNumber?: number
-    // 拖拽图表的误差范围
+    // 拖拽图表的误差范围, 意思是在距离图表底部线多少会出现 鼠标改为拖拽的样式
     dragChartNumber?: number
+    // 最小图表的高度，建议是80以上
+    chartMinH?: number
 }
 
 const DefToolConf: BaseToolConf = {
@@ -345,6 +347,7 @@ export const DefKLineConf: KLineConf = {
     triggerNewNumber: 20,
     triggerOldNumber: 20,
     dragChartNumber: 5,
+    chartMinH: 100,
 }
 
 export function initConf(conf: KLineConf, kLine: SimpleKLine) {
